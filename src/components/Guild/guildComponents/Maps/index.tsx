@@ -1,12 +1,16 @@
 // Externals
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Message } from 'retro-ui';
 
 import { addPlayerPos } from '../MapUtil';
 
 const MapWrap = styled.div`
   display: flex;
   justify-content: center;
+`;
+const Title = styled(Message)`
+  width: 50%;
 `;
 
 interface MapsProps {
@@ -29,9 +33,15 @@ export const SplitMap: React.FC<MapsProps> = ({
   }, [guildOneMap, guildTwoMap]);
 
   return (
-    <MapWrap>
-      <div dangerouslySetInnerHTML={{ __html: guildOneMap }} />
-      <div dangerouslySetInnerHTML={{ __html: guildTwoMap }} />
-    </MapWrap>
+    <div>
+      <MapWrap>
+        <Title>Guild #1</Title>
+        <Title>Guild #2</Title>
+      </MapWrap>
+      <MapWrap>
+        <div dangerouslySetInnerHTML={{ __html: guildOneMap }} />
+        <div dangerouslySetInnerHTML={{ __html: guildTwoMap }} />
+      </MapWrap>
+    </div>
   );
 };
