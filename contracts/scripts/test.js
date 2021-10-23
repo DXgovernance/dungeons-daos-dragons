@@ -154,7 +154,7 @@ async function main() {
             },
           ],
         },
-        [setUpGameHash, true]
+        [toEthSignedMessageHash(setUpGameHash), true]
       ),
     ],
     ['0', '0'],
@@ -202,7 +202,7 @@ async function main() {
             },
           ],
         },
-        [setUpGameHash, true]
+        [toEthSignedMessageHash(setUpGameHash), true]
       ),
     ],
     ['0', '0'],
@@ -229,14 +229,8 @@ async function main() {
 
   const signatures = [
     await web3.eth.sign(setUpGameHash, dungeonMaster),
-    await web3.eth.sign(
-      toEthSignedMessageHash(setUpGameHash),
-      guildASingleOwner
-    ),
-    await web3.eth.sign(
-      toEthSignedMessageHash(setUpGameHash),
-      guildBSingleOwner
-    ),
+    await web3.eth.sign(setUpGameHash, guildASingleOwner),
+    await web3.eth.sign(setUpGameHash, guildBSingleOwner),
   ];
   await ddnd.setUpGame(
     [dungeonMaster, guildA.address, guildB.address],
