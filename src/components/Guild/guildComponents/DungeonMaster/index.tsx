@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Box } from 'retro-ui';
 
 import { generateMap } from '../../../../map-generator/index';
-import { addPlayerPos } from '../MapUtil';
+import { SplitMap } from '../Maps';
 
 const UserInfoWrap = styled.div`
   display: flex;
@@ -32,45 +32,24 @@ const GuildActions = styled(Box)`
 `;
 
 export const DungeonMaster: React.FC = () => {
-  const [map, setMap] = useState('');
+  const [originalMap, setOriginalMap] = useState('');
   const [json, setJson] = useState(null);
-  const [guildOnePos, setGuildOnePos] = useState([0, 0]);
-  const [guildTwoPos, setGuildTwoPos] = useState([0, 0]);
+  const [guildOneState, setGuildOneState] = useState(null);
+  const [guildTwoState, setGuildTwoState] = useState(null);
 
   useEffect(() => {
-    // Get map from game state instead of generating here
     const { svg, json } = generateMap();
-    let initialRoom = null;
     json.map(room => {
       if (room.roomNumber === 1) {
-        initialRoom = room;
+        setGuildOneState({ room });
+        setGuildTwoState({ room });
       }
     });
 
-    setMap(addPlayerPos(svg, initialRoom));
+    setOriginalMap(svg);
 
     setJson(json);
-    json.map(room => {
-      if (room.roomNumber === 1) {
-        setGuildOnePos([room.x, room.y]);
-        setGuildTwoPos([room.x, room.y]);
-      }
-    });
   }, []);
-
-  useEffect(() => {
-    // setMap(
-    //   section(
-    //     map.replace(
-    //       '</svg>',
-    //       `${drawCircle(
-    //         { cx: guildOnePos[0] * 24, cy: guildOnePos[1] * 24, r: 20 },
-    //         { fill: 'pink' }
-    //       )}</svg>`
-    //     )
-    //   )
-    // );
-  }, [guildOnePos, guildTwoPos]);
 
   console.log({ json });
 
@@ -78,7 +57,13 @@ export const DungeonMaster: React.FC = () => {
     <UserInfoWrap>
       <Box style={{ marginBottom: '15px' }}>DungeonMaster</Box>
 
-      <div dangerouslySetInnerHTML={{ __html: map }} />
+      {originalMap ? (
+        <SplitMap
+          originalMap={originalMap}
+          guildOneState={guildOneState}
+          guildTwoState={guildTwoState}
+        />
+      ) : null}
       <GuildsWrapper>
         <Guild>
           <GuildName>Guild name 1</GuildName>
