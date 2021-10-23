@@ -28,7 +28,6 @@
     "@nomiclabs/hardhat-truffle5": "^2.0.0",
     "@nomiclabs/hardhat-web3": "^2.0.0",
     "@openzeppelin/contract-loader": "^0.6.1",
-    "@openzeppelin/hardhat-upgrades": "^1.6.0",
     "@truffle/contract": "^4.2.21",
     "babel-eslint": "^10.1.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
@@ -74,8 +73,8 @@
   "dependencies": {
     "@daostack/infra": "0.0.1-rc.19",
     "@maticnetwork/eth-decoder": "0.0.2",
-    "@openzeppelin/contracts": "3.4.0",
-    "@openzeppelin/contracts-upgradeable": "3.4.0",
+    "@openzeppelin/contracts": "4.3.2",
+    "@openzeppelin/contracts-upgradeable": "4.3.2",
     "@openzeppelin/test-helpers": "^0.5.11",
     "@realitio/realitio-contracts": ">=0.0.0",
     "@truffle/hdwallet-provider": "^1.4.0",

@@ -10,29 +10,10 @@ module.exports = {
   paths: {
     sources: "./src", // Use src folder isntead of contracts to avoid having empty conrtracts folder
   },
-  dependencyCompiler: {
-    paths: [
-      'dxdao-contracts/contracts/dxdao/DxAvatar.sol',
-      'dxdao-contracts/contracts/dxdao/DxController.sol',
-      'dxdao-contracts/contracts/dxdao/DxReputation.sol',
-      'dxdao-contracts/contracts/dxdao/DxToken.sol',
-      'dxdao-contracts/contracts/dxvote/DXDVotingMachine.sol',
-      'dxdao-contracts/contracts/dxvote/WalletScheme.sol',
-      'dxdao-contracts/contracts/dxvote/PermissionRegistry.sol',
-      'dxdao-contracts/contracts/dxvote/utils/DXDVestingFactory.sol',
-      'dxdao-contracts/contracts/dxvote/utils/DXdaoNFT.sol',
-      'dxdao-contracts/contracts/utils/Multicall.sol',
-      'dxdao-contracts/contracts/test/ERC20Mock.sol',
-      'dxdao-contracts/contracts/daostack/universalSchemes/ContributionReward.sol',
-      'dxdao-contracts/contracts/daostack/universalSchemes/SchemeRegistrar.sol',
-      'dxdao-contracts/contracts/daostack/utils/Redeemer.sol',
-      '@daostack/infra/contracts/votingMachines/GenesisProtocol.sol'
-    ],
-  },
   solidity: {
     compilers: [
       {
-        version: '0.5.17',
+        version: '0.7.6',
         settings: {
           optimizer: {
             enabled: true,
@@ -41,7 +22,7 @@ module.exports = {
         },
       },
       {
-        version: '0.7.6',
+        version: '0.8.1',
         settings: {
           optimizer: {
             enabled: true,

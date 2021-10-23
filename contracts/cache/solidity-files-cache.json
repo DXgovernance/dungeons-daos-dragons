@@ -1,12 +1,12 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/erc20guild/ERC20Guild.sol": {
-      "lastModificationDate": 1634980028156,
-      "contentHash": "dbf93324681dac950a430184fe3a443b",
-      "sourceName": "contracts/erc20guild/ERC20Guild.sol",
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/DDnD.sol": {
+      "lastModificationDate": 1634994552488,
+      "contentHash": "41dfe40427f872a7bd43fbfd1eb2e883",
+      "sourceName": "contracts/DDnD.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -28,27 +28,668 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol",
-        "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol",
-        "@openzeppelin/contracts-upgradeable/math/MathUpgradeable.sol",
-        "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol",
+        "@openzeppelin/contracts/utils/math/SafeMath.sol",
+        "@openzeppelin/contracts/utils/math/Math.sol",
+        "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "./DDnDNFT.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.8"
+      ],
+      "artifacts": [
+        "DDnD"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
+      "lastModificationDate": 1634993615692,
+      "contentHash": "5365090efc586b728719e562ebfed0d6",
+      "sourceName": "@openzeppelin/contracts/utils/math/SafeMath.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeMath"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
+      "lastModificationDate": 1634993615692,
+      "contentHash": "4e138d2b21c8844ab1799e37d232fb5e",
+      "sourceName": "@openzeppelin/contracts/utils/math/Math.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Math"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol": {
+      "lastModificationDate": 1634993615688,
+      "contentHash": "197dbfaf7146845fa76331a4c9980e9f",
+      "sourceName": "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ECDSA"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1634993615688,
+      "contentHash": "0eac3e1a83ee62326ca007811285b274",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+      "lastModificationDate": 1634993615688,
+      "contentHash": "a4f6dccf3f15b6844e357f737a572388",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC721.sol",
+        "./IERC721Receiver.sol",
+        "./extensions/IERC721Metadata.sol",
+        "../../utils/Address.sol",
+        "../../utils/Context.sol",
+        "../../utils/Strings.sol",
+        "../../utils/introspection/ERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC721"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/DDnDNFT.sol": {
+      "lastModificationDate": 1634994555452,
+      "contentHash": "c286bc6f9386c2ee7b3f966e2ba334db",
+      "sourceName": "contracts/DDnDNFT.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.8"
+      ],
+      "artifacts": [
+        "DDnDNFT"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+      "lastModificationDate": 1634993615688,
+      "contentHash": "53919d6975f2c0f3dffee5e3a1064116",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+      "lastModificationDate": 1634993615688,
+      "contentHash": "9a367cecca6fed80a3e975b7e6b3bd5c",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721Receiver"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+      "lastModificationDate": 1634993619088,
+      "contentHash": "8aa69ca8424167555baaaa9f607801db",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721Metadata"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/Address.sol": {
+      "lastModificationDate": 1634993608860,
+      "contentHash": "c5f6c4e4df069c789e7d84b4c3011913",
+      "sourceName": "@openzeppelin/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1634993608860,
+      "contentHash": "851485d5b925529b1a2f34a0be077891",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+      "lastModificationDate": 1634993608860,
+      "contentHash": "62142442bed149f965c5ed971fae4182",
+      "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Strings"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+      "lastModificationDate": 1634993615692,
+      "contentHash": "a9a5319dff9088c6ffe757ea1c2a6729",
+      "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC165"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+      "lastModificationDate": 1634993615692,
+      "contentHash": "9a04322bb8f6b8f2767d8358d1d2537b",
+      "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC165"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol": {
+      "lastModificationDate": 1634993619088,
+      "contentHash": "94da923c22e9773af388607307182c80",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC721URIStorage"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
+      "lastModificationDate": 1634993608860,
+      "contentHash": "b7811964d33f23b2d45ed3ebb76a4548",
+      "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Counters"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1634993608852,
+      "contentHash": "4fe56b59ced59d87df6b796758f62895",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/erc20guild/ERC20Guild.sol": {
+      "lastModificationDate": 1634994568960,
+      "contentHash": "e5487f5febaf11fdd7fe19cca0d1df25",
+      "sourceName": "contracts/erc20guild/ERC20Guild.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol",
         "../utils/TokenVault.sol",
         "../utils/Arrays.sol"
       ],
       "versionPragmas": [
-        "^0.7.6"
+        "^0.8.8"
       ],
       "artifacts": [
         "ERC20Guild"
       ]
     },
-    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/proxy/Initializable.sol": {
-      "lastModificationDate": 1634981388324,
-      "contentHash": "71b3ac8d4da61bb6c6708c12f56e3c1f",
-      "sourceName": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol",
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+      "lastModificationDate": 1634993795848,
+      "contentHash": "cbb8386f0120d46d66ff42dffbbc16c1",
+      "sourceName": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -69,22 +710,20 @@
           }
         }
       },
-      "imports": [
-        "../utils/AddressUpgradeable.sol"
-      ],
+      "imports": [],
       "versionPragmas": [
-        ">=0.4.24 <0.8.0"
+        "^0.8.0"
       ],
       "artifacts": [
         "Initializable"
       ]
     },
-    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol": {
-      "lastModificationDate": 1634981388312,
-      "contentHash": "33cad0216fea16ce4baadc5603b84218",
-      "sourceName": "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol",
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol": {
+      "lastModificationDate": 1634993795868,
+      "contentHash": "824ab7c5ce280675c9234007c6fdaa67",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -107,18 +746,18 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.6.0 <0.8.0"
+        "^0.8.0"
       ],
       "artifacts": [
         "SafeMathUpgradeable"
       ]
     },
-    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/math/MathUpgradeable.sol": {
-      "lastModificationDate": 1634981388312,
-      "contentHash": "309783d0070f4c863bcb1bd659e2698b",
-      "sourceName": "@openzeppelin/contracts-upgradeable/math/MathUpgradeable.sol",
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol": {
+      "lastModificationDate": 1634993795868,
+      "contentHash": "0f74d25db8ac833b5d89c9bbe968686b",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -141,18 +780,18 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.6.0 <0.8.0"
+        "^0.8.0"
       ],
       "artifacts": [
         "MathUpgradeable"
       ]
     },
-    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol": {
-      "lastModificationDate": 1634981388312,
-      "contentHash": "8fe21554560075593b87ae37a30dea42",
-      "sourceName": "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol",
+    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol": {
+      "lastModificationDate": 1634993795868,
+      "contentHash": "dd11c9578c28dc1e0ed0043da7b3ad6a",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -175,18 +814,18 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.6.0 <0.8.0"
+        "^0.8.0"
       ],
       "artifacts": [
         "ECDSAUpgradeable"
       ]
     },
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol": {
-      "lastModificationDate": 1634981395520,
-      "contentHash": "6c8edd65243ec9d6eb91cc63cce2cd16",
+      "lastModificationDate": 1634993795868,
+      "contentHash": "3a5432b9dfef2ff5c8f58fcc0b1452b2",
       "sourceName": "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -209,18 +848,18 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.6.0 <0.8.0"
+        "^0.8.0"
       ],
       "artifacts": [
         "IERC20Upgradeable"
       ]
     },
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/utils/TokenVault.sol": {
-      "lastModificationDate": 1634980028156,
-      "contentHash": "f92ebfbf27b527b7dfb7eb08fd6c2a46",
+      "lastModificationDate": 1634994560240,
+      "contentHash": "1421f04d2d298c7362f46d4e6cf79ddd",
       "sourceName": "contracts/utils/TokenVault.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -242,23 +881,23 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol",
-        "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol"
       ],
       "versionPragmas": [
-        "^0.7.6"
+        "^0.8.8"
       ],
       "artifacts": [
         "TokenVault"
       ]
     },
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/utils/Arrays.sol": {
-      "lastModificationDate": 1634980028156,
-      "contentHash": "bdca80a711b27c62e5351992877c41a3",
+      "lastModificationDate": 1634994563016,
+      "contentHash": "9ee6110322b5605ccb8a3294abb7127c",
       "sourceName": "contracts/utils/Arrays.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -281,52 +920,18 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.7.6"
+        "^0.8.8"
       ],
       "artifacts": [
         "Arrays"
       ]
     },
-    "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol": {
-      "lastModificationDate": 1634981388324,
-      "contentHash": "aa72beb3bf14f8394b4a8a292d66589c",
-      "sourceName": "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol",
-      "solcConfig": {
-        "version": "0.7.6",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.6.2 <0.8.0"
-      ],
-      "artifacts": [
-        "AddressUpgradeable"
-      ]
-    },
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/erc20guild/IERC20Guild.sol": {
-      "lastModificationDate": 1634980028156,
-      "contentHash": "621ca2de0620336d7903d5a7d7f6bb51",
+      "lastModificationDate": 1634994566304,
+      "contentHash": "b37b5379cc540e2f4bdcb9900095bd76",
       "sourceName": "contracts/erc20guild/IERC20Guild.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
@@ -351,7 +956,7 @@
         "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol"
       ],
       "versionPragmas": [
-        "^0.7.6"
+        "^0.8.8"
       ],
       "artifacts": [
         "IERC20Guild"
@@ -362,7 +967,7 @@
       "contentHash": "a93b98b8f2aa05d4f0949d2c320b3dae",
       "sourceName": "contracts/utils/Multicall.sol",
       "solcConfig": {
-        "version": "0.7.6",
+        "version": "0.8.8",
         "settings": {
           "optimizer": {
             "enabled": true,
