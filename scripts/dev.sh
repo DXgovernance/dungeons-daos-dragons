@@ -12,7 +12,7 @@ cleanup() {
     kill -9 $ganache_pid
   fi
 }
-mnemonic="dxdao dxdao dxdao dxdao dxdao dxdao dxdao dxdao dxdao dxdao dxdao dxdao"
+mnemonic="ddnd ddnd ddnd ddnd ddnd ddnd ddnd ddnd ddnd ddnd ddnd ddnd"
 
 ganache_running() {
   nc -z localhost 8545
@@ -112,11 +112,7 @@ contents="$(jq '.compilerOptions.module = "commonjs"' tsconfig.json)" && \
 echo "${contents}" > tsconfig.json
 
 # Deploy local contracts
-yarn hardhat run --network localhost scripts/deployDevContracts.ts
-
-# Run build cache
-EMPTY_CACHE=1 yarn hardhat run --network localhost scripts/buildCache.ts
-sleep 1
+yarn hardhat run --network localhost scripts/setDDnD.js
 
 # Enable isolatedModules and use esnext as module in tsconfig
 contents="$(jq '.compilerOptions.isolatedModules = true' tsconfig.json)" && \
@@ -124,9 +120,8 @@ echo "${contents}" > tsconfig.json
 contents="$(jq '.compilerOptions.module = "esnext"' tsconfig.json)" && \
 echo "${contents}" > tsconfig.json
 
-#commit nr
-export REACT_APP_GIT_SHA=`git rev-parse --short HEAD`
-
 # Run dapp with localhost contracts
 FORCE_COLOR=true \
+REACT_APP_ETH_NETWORKS=mainnet,xdai,arbitrum,rinkeby,arbitrumTestnet \
+REACT_APP_DDND_ADDRESS=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 \
 SKIP_PREFLIGHT_CHECK=true FORCE_COLOR=true npx react-scripts start | cat

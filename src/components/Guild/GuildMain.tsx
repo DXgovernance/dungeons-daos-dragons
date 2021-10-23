@@ -8,9 +8,7 @@ const GuildWrap=styled.div`
 display:flex;
 flex-direction: column;
 `
-
-
-
+console.log("DDND_ADDRESS", process.env.REACT_APP_DDND_ADDRESS)
 interface LinkedButtonsProps {
 
 }
