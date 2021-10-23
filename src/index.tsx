@@ -4,6 +4,7 @@ import { createWeb3ReactRoot } from '@web3-react/core';
 import Web3ReactManager from 'components/Web3ReactManager';
 import Web3 from 'web3';
 import moment from 'moment';
+import {  ThemeWrapper } from 'retro-ui'
 
 import * as serviceWorker from './serviceWorker';
 
@@ -16,7 +17,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PageRouter from './PageRouter';
 
-import ProposalsPage from './pages/Proposals';
 import { SubmitProposalPage } from './pages/SubmitProposal';
 import { NewProposalTypePage } from './pages/NewProposalType';
 import UserPage from './pages/User';
@@ -26,6 +26,7 @@ import ConfigPage from './pages/Configuration';
 import FAQPage from './pages/FAQ';
 import ForumPage from './pages/Forum';
 import { CreateMetadataPage } from 'pages/Metadata';
+import { GuildMain } from './components/Guild/GuildMain';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -48,7 +49,8 @@ const Routes = () => {
     <PageRouter>
       <Route exact path="/">
         {' '}
-        <ProposalsPage />{' '}
+        {/*<ProposalsPage />{' '}*/}\
+        <GuildMain/>
       </Route>
       <Route exact path="/config">
         {' '}
@@ -64,7 +66,7 @@ const Routes = () => {
       </Route>
       <Route exact path="/:network/proposals">
         {' '}
-        <ProposalsPage />{' '}
+        <GuildMain/>
       </Route>
       <Route exact path="/:network/create/type">
         {' '}
@@ -98,17 +100,20 @@ const Routes = () => {
 
 const Root = (
   <Web3ProviderInjected getLibrary={getLibrary}>
-    <ThemeProvider>
-      <GlobalStyle />
-      <HashRouter>
-        <Switch>
-          <Web3ReactManager>
-            <Header />
-            <Routes />
-          </Web3ReactManager>
-        </Switch>
-      </HashRouter>
-    </ThemeProvider>
+    <ThemeWrapper>
+      <ThemeProvider>
+        <GlobalStyle />
+        <HashRouter>
+          <Switch>
+            <Web3ReactManager>
+              <Header />
+              <Routes />
+            </Web3ReactManager>
+          </Switch>
+        </HashRouter>
+      </ThemeProvider>
+    </ThemeWrapper>
+
   </Web3ProviderInjected>
 );
 ReactDOM.render(Root, document.getElementById('root'));
