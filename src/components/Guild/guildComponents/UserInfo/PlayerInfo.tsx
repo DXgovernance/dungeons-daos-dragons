@@ -1,6 +1,7 @@
 // Externals
 import React from 'react';
 import styled from 'styled-components';
+import { Box } from 'retro-ui'
 
 const StyledWrapper=styled.div`
 display: flex;
@@ -18,9 +19,9 @@ export const PlayerInfo: React.FC<LinkedButtonsProps> = () => {
 
   return (
     <StyledWrapper>
-      <div>Health:22</div>
-      <div>Score: 36</div>
-      <div>Some: 12</div>
+      <Box>Health:22</Box>
+      <Box>Score: 36</Box>
+      <Box>Some: 12</Box>
 
     </StyledWrapper>
 
