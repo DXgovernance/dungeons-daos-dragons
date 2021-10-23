@@ -4,6 +4,7 @@ import { createWeb3ReactRoot } from '@web3-react/core';
 import Web3ReactManager from 'components/Web3ReactManager';
 import Web3 from 'web3';
 import moment from 'moment';
+import {  ThemeWrapper } from 'retro-ui'
 
 import * as serviceWorker from './serviceWorker';
 
@@ -99,17 +100,20 @@ const Routes = () => {
 
 const Root = (
   <Web3ProviderInjected getLibrary={getLibrary}>
-    <ThemeProvider>
-      <GlobalStyle />
-      <HashRouter>
-        <Switch>
-          <Web3ReactManager>
-            <Header />
-            <Routes />
-          </Web3ReactManager>
-        </Switch>
-      </HashRouter>
-    </ThemeProvider>
+    <ThemeWrapper>
+      <ThemeProvider>
+        <GlobalStyle />
+        <HashRouter>
+          <Switch>
+            <Web3ReactManager>
+              <Header />
+              <Routes />
+            </Web3ReactManager>
+          </Switch>
+        </HashRouter>
+      </ThemeProvider>
+    </ThemeWrapper>
+
   </Web3ProviderInjected>
 );
 ReactDOM.render(Root, document.getElementById('root'));
