@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/DDnD.sol": {
-      "lastModificationDate": 1635007472756,
-      "contentHash": "ca0d478c15eeee829e4cd7686c98dce8",
+      "lastModificationDate": 1635014828036,
+      "contentHash": "382a517ce0db7445cfcf69f1df3b1e41",
       "sourceName": "contracts/DDnD.sol",
       "solcConfig": {
         "version": "0.8.8",
