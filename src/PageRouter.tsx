@@ -79,6 +79,7 @@ const PageRouter = observer(({ children }) => {
   else {
     const networkName = configStore.getActiveChainName();
     if (location.pathname === '/') {
+      console.log('here')
       history.push(`/${networkName}/proposals`);
     }
 
@@ -87,6 +88,7 @@ const PageRouter = observer(({ children }) => {
       location.pathname.split('/')[1] !== networkName &&
       connector instanceof InjectedConnector
     ) {
+      console.log('here')
       history.push(`/${networkName}/proposals`);
     }
 

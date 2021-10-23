@@ -74,6 +74,7 @@ const Web3ReactManager = ({ children }) => {
 
     const urlNetworkName = location.pathname.split('/')[1];
     if (chain && chain.name != urlNetworkName) {
+      console.log('here')
       history.push(`/${chain.name}/proposals`);
     }
 

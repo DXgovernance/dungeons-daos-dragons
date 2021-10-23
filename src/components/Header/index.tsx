@@ -143,6 +143,8 @@ const Header = observer(() => {
                 ) : (
                   <div />
                 )}
+
+
                 {/*{votingMachines.gen ? (*/}
                 {/*  <ItemBox> {genBalance} GEN </ItemBox>*/}
                 {/*) : (*/}
@@ -152,6 +154,9 @@ const Header = observer(() => {
               </>
             )}
             <Web3ConnectStatus text="Connect Wallet" />
+            <NavItem route={`/dungeon-master`}>
+              <ItemBox> Dungeon Master </ItemBox>
+            </NavItem>
             <NavItem route={`/${networkName}/info`}>
               <a>
                 <FiBarChart2 style={{ margin: '0px 10px', color: '#616161' }} />
