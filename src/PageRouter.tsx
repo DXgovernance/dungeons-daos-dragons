@@ -39,22 +39,18 @@ const LoadingBox = styled.div`
 const PageRouter = observer(({ children }) => {
   const {
     context: {
-      // notificationStore,
       providerStore,
       configStore,
       ipfsService,
-      etherscanService,
     },
   } = useContext();
 
   const history = useHistory();
   const location = useLocation();
   const noLoading = ['/guild', '/dungeon-master', '/forum'];
-  const networkName = configStore.getActiveChainName();
 
   // Start or auth services
   ipfsService.start();
-  etherscanService.isAuthenticated(networkName);
 
   const { active: providerActive, connector } =
     providerStore.getActiveWeb3React();

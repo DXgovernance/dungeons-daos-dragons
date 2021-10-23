@@ -10,19 +10,6 @@ export default class PinataService {
     this.context = context;
   }
 
-  async updatePinList() {
-    // const pinList = await this.getPinList();
-    const ipfsHashes = this.context.daoStore.getCache().ipfsHashes;
-    // const alreadyPinned = pinList.data.rows;
-    for (let i = 0; i < ipfsHashes.length; i++) {
-      // if (alreadyPinned.indexOf(pinned => alreadyPinned.ipfs_pin_hash === ipfsHashes[i].hash) < 0) {
-      //   console.debug('[PINATA] Pinning:', ipfsHashes[i].hash);
-      // } else {
-      //   console.debug('[PINATA] Alpready pinned:', ipfsHashes[i].hash);
-      // }
-    }
-  }
-
   async isAuthenticated() {
     const pinataApiKey = this.context.configStore.getLocalConfig().pinata;
     try {

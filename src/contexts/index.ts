@@ -2,7 +2,6 @@ import React from 'react';
 
 import ABIService from '../services/ABIService';
 import MulticallService from '../services/MulticallService';
-import DaoService from '../services/DaoService';
 import EventsService from '../services/EventsService';
 import IPFSService from '../services/IPFSService';
 import EtherscanService from '../services/EtherscanService';
@@ -15,9 +14,7 @@ import ProviderStore from '../stores/Provider';
 import TransactionStore from '../stores/Transaction';
 import ModalStore from '../stores/Modal';
 import ConfigStore from '../stores/ConfigStore';
-import DaoStore from '../stores/DaoStore';
 import UserStore from '../stores/UserStore';
-import BlockchainStore from '../stores/BlockchainStore';
 import NotificationStore from '../stores/NotificationStore';
 
 /*
@@ -38,14 +35,11 @@ export default class RootContext {
   transactionStore: TransactionStore;
   modalStore: ModalStore;
   configStore: ConfigStore;
-  daoStore: DaoStore;
   userStore: UserStore;
   notificationStore: NotificationStore;
-  blockchainStore: BlockchainStore;
 
   abiService: ABIService;
   multicallService: MulticallService;
-  daoService: DaoService;
   eventsService: EventsService;
   ipfsService: IPFSService;
   etherscanService: EtherscanService;
@@ -59,15 +53,12 @@ export default class RootContext {
     this.transactionStore = new TransactionStore(this);
     this.modalStore = new ModalStore(this);
     this.configStore = new ConfigStore(this);
-    this.daoStore = new DaoStore(this);
     this.userStore = new UserStore(this);
     this.notificationStore = new NotificationStore(this);
-    this.blockchainStore = new BlockchainStore(this);
 
     this.abiService = new ABIService(this);
     this.multicallService = new MulticallService(this);
     this.eventsService = new EventsService(this);
-    this.daoService = new DaoService(this);
     this.ipfsService = new IPFSService(this);
     this.etherscanService = new EtherscanService(this);
     this.coingeckoService = new CoingeckoService(this);

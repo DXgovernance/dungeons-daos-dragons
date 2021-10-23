@@ -22,7 +22,7 @@ const BLOKCHAIN_FETCH_INTERVAL = 10000;
 
 const Web3ReactManager = ({ children }) => {
   const {
-    context: { providerStore, userStore },
+    context: { providerStore },
   } = useContext();
   const location = useLocation();
   const { activate } = useActiveWeb3React();
@@ -97,7 +97,6 @@ const Web3ReactManager = ({ children }) => {
       // Handle the new accounts, or lack thereof.
       // "accounts" will always be an array, but it can be empty.
       // blockchainStore.fetchData(web3React, false);
-      if (networkActive) userStore.update(providerStore.getActiveWeb3React());
     });
   } catch (error) {
     console.debug(
@@ -122,7 +121,6 @@ const Web3ReactManager = ({ children }) => {
   useInterval(
     async () => {
       if (networkActive) {
-        userStore.update(providerStore.getActiveWeb3React());
         // blockchainStore.fetchData(providerStore.getActiveWeb3React(), false);
       }
     },
