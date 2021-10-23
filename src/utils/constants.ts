@@ -14,19 +14,7 @@ export const DEFAULT_TOKEN_DECIMALS = 18;
 const defaultAlchemyKey = process.env.REACT_APP_KEY_ALCHEMY_API_KEY;
 
 export const NETWORKS: ChainConfig[] = [
-  {
-    id: 1,
-    name: 'mainnet',
-    displayName: 'Ethereum Mainnet',
-    defaultRpc: `https://eth-mainnet.alchemyapi.io/v2/${defaultAlchemyKey}`,
-    nativeAsset: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18,
-    },
-    blockExplorer: 'https://etherscan.io',
-    api: 'https://api.etherscan.io',
-  },
+
   {
     id: 4,
     name: 'rinkeby',
@@ -39,6 +27,19 @@ export const NETWORKS: ChainConfig[] = [
     },
     blockExplorer: 'https://rinkeby.etherscan.io/',
     api: 'https://api-rinkeby.etherscan.io/',
+  },
+  {
+    id: 1,
+    name: 'mainnet',
+    displayName: 'Ethereum Mainnet',
+    defaultRpc: `https://eth-mainnet.alchemyapi.io/v2/${defaultAlchemyKey}`,
+    nativeAsset: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    blockExplorer: 'https://etherscan.io',
+    api: 'https://api.etherscan.io',
   },
   {
     id: 100,
