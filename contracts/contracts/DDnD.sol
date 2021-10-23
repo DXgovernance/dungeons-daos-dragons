@@ -9,6 +9,7 @@ import '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import './DDnDNFT.sol';
+import 'hardhat/console.sol';
 
 /// @title DDnD
 contract DDnD {
@@ -85,7 +86,8 @@ contract DDnD {
     games[gameCount] = newGame;
 
     require(
-      1 < getValidSignatures(gameCount, gameStateHash, signatures),
+      players.length ==
+        getValidSignatures(gameCount, gameStateHash, signatures),
       'DDnD: Error in signature verification'
     );
 
@@ -239,21 +241,14 @@ contract DDnD {
     bytes[] memory signatures
   ) public view returns (uint256 validSignatures) {
     for (uint256 i = 0; i < signatures.length; i++) {
+      console.log('Signer', games[gameId].players[i], i);
       if (
-        ((i == 0) &&
-          (
-            games[gameId].players[0].isValidSignatureNow(
-              gameStateHash.toEthSignedMessageHash(),
-              signatures[0]
-            )
-          )) ||
-        (
-          games[gameId].players[i.sub(1)].isValidSignatureNow(
-            gameStateHash.toEthSignedMessageHash(),
-            signatures[i]
-          )
+        games[gameId].players[i].isValidSignatureNow(
+          gameStateHash.toEthSignedMessageHash(),
+          signatures[i]
         )
       ) {
+        console.log('Valid Sgnature', i);
         validSignatures++;
       }
     }
