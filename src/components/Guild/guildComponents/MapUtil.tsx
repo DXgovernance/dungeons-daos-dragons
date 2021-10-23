@@ -7,7 +7,7 @@ export const addPlayerPos = (svg, room, color) => {
       '</svg>',
       `${drawCircle(
         {
-          cx: room.x * 24 + (room.width * 24) / 1.5,
+          cx: room.x * 24 + (room.width * 24) / 2,
           cy: room.y * 24 + (room.height * 24) / 2,
           r: 5,
         },
