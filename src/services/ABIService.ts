@@ -3,18 +3,9 @@ import { ContractType } from 'stores/Provider';
 import RootContext from '../contexts';
 
 export const schema = {
-  Avatar: require('../contracts/DxAvatar').abi,
-  Controller: require('../contracts/DxController').abi,
-  VotingMachine: require('../contracts/GenesisProtocol').abi,
-  DXDVotingMachine: require('../contracts/DXDVotingMachine').abi,
-  Reputation: require('../contracts/DxReputation').abi,
-  WalletScheme: require('../contracts/WalletScheme').abi,
-  ERC20: require('../contracts/ERC20').abi,
-  PermissionRegistry: require('../contracts/PermissionRegistry').abi,
-  Multicall: require('../contracts/Multicall').abi,
-  ContributionReward: require('../contracts/ContributionReward').abi,
-  SchemeRegistrar: require('../contracts/SchemeRegistrar').abi,
-  Redeemer: require('../contracts/Redeemer').abi,
+  ERC20Guild: require('../contracts/ERC20Guild').abi,
+  DDND: require('../contracts/DDnD').abi,
+  Multicall: require('../contracts/Multicall').abi
 };
 
 export default class ABIService {

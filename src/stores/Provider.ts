@@ -11,16 +11,9 @@ import moment from 'moment';
 import { schema } from '../services/ABIService';
 
 export enum ContractType {
-  ERC20 = 'ERC20',
-  Avatar = 'Avatar',
-  Controller = 'Controller',
-  Reputation = 'Reputation',
-  PermissionRegistry = 'PermissionRegistry',
-  VotingMachine = 'VotingMachine',
-  DXDVotingMachine = 'DXDVotingMachine',
-  WalletScheme = 'WalletScheme',
-  Multicall = 'Multicall',
-  Redeemer = 'Redeemer',
+  DDND = 'DDND',
+  ERC20Guild = 'ERC20Guild',
+  Multicall = 'Multicall'
 }
 
 export interface ChainData {
