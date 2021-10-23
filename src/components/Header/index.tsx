@@ -63,9 +63,7 @@ margin-left:10px;
 //   }]
 const SelectStyle=styled(Select)`
 font-size:9px !important;
-  label{
-    font-size:9px !important;
-    }
+    
 `
 
 const Header = observer(() => {
@@ -235,7 +233,7 @@ const Header = observer(() => {
         ) : (
 
           <NavSection>
-            <MenuItem>
+            <MenuItem style={{fontSize:'10px'}}>
               <SelectStyle name="Choose Guild">
                 <option label="Guild 1">{'Guild1'}</option>
                 <option label="Guild 2">{'Guild2'}</option>
