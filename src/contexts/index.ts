@@ -9,6 +9,7 @@ import CoingeckoService from '../services/CoingeckoService';
 import InfuraService from '../services/InfuraService';
 import AlchemyService from '../services/AlchemyService';
 import CustomRpcService from '../services/CustomRpcService';
+import DDnDService from '../services/DDnDService';
 
 import ProviderStore from '../stores/Provider';
 import TransactionStore from '../stores/Transaction';
@@ -38,6 +39,8 @@ export default class RootContext {
   userStore: UserStore;
   notificationStore: NotificationStore;
 
+  ddndService: DDnDService;
+
   abiService: ABIService;
   multicallService: MulticallService;
   eventsService: EventsService;
@@ -55,6 +58,7 @@ export default class RootContext {
     this.configStore = new ConfigStore(this);
     this.userStore = new UserStore(this);
     this.notificationStore = new NotificationStore(this);
+    this.ddndService = new DDnDService(this);
 
     this.abiService = new ABIService(this);
     this.multicallService = new MulticallService(this);

@@ -5,6 +5,7 @@ import Web3ConnectStatus from '../Web3ConnectStatus';
 import { useContext } from '../../contexts';
 import { FiSettings } from 'react-icons/fi';
 import { Select, Box } from 'retro-ui';
+import { useEffect, useState } from 'react';
 
 // import { Box } from '../../components/common';
 
@@ -39,11 +40,25 @@ const StyledNavBox = styled(Box)`
 const SelectStyle = styled(Select)`
   font-size: 9px !important;
 `;
-
+enum Guilds{
+  Guild1,
+  Guild2
+}
 const Header = observer(() => {
   const {
     context: { providerStore, configStore },
   } = useContext();
+  const [selectedClient,setSelectedClient] = useState(Guilds.Guild1); //default value
+  useEffect(()=>{
+    console.log(selectedClient)
+    JSON.parse(localStorage.getItem('GuildSelected'));
+  },[selectedClient])
+
+
+  function handleSelectChange(event) {
+    localStorage.setItem('GuildSelected', JSON.stringify(selectedClient));
+    setSelectedClient(event.target.value);
+  }
   console.log(providerStore);
   const { active } = providerStore.getActiveWeb3React();
 
@@ -92,9 +107,13 @@ const Header = observer(() => {
 
         <NavSection>
           <MenuItem style={{ fontSize: '10px' }}>
-            <SelectStyle name="Choose Guild">
-              <option label="Guild 1">{'Guild1'}</option>
-              <option label="Guild 2">{'Guild2'}</option>
+            <SelectStyle onChange={handleSelectChange} name="Choose Guild">
+              <option value={Guilds.Guild1} onChange={()=>{
+                console.log('her')
+              }} label="Guild 1">{'Guild1'}</option>
+              <option value={Guilds.Guild2} onChange={()=>{
+                console.log('hersss')
+              }} label="Guild 2">{'Guild2'}</option>
             </SelectStyle>
           </MenuItem>
           <NavItem route={`/${networkName}/dungeon-master`}>
