@@ -4,7 +4,8 @@ import { toCamelCaseString } from '../../utils';
 import WalletModal from 'components/WalletModal';
 import { getChains, injected, isChainIdSupported } from 'provider/connectors';
 import { useContext } from '../../contexts';
-import { Box, BlockchainLink } from '../../components/common';
+import { BlockchainLink } from '../../components/common';
+import { Box } from 'retro-ui';
 import NetworkModal from 'components/NetworkModal';
 import { useEffect, useState } from 'react';
 import { useRpcUrls } from 'provider/providerHooks';
@@ -13,8 +14,6 @@ const WrongNetworkButton = styled(Box)`
   color: var(--dark-text-gray);
   padding: 5px 10px;
   font-weight: 500;
-  font-size: 16px;
-  height: 28px;
   border-radius: 6px;
   background: var(--wrong-network);
   color: var(--white);
@@ -25,9 +24,7 @@ const AccountButton = styled(Box)`
   color: var(--dark-text-gray);
   padding: 5px 10px;
   font-weight: 500;
-  font-size: 16px;
   margin-right: 10px;
-  height: 28px;
   border-radius: 6px;
   cursor: pointer;
 `;
@@ -36,8 +33,6 @@ const ConnectButton = styled(Box)`
   color: var(--dark-text-gray);
   padding: 5px 10px;
   font-weight: 500;
-  font-size: 16px;
-  height: 28px;
   border-radius: 6px;
   background: var(--blue-text);
   color: var(--white);
@@ -45,7 +40,7 @@ const ConnectButton = styled(Box)`
 `;
 
 const ChainButton = styled(AccountButton)`
-  font-size: 14px;
+  margin-left: 40px;
 `;
 
 const Web3ConnectStatus = observer(props => {
