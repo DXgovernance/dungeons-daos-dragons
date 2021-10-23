@@ -16,6 +16,7 @@ const DDnD = artifacts.require('DDnD.sol');
 const DDnDNFT = artifacts.require('DDnDNFT.sol');
 const ERC20Mock = artifacts.require('ERC20Mock.sol');
 const ERC20Guild = artifacts.require('ERC20Guild.sol');
+const MessageLogger = artifacts.require('MessageLogger.sol');
 
 function toEthSignedMessageHash(messageHex) {
   const messageBuffer = Buffer.from(messageHex.substring(2), 'hex');
@@ -70,7 +71,8 @@ async function main() {
   // Deploy DDnD
   console.log('Deploying DDnD...');
   const ddndNFT = await DDnDNFT.new();
-  const ddnd = await DDnD.new(ddndNFT.address);
+  const messageLogger = await MessageLogger.new();
+  const ddnd = await DDnD.new(ddndNFT.address, messageLogger.address);
   console.log('DDnD deployed to:', ddnd.address);
 
   // Deploy Parking Lot Dao

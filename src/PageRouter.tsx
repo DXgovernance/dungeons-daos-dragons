@@ -42,6 +42,7 @@ const PageRouter = observer(({ children }) => {
       providerStore,
       configStore,
       ipfsService,
+      messageService
     },
   } = useContext();
 
@@ -51,6 +52,8 @@ const PageRouter = observer(({ children }) => {
 
   // Start or auth services
   ipfsService.start();
+
+  messageService.read();
 
   const { active: providerActive, connector } =
     providerStore.getActiveWeb3React();

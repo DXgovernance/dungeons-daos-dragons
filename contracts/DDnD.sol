@@ -22,7 +22,7 @@ contract DDnD {
   /* enum GameState {None, PlayersTurn, MasterTurn, Ended} */
 
   DDnDNFT public DDnDNFTMinter;
-
+  address public MessageLogger;
   string public nftTrophyURI = 'nftTrophyURI';
   string public nftDMURI = 'nftDMURI';
 
@@ -46,8 +46,9 @@ contract DDnD {
   mapping(uint256 => Game) public games;
   address[] public guilds;
 
-  constructor(address _DDnDNFT) public {
+  constructor(address _DDnDNFT, address messageLogger) public {
     DDnDNFTMinter = DDnDNFT(_DDnDNFT);
+    MessageLogger = messageLogger;
   }
   
   function createGuild(

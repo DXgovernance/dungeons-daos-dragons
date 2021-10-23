@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box } from 'retro-ui';
 import styled from 'styled-components';
+import { useContext } from '../../../../contexts';
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
@@ -38,6 +39,11 @@ enum Actions {
 }
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
+  const {
+    context: {
+      messageService
+    },
+  } = useContext();
   const [action, setAction] = useState<Actions>(Actions.attack);
   useEffect(() => {
     console.log(action);
@@ -77,6 +83,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       <StyledButton
         onClick={() => {
           setAction(Actions.attack);
+          messageService.write();
         }}
       >
         Attack
