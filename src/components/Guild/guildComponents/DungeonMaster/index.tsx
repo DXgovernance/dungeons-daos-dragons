@@ -35,6 +35,7 @@ export const DungeonMaster: React.FC = () => {
   const [map, setMap] = useState('');
   const [json, setJson] = useState(null);
   const [guildOnePos, setGuildOnePos] = useState([0, 0]);
+  const [guildTwoPos, setGuildTwoPos] = useState([0, 0]);
 
   useEffect(() => {
     // Get map from game state instead of generating here
@@ -52,6 +53,7 @@ export const DungeonMaster: React.FC = () => {
     json.map(room => {
       if (room.roomNumber === 1) {
         setGuildOnePos([room.x, room.y]);
+        setGuildTwoPos([room.x, room.y]);
       }
     });
   }, []);
@@ -68,7 +70,7 @@ export const DungeonMaster: React.FC = () => {
     //     )
     //   )
     // );
-  }, [guildOnePos]);
+  }, [guildOnePos, guildTwoPos]);
 
   console.log({ json });
 
