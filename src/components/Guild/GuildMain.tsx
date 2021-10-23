@@ -6,7 +6,7 @@ import { UserInfo } from './guildComponents/UserInfo';
 
 const GuildWrap=styled.div`
 display:flex;
-flex-direction: row;
+flex-direction: column;
 `
 
 

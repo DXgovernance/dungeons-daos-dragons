@@ -27,6 +27,7 @@ import FAQPage from './pages/FAQ';
 import ForumPage from './pages/Forum';
 import { CreateMetadataPage } from 'pages/Metadata';
 import { GuildMain } from './components/Guild/GuildMain';
+import { DungeonMaster } from './components/Guild/guildComponents/DungeonMaster';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -52,9 +53,9 @@ const Routes = () => {
         {/*<ProposalsPage />{' '}*/}\
         <GuildMain/>
       </Route>
-      <Route exact path="/config">
+      <Route exact path="/dungeon-master">
         {' '}
-        <ConfigPage />{' '}
+        <DungeonMaster/>{' '}
       </Route>
       <Route exact path="/forum">
         {' '}
