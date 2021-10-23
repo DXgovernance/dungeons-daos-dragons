@@ -209,7 +209,7 @@ const Header = observer(() => {
               </>
             )}
             <Web3ConnectStatus text="Connect Wallet" />
-            <NavItem route={`/dungeon-master`}>
+            <NavItem route={`/${networkName}/dungeon-master`}>
               <ItemBox> Dungeon Master </ItemBox>
             </NavItem>
             <NavItem route={`/${networkName}/info`}>
@@ -239,7 +239,7 @@ const Header = observer(() => {
                 <option label="Guild 2">{'Guild2'}</option>
               </SelectStyle>
             </MenuItem>
-            <NavItem route={`/dungeon-master`}>
+            <NavItem route={`/${networkName}/dungeon-master`}>
               <StyledNavBox> Dungeon Master </StyledNavBox>
             </NavItem>
 
