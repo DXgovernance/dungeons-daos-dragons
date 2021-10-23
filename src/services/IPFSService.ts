@@ -73,8 +73,7 @@ export default class IPFSService {
   async uploadProposalMetadata(
     title: string,
     description: string,
-    tags: string[],
-    pinataService
+    tags: string[]
   ) {
     const bodyTextToUpload = JSON.stringify({
       description,
@@ -86,10 +85,6 @@ export default class IPFSService {
     const hash = await this.add(bodyTextToUpload);
     localStorage.setItem('dxvote-newProposal-hash', hash);
 
-    if (pinataService.auth) {
-      const pinataPin = await this.pin(hash);
-      console.debug('[PINATA PIN]', pinataPin.data);
-    }
     const ipfsPin = await this.pin(hash);
     console.debug('[IPFS PIN]', ipfsPin);
 

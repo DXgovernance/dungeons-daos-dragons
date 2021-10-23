@@ -48,7 +48,6 @@ const ConfigPage = observer(() => {
   const {
     context: {
       configStore,
-      pinataService,
       etherscanService,
       infuraService,
       alchemyService,
@@ -60,9 +59,6 @@ const ConfigPage = observer(() => {
 
   const [etherscanApiStatus, setEtherscanApiStatus] = React.useState(
     etherscanService.auth
-  );
-  const [pinataKeyStatus, setPinataKeyStatus] = React.useState(
-    pinataService.auth
   );
   const [infuraKeyStatus, setInfuraKeyStatus] = React.useState(
     infuraService.auth
@@ -90,20 +86,14 @@ const ConfigPage = observer(() => {
   }
 
   async function testApis() {
-    await pinataService.isAuthenticated();
     await etherscanService.isAuthenticated(networkName);
     await infuraService.isAuthenticated();
     await alchemyService.isAuthenticated();
     await customRpcService.isAuthenticated();
-    setPinataKeyStatus(pinataService.auth);
     setEtherscanApiStatus(etherscanService.auth);
     setInfuraKeyStatus(infuraService.auth);
     setAlchemyKeyStatus(alchemyService.auth);
     setCustomRpcUrlStatus(customRpcService.auth);
-  }
-
-  async function pinDXvoteHashes() {
-    pinataService.updatePinList();
   }
 
   async function clearCache() {
@@ -141,7 +131,6 @@ const ConfigPage = observer(() => {
             }
             value={localConfig.pinata}
           ></InputBox>
-          <FormLabel>{pinataKeyStatus ? <FiCheckCircle /> : <FiX />}</FormLabel>
         </Row>
 
         {connector != injected && (
@@ -226,7 +215,6 @@ const ConfigPage = observer(() => {
         <Button onClick={saveConfig}>Save</Button>
         <Button onClick={testApis}>Test Apis</Button>
         <Button onClick={clearCache}>Clear Cache</Button>
-        <Button onClick={pinDXvoteHashes}>Pin DXVote Hashes</Button>
       </Row>
     </Box>
   );
