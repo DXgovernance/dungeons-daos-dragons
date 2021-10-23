@@ -4,6 +4,7 @@ import { Button, Box,Modal } from 'retro-ui';
 import styled from 'styled-components';
  import { useContext } from '../../../../contexts';
 
+
 const PlayerActionsWrapper = styled.div`
   width: 50%;
   display: flex;
@@ -32,7 +33,7 @@ background-color: #ff9051;
 `
 
 interface LinkedButtonsProps {}
-enum Actions {
+export enum Actions {
   up,
   down,
   left,
@@ -53,15 +54,19 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     try{
       const guild=JSON.parse(localStorage.getItem('GuildSelected'));
        console.log(guild)
-      const data=[ "to",
-        "data",
-        "value",
-        "titleText",
-        "descriptionHash"]
-      await ddndService.createProposal('0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe',data)
+      const dataFor=[
+        '0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe' ,
+      ,
+        [0],
+        action,
+        "0x0000000000000000000000000000000000000000"]
+
+      await ddndService.createProposal(' 0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe',dataFor)
     }catch (e) {
+      console.log(e)
       setShowModal(false)
     }
+    setShowModal(false)
 
 
   }
