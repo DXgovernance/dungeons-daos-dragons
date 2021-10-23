@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/DDnD.sol": {
-      "lastModificationDate": 1635007472756,
-      "contentHash": "ca0d478c15eeee829e4cd7686c98dce8",
+      "lastModificationDate": 1635015018448,
+      "contentHash": "547c02bcefbb6d0e201040e44cbe84d6",
       "sourceName": "contracts/DDnD.sol",
       "solcConfig": {
         "version": "0.8.8",
@@ -645,8 +645,8 @@
       ]
     },
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/erc20guild/ERC20Guild.sol": {
-      "lastModificationDate": 1635003138832,
-      "contentHash": "df5aaf93e73b03ec0580d5834cf571c6",
+      "lastModificationDate": 1635017362428,
+      "contentHash": "a9a6295083c2e64d299ca387dfa26cf1",
       "sourceName": "contracts/erc20guild/ERC20Guild.sol",
       "solcConfig": {
         "version": "0.8.8",

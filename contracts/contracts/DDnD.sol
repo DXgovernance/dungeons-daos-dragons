@@ -111,11 +111,11 @@ contract DDnD {
     uint256 gameState,
     bytes32[] memory playersState,
     address winner,
-    bytes[] memory signatures
+    bytes[] memory signatures,
+    bytes32[] memory nextPlayersState
   ) public {
-    uint256 turnsThatPassed = turnNumber - games[gameId].turnNumber;
     require(
-      block.timestamp >
+      block.timestamp <
         lastTimestampUpdate[gameCount].add(
           (turnNumber.sub(games[gameId].turnNumber)).mul(
             games[gameId].secondsPerTurn
@@ -130,8 +130,8 @@ contract DDnD {
         gameId,
         turnNumber,
         gameState,
-        winner,
-        playersState
+        playersState,
+        winner
       );
 
     // Check that the signatures match the future state of the game
@@ -152,7 +152,7 @@ contract DDnD {
     // Everything is valid, change the game state
     games[gameId].turnNumber = turnNumber;
     games[gameId].gameState = gameState;
-    games[gameId].playersState = playersState;
+    games[gameId].playersState = nextPlayersState;
     games[gameId].winner = winner;
     lastTimestampUpdate[gameId] = block.timestamp;
 
@@ -222,8 +222,8 @@ contract DDnD {
     uint256 gameId,
     uint256 turnNumber,
     uint256 gameState,
-    address winner,
-    bytes32[] memory playersState
+    bytes32[] memory playersState,
+    address winner
   ) public view returns (bytes32) {
     Game memory updatedGame = games[gameId];
 
@@ -241,14 +241,12 @@ contract DDnD {
     bytes[] memory signatures
   ) public view returns (uint256 validSignatures) {
     for (uint256 i = 0; i < signatures.length; i++) {
-      console.log('Signer', games[gameId].players[i], i);
       if (
         games[gameId].players[i].isValidSignatureNow(
           gameStateHash.toEthSignedMessageHash(),
           signatures[i]
         )
       ) {
-        console.log('Valid Sgnature', i);
         validSignatures++;
       }
     }
