@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Web3ConnectStatus from '../Web3ConnectStatus';
 import { useContext } from '../../contexts';
 import { FiSettings } from 'react-icons/fi';
-import dragon from 'assets/images/dragon.png';
 import { Select, Box } from 'retro-ui';
 
 // import { Box } from '../../components/common';
@@ -26,39 +25,24 @@ const NavSection = styled.div`
 const MenuItem = styled.div`
   display: flex;
   align-items: center;
-  color: var(--nav-text-light);
-  font-size: 16px;
+  font-size: x-large;
   line-height: 19px;
   cursor: pointer;
 `;
 
-const StyledLogo = styled.img`
-  width: 26px;
-  height: 26px;
-`;
 const StyledNavBox = styled(Box)`
   padding: 0;
   margin-top: 17px;
   margin-left: 10px;
 `;
 
-// const abi= [{
-//     inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
-//     name: 'votesOf',
-//     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-//     stateMutability: 'view',
-//     type: 'function',
-//   }]
 const SelectStyle = styled(Select)`
   font-size: 9px !important;
 `;
 
 const Header = observer(() => {
   const {
-    context: {
-      providerStore,
-      configStore,
-    },
+    context: { providerStore, configStore },
   } = useContext();
   console.log(providerStore);
   const { active } = providerStore.getActiveWeb3React();
@@ -97,14 +81,12 @@ const Header = observer(() => {
     );
   } else {
     const networkName = configStore.getActiveChainName();
-    
+
     return (
       <NavWrapper>
         <NavSection>
           <NavItem route={`/${networkName}/guild`}>
-            <MenuItem>
-              <StyledLogo alt="dxdao" src={dragon} />
-            </MenuItem>
+            <MenuItem>🏰 🏛️ 🐉</MenuItem>
           </NavItem>
         </NavSection>
 
