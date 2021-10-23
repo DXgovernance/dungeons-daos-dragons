@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0
-pragma solidity ^0.7.6;
+pragma solidity ^0.8.8;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/math/MathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "../utils/TokenVault.sol";
 import "../utils/Arrays.sol";
@@ -299,7 +299,7 @@ contract ERC20Guild is Initializable {
             "ERC20Guild: Invalid amount"
         );
         _setVote(msg.sender, proposalId, amount);
-        _refundVote(msg.sender);
+        _refundVote(payable(msg.sender));
     }
 
     /// @dev Set the amount of tokens to vote in multiple proposals
