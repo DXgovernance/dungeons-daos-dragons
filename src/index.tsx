@@ -17,9 +17,9 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PageRouter from './PageRouter';
 
-
 import { GuildMain } from './components/Guild/GuildMain';
 import { DungeonMaster } from './components/Guild/guildComponents/DungeonMaster';
+import { InitGame } from 'components/Guild/guildComponents/InitGame';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -46,6 +46,10 @@ const Routes = () => {
       <Route exact path="/:network/guild">
         {' '}
         <GuildMain />{' '}
+      </Route>
+      <Route exact path="/:network/init">
+        {' '}
+        <InitGame />{' '}
       </Route>
       <Footer />
     </PageRouter>
