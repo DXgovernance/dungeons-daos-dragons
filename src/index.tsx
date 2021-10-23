@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom';
-import { HashRouter, Route, Switch, useLocation } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { createWeb3ReactRoot } from '@web3-react/core';
 import Web3ReactManager from 'components/Web3ReactManager';
 import Web3 from 'web3';
 import moment from 'moment';
-import {  ThemeWrapper } from 'retro-ui'
+import { ThemeWrapper } from 'retro-ui';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -17,15 +17,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PageRouter from './PageRouter';
 
-import { SubmitProposalPage } from './pages/SubmitProposal';
-import { NewProposalTypePage } from './pages/NewProposalType';
-import UserPage from './pages/User';
-import ProposalPage from './pages/Proposal';
-import InfoPage from './pages/Info';
 
-import FAQPage from './pages/FAQ';
-import ForumPage from './pages/Forum';
-import { CreateMetadataPage } from 'pages/Metadata';
 import { GuildMain } from './components/Guild/GuildMain';
 import { DungeonMaster } from './components/Guild/guildComponents/DungeonMaster';
 
@@ -45,57 +37,17 @@ function getLibrary(provider) {
 }
 
 const Routes = () => {
-  const location = useLocation();
   return (
     <PageRouter>
-      <Route exact path="/">
-        {/*<GuildMain/>*/}
-        <DungeonMaster/>
-      </Route>
-      <Route exact path="/dungeon-master">
+      <Route exact path="/:network/dungeon-master">
         {' '}
-        <DungeonMaster/>{' '}
+        <DungeonMaster />{' '}
       </Route>
-      <Route exact path="/forum">
+      <Route exact path="/:network/guild">
         {' '}
-        <ForumPage />{' '}
+        <GuildMain />{' '}
       </Route>
-      <Route exact path="/faq">
-        {' '}
-        <FAQPage />{' '}
-      </Route>
-      <Route exact path="/:network/proposals">
-        {' '}
-        {/*<DungeonMaster/>*/}
-        <GuildMain/>
-
-      </Route>
-      <Route exact path="/:network/create/type">
-        {' '}
-        <NewProposalTypePage />{' '}
-      </Route>
-      <Route path="/:network/create/submit">
-        {' '}
-        <SubmitProposalPage />{' '}
-      </Route>
-      <Route path="/:network/create/metadata/:proposalType">
-        {' '}
-        <CreateMetadataPage />{' '}
-      </Route>
-      <Route exact path="/:network/info">
-        {' '}
-        <InfoPage />{' '}
-      </Route>
-      <Route exact path="/:network/user/:address">
-        {' '}
-        <UserPage />{' '}
-      </Route>
-      <Route exact path="/:network/proposal/:proposalId">
-        {' '}
-        <ProposalPage />{' '}
-      </Route>
-      {location.pathname.indexOf('/proposals') < 0 &&
-        location.pathname.indexOf('/create/metadata') < 0 && <Footer />}
+      <Footer />
     </PageRouter>
   );
 };
@@ -115,7 +67,6 @@ const Root = (
         </HashRouter>
       </ThemeProvider>
     </ThemeWrapper>
-
   </Web3ProviderInjected>
 );
 ReactDOM.render(Root, document.getElementById('root'));

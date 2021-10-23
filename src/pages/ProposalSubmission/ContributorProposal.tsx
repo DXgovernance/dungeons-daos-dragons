@@ -116,7 +116,6 @@ export const ContributorProposalPage = observer(() => {
       daoService,
       providerStore,
       ipfsService,
-      pinataService,
     },
   } = useContext();
   const { library, account } = providerStore.getActiveWeb3React();
@@ -235,8 +234,7 @@ export const ContributorProposalPage = observer(() => {
           `Level ${selectedLevel + 1}`,
           `${trialPeriod ? 'Trial Period' : ''}`,
           `${percentage && percentage < 100 ? '' : 'Full time worker'}`,
-        ],
-        pinataService
+        ]
       );
 
       // Encode rep mint call

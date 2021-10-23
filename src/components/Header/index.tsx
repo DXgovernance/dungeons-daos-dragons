@@ -81,7 +81,6 @@ const Header = observer(() => {
             <MenuItem>
               🐉
             </MenuItem>
-            <div>here</div>
           </NavItem>
         </NavSection>
         <NavSection>
@@ -128,7 +127,7 @@ const Header = observer(() => {
     return (
       <NavWrapper>
         <NavSection>
-          <NavItem route={`/${networkName}/proposals`}>
+          <NavItem route={`/${networkName}/guild`}>
             <MenuItem>
               <StyledLogo alt="dxdao" src={dragon} />
             </MenuItem>

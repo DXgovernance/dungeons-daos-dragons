@@ -132,7 +132,6 @@ const NewProposalPage = observer(() => {
       configStore,
       daoService,
       ipfsService,
-      pinataService,
     },
   } = useContext();
 
@@ -268,10 +267,6 @@ const NewProposalPage = observer(() => {
       const hash = await ipfsService.add(bodyTextToUpload);
       setIpfsHash(hash);
 
-      if (pinataService.auth) {
-        const pinataPin = await pinataService.pin(hash);
-        console.debug('[PINATA PIN]', pinataPin.data);
-      }
       const ipfsPin = await ipfsService.pin(hash);
       console.debug('[IPFS PIN]', ipfsPin);
 
