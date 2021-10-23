@@ -8,7 +8,7 @@ display: flex;
 flex-direction: column;
 grid-gap:2px;
 `
-export const Progress = styled.div<{ width: number; outcomeIndex?: number; selected?: boolean; color?: keyof Colors }>`
+export const Progress = styled.div<{ width: number; outcomeIndex?: number; selected?: boolean; }>`
   background-color:green;
   border-radius: 4px;
   height: 100%;

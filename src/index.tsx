@@ -22,7 +22,7 @@ import { NewProposalTypePage } from './pages/NewProposalType';
 import UserPage from './pages/User';
 import ProposalPage from './pages/Proposal';
 import InfoPage from './pages/Info';
-import ConfigPage from './pages/Configuration';
+
 import FAQPage from './pages/FAQ';
 import ForumPage from './pages/Forum';
 import { CreateMetadataPage } from 'pages/Metadata';
@@ -66,7 +66,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/:network/proposals">
         {' '}
-        <DungeonMaster/>
+        {/*<DungeonMaster/>*/}
+        <GuildMain/>
+
       </Route>
       <Route exact path="/:network/create/type">
         {' '}
