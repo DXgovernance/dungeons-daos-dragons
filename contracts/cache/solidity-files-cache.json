@@ -645,8 +645,8 @@
       ]
     },
     "/home/blackjak/Projects/DXdao/dungeons-daos-dragons/contracts/contracts/erc20guild/ERC20Guild.sol": {
-      "lastModificationDate": 1635003138832,
-      "contentHash": "df5aaf93e73b03ec0580d5834cf571c6",
+      "lastModificationDate": 1635014049772,
+      "contentHash": "2253e27fee9359637d5c9355a8204fbd",
       "sourceName": "contracts/erc20guild/ERC20Guild.sol",
       "solcConfig": {
         "version": "0.8.8",

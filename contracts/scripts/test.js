@@ -48,7 +48,7 @@ async function main() {
   const guildA = await ERC20Guild.new();
   await guildA.initialize(
     guildAToken.address, // address _token,
-    moment.duration(1, 'days').asSeconds(), // uint256 _proposalTime,
+    moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
     moment.duration(1, 'days').asSeconds(), // uint256 _timeForExecution,
     web3.utils.toWei('10'), // uint256 _votesForExecution,
     web3.utils.toWei('1'), // uint256 _votesForCreation,
@@ -75,7 +75,7 @@ async function main() {
   const guildB = await ERC20Guild.new();
   await guildB.initialize(
     guildBToken.address, // address _token,
-    moment.duration(1, 'days').asSeconds(), // uint256 _proposalTime,
+    moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
     moment.duration(1, 'days').asSeconds(), // uint256 _timeForExecution,
     web3.utils.toWei('10'), // uint256 _votesForExecution,
     web3.utils.toWei('1'), // uint256 _votesForCreation,
@@ -148,13 +148,9 @@ async function main() {
               type: 'bytes32',
               name: '_hash',
             },
-            {
-              type: 'bool',
-              name: 'valid',
-            },
           ],
         },
-        [toEthSignedMessageHash(setUpGameHash), true]
+        [toEthSignedMessageHash(setUpGameHash)]
       ),
     ],
     ['0', '0'],
@@ -196,13 +192,9 @@ async function main() {
               type: 'bytes32',
               name: '_hash',
             },
-            {
-              type: 'bool',
-              name: 'valid',
-            },
           ],
         },
-        [toEthSignedMessageHash(setUpGameHash), true]
+        [toEthSignedMessageHash(setUpGameHash)]
       ),
     ],
     ['0', '0'],
@@ -215,7 +207,7 @@ async function main() {
     setUpDDnDFromGuildB.logs[0].args.proposalId
   );
 
-  await time.increase(moment.duration(1, 'days').asSeconds());
+  await time.increase(moment.duration(1, 'hours').asSeconds());
 
   const proposalSetUpFromGuildA = await guildA.endProposal(
     setUpDDnDFromGuildA.logs[0].args.proposalId
