@@ -6,11 +6,9 @@ import { useContext } from '../../contexts';
 import { FiSettings, FiUser, FiBarChart2 } from 'react-icons/fi';
 import dragon from 'assets/images/dragon.png';
 import Web3 from 'web3';
-import { Select,Box } from 'retro-ui'
-
+import { Select, Box } from 'retro-ui';
 
 // import { Box } from '../../components/common';
-
 
 const NavWrapper = styled.div`
   display: flex;
@@ -44,15 +42,15 @@ const ItemBox = styled(Box)`
   height: 28px;
   border-radius: 6px;
 `;
-const StyledLogo=styled.img`
-width:26px;
-height:26px;
-`
-const StyledNavBox=styled(Box)`
-padding:0;
-margin-top:17px;
-margin-left:10px;
-`
+const StyledLogo = styled.img`
+  width: 26px;
+  height: 26px;
+`;
+const StyledNavBox = styled(Box)`
+  padding: 0;
+  margin-top: 17px;
+  margin-left: 10px;
+`;
 
 // const abi= [{
 //     inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
@@ -61,13 +59,11 @@ margin-left:10px;
 //     stateMutability: 'view',
 //     type: 'function',
 //   }]
-const SelectStyle=styled(Select)`
-font-size:9px !important;
-    
-`
+const SelectStyle = styled(Select)`
+  font-size: 9px !important;
+`;
 
 const Header = observer(() => {
-
   const {
     context: {
       userStore,
@@ -77,7 +73,7 @@ const Header = observer(() => {
       // daoStore,
     },
   } = useContext();
-      console.log(providerStore)
+  console.log(providerStore);
   const { active, account } = providerStore.getActiveWeb3React();
 
   // useEffect(()=>{
@@ -125,16 +121,12 @@ const Header = observer(() => {
     );
   });
 
-
-
   if (!active) {
     return (
       <NavWrapper>
         <NavSection>
           <NavItem route={`/`}>
-            <MenuItem>
-              🐉
-            </MenuItem>
+            <MenuItem>🐉</MenuItem>
           </NavItem>
         </NavSection>
         <NavSection>
@@ -188,7 +180,6 @@ const Header = observer(() => {
           </NavItem>
         </NavSection>
 
-
         {blockchainStore.initialLoadComplete ? (
           <NavSection>
             {account && (
@@ -198,7 +189,6 @@ const Header = observer(() => {
                 ) : (
                   <div />
                 )}
-
 
                 {/*{votingMachines.gen ? (*/}
                 {/*  <ItemBox> {genBalance} GEN </ItemBox>*/}
@@ -231,9 +221,8 @@ const Header = observer(() => {
             )}
           </NavSection>
         ) : (
-
           <NavSection>
-            <MenuItem style={{fontSize:'10px'}}>
+            <MenuItem style={{ fontSize: '10px' }}>
               <SelectStyle name="Choose Guild">
                 <option label="Guild 1">{'Guild1'}</option>
                 <option label="Guild 2">{'Guild2'}</option>
@@ -243,7 +232,7 @@ const Header = observer(() => {
               <StyledNavBox> Dungeon Master </StyledNavBox>
             </NavItem>
 
-            {/*<Web3ConnectStatus text="Connect Wallet" />*/}
+            <Web3ConnectStatus text="Connect Wallet" />
             {/*<NavItem route={`/config`}>*/}
             {/*  <a>*/}
             {/*    <FiSettings style={{ margin: '0px 10px', color: '#616161' }} />*/}
