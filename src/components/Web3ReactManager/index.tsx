@@ -22,7 +22,7 @@ const BLOKCHAIN_FETCH_INTERVAL = 10000;
 
 const Web3ReactManager = ({ children }) => {
   const {
-    context: { providerStore, blockchainStore, userStore },
+    context: { providerStore, userStore },
   } = useContext();
   const location = useLocation();
   const { activate } = useActiveWeb3React();
@@ -74,6 +74,7 @@ const Web3ReactManager = ({ children }) => {
 
     const urlNetworkName = location.pathname.split('/')[1];
     if (chain && chain.name != urlNetworkName) {
+      console.log('here');
       history.push(`/${chain.name}/proposals`);
     }
 
@@ -122,7 +123,7 @@ const Web3ReactManager = ({ children }) => {
     async () => {
       if (networkActive) {
         userStore.update(providerStore.getActiveWeb3React());
-        blockchainStore.fetchData(providerStore.getActiveWeb3React(), false);
+        // blockchainStore.fetchData(providerStore.getActiveWeb3React(), false);
       }
     },
     networkActive ? BLOKCHAIN_FETCH_INTERVAL : 10

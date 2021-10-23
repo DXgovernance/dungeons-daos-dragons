@@ -13,6 +13,7 @@ align-items: center;
 const StyledSelect=styled(Select)`
 display: flex;
 `
+
 interface LinkedButtonsProps {
 
 }

@@ -1,13 +1,14 @@
 // Externals
 import React from 'react';
 import styled from 'styled-components'
-import { PlayerData } from './PlayerData';
 import { PlayerActions } from './PlayerActions';
+import { PlayerDataV2 } from './PlayerDatav2';
 
 
 const UserInfoWrap=styled.div`
 display:flex;
-flex:1;
+width:100%;
+align-items: center;
 `
 
 
@@ -20,7 +21,7 @@ export const UserInfo: React.FC<LinkedButtonsProps> = () => {
 
   return (
    <UserInfoWrap>
-     <PlayerData/>
+     <PlayerDataV2/>
      <PlayerActions/>
    </UserInfoWrap>
 
