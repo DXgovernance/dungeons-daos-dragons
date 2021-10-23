@@ -17,7 +17,6 @@ interface LinkedButtonsProps {
 
 export const GuildMain: React.FC<LinkedButtonsProps> = () => {
 
-
   return (
     <GuildWrap>
 
