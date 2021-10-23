@@ -49,9 +49,8 @@ const Routes = () => {
   return (
     <PageRouter>
       <Route exact path="/">
-        {' '}
-        {/*<ProposalsPage />{' '}*/}\
-        <GuildMain/>
+        {/*<GuildMain/>*/}
+        <DungeonMaster/>
       </Route>
       <Route exact path="/dungeon-master">
         {' '}
@@ -67,7 +66,7 @@ const Routes = () => {
       </Route>
       <Route exact path="/:network/proposals">
         {' '}
-        <GuildMain/>
+        <DungeonMaster/>
       </Route>
       <Route exact path="/:network/create/type">
         {' '}
