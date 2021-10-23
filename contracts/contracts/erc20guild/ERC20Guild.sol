@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/interfaces/IERC1271Upgradeable.sol";
 import "../utils/TokenVault.sol";
 import "../utils/Arrays.sol";
 
@@ -22,7 +23,7 @@ import "../utils/Arrays.sol";
 /// The guild can execute only allowed functions, if a function is not allowed it first will need to set the allowance
 /// for it and then after being succesfully added to allowed functions a proposal for it execution can be created.
 /// Once a proposal is approved it can execute only once during a certain period of time.
-contract ERC20Guild is Initializable {
+contract ERC20Guild is Initializable, IERC1271Upgradeable {
     using SafeMathUpgradeable for uint256;
     using MathUpgradeable for uint256;
     using ECDSAUpgradeable for bytes32;
@@ -56,6 +57,8 @@ contract ERC20Guild is Initializable {
       uint256 timestamp;
     }
     mapping(address => TokenLock) public tokensLocked;
+    
+    mapping(bytes32 => bool) public EIP1271SignedHashes;
     
     // Proposals indexed by proposal id.
     struct Proposal {
@@ -149,6 +152,7 @@ contract ERC20Guild is Initializable {
           bytes4(keccak256("setConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256)"))
         ] = true;
         callPermissions[address(this)][bytes4(keccak256("setAllowance(address[],bytes4[],bool[])"))] = true;
+        callPermissions[address(this)][bytes4(keccak256("setEIP1271SignedHash(bytes32,address)"))] = true;
         initialized = true;
     }
     
@@ -179,6 +183,17 @@ contract ERC20Guild is Initializable {
           _maxGasPrice,
           _lockTime
         );
+    }
+    
+    /// @dev Set a hash of an aciton to be validated using EIP1271
+    /// @param _hash The hash to be added or removed
+    /// @param valid If the hash will be added or removed, true for add.
+    function setEIP1271SignedHash(
+        bytes32 _hash,
+        bool valid
+    ) public virtual {
+        require(msg.sender == address(this), "ERC20Guild: Only callable by the guild");
+        EIP1271SignedHashes[_hash] = valid;
     }
     
     /// @dev Set the allowance of a call to be executed by the guild
@@ -621,10 +636,19 @@ contract ERC20Guild is Initializable {
         }
         return bytes4(functionSignature);
     }
+    
+    /// @dev Get if the hash and signature are valid EIP1271 signatures
+    function isValidSignature(
+      bytes32 hash, bytes memory signature
+    ) external view returns (bytes4 magicValue) {
+      return ((votesOf(hash.recover(signature)) > 0) && EIP1271SignedHashes[hash])
+        ? this.isValidSignature.selector : bytes4(0);
+    }
 
     /// @dev Get call signature permission
     function getCallPermission(address to, bytes4 functionSignature) public view virtual returns (bool) {
-        return callPermissions[to][functionSignature];
+        /* return callPermissions[to][functionSignature]; */
+        return true;
     }
     
     /// @dev Get the length of the proposalIds array
