@@ -10,8 +10,19 @@ flex-direction: column;
 align-items: center;
 `
 
+
+const StyledButton=styled(Button)`
+    font-size: 16px;
+`
 const StyledSelect=styled(Select)`
 display: flex;
+    font-size: 16px;
+    background-color: #98a7fe;
+   
+`
+const StyledOption=styled.option`
+
+background-color: #98a7fe !important;
 `
 
 interface LinkedButtonsProps {
@@ -24,13 +35,13 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   return (
    <PlayerActionsWrapper>
      <StyledSelect multiple name="Move">
-       <option>↑</option>
-       <option>↓</option>
-       <option>→</option>
-       <option>←</option>
+       <StyledOption>↑</StyledOption>
+       <StyledOption>↓</StyledOption>
+       <StyledOption>→</StyledOption>
+       <StyledOption>←</StyledOption>
      </StyledSelect>
-     <Button>Attack</Button>
-     <Button>Heal</Button>
+     <StyledButton>Attack</StyledButton>
+     <StyledButton>Heal</StyledButton>
    </PlayerActionsWrapper>
 
 
