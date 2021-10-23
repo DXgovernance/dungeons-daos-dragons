@@ -1,7 +1,8 @@
 // Externals
 import React, { useEffect, useState } from 'react';
-import { Button, Box } from 'retro-ui';
+import { Button, Box,Modal } from 'retro-ui';
 import styled from 'styled-components';
+ import { useContext } from '../../../../contexts';
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
@@ -26,6 +27,9 @@ const StyledOption = styled.option`
 const StyledOptionRotated = styled(StyledOption)`
   transform: rotate(90deg);
 `;
+const ExecuteButton=styled(Button)`
+background-color: #ff9051;
+`
 
 interface LinkedButtonsProps {}
 enum Actions {
@@ -39,11 +43,37 @@ enum Actions {
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   const [action, setAction] = useState<Actions>(Actions.attack);
+  const [showModal,setShowModal]=useState(false)
+  const {
+    context: { ddndService },
+  } = useContext();
+
+  async function createProposal(){
+    setShowModal(true)
+    try{
+      const guild=JSON.parse(localStorage.getItem('GuildSelected'));
+       console.log(guild)
+      const data=[ "to",
+        "data",
+        "value",
+        "titleText",
+        "descriptionHash"]
+      await ddndService.createProposal('0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe',data)
+    }catch (e) {
+      setShowModal(false)
+    }
+
+
+  }
   useEffect(() => {
     console.log(action);
   }, [action]);
   return (
     <PlayerActionsWrapper>
+      {showModal &&
+      <Modal open={showModal}>
+        <Button >Confirm Transaction in Metamsk</Button>
+      </Modal>}
       <StyledSelect multiple name="Move">
         <StyledOption
           onClick={() => {
@@ -88,6 +118,12 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       >
         Heal
       </StyledButton>
+      <ExecuteButton  onClick={async () => {
+
+        await createProposal()
+      }}>
+        Execute!
+      </ExecuteButton>
     </PlayerActionsWrapper>
   );
 };
