@@ -6,8 +6,11 @@ import { useContext } from '../../contexts';
 import { FiSettings, FiUser, FiBarChart2 } from 'react-icons/fi';
 import dragon from 'assets/images/dragon.png';
 import Web3 from 'web3';
-// import { bnum } from '../../utils';
-import { Box } from '../../components/common';
+import { Select,Box } from 'retro-ui'
+
+
+// import { Box } from '../../components/common';
+
 
 const NavWrapper = styled.div`
   display: flex;
@@ -45,8 +48,69 @@ const StyledLogo=styled.img`
 width:26px;
 height:26px;
 `
+const StyledNavBox=styled(Box)`
+padding:0;
+margin-top:17px;
+margin-left:10px;
+`
+
+// const abi= [{
+//     inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+//     name: 'votesOf',
+//     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   }]
+const SelectStyle=styled(Select)`
+font-size:9px !important;
+    
+`
 
 const Header = observer(() => {
+
+  const {
+    context: {
+      userStore,
+      providerStore,
+      blockchainStore,
+      configStore,
+      // daoStore,
+    },
+  } = useContext();
+      console.log(providerStore)
+  const { active, account } = providerStore.getActiveWeb3React();
+
+  // useEffect(()=>{
+  //   async function fetchUserVotes(){
+  //     const proposalData = {
+  //       to: [
+  //         contracts.controller,
+  //         account,
+  //         tokens.find(token => token.symbol === 'DXD').address,
+  //         contracts.utils.dxdVestingFactory,
+  //       ],
+  //       data: [repCallData, '0x0', dxdApprovalCallData, vestingCallData],
+  //
+  //       account: [address
+  //
+  //       ],
+  //       titleText: localStorage.getItem('dxvote-newProposal-title'),
+  //       descriptionHash: contentHash.fromIpfs(hash),
+  //     };
+  //     const contract = await new library.eth.Contract(abi,'0xa327ea1b9986d81750E9A6FdeAb1305589BFC260');
+  //     contract.methods.votesOf().send({from: ....})
+  //       .on('receipt', function(){
+  //       ...
+  //       });
+  //    // const guildContract=new ethers.Contract('0xa327ea1b9986d81750E9A6FdeAb1305589BFC260', abi, library).connect(library)
+  //     //const guildContract=new ethers.Contract('0xa327ea1b9986d81750E9A6FdeAb1305589BFC260', abi, library)
+  //      const vote= await guildContract.votesOf(account)
+  //     console.log('wooooorkkkss',vote)
+  //
+  //   }
+  //   fetchUserVotes()
+  // },[])
+
   const NavItem = withRouter(({ route, history, children }) => {
     return (
       <div
@@ -61,17 +125,7 @@ const Header = observer(() => {
     );
   });
 
-  const {
-    context: {
-      userStore,
-      providerStore,
-      blockchainStore,
-      configStore,
-      // daoStore,
-    },
-  } = useContext();
 
-  const { active, account } = providerStore.getActiveWeb3React();
 
   if (!active) {
     return (
@@ -133,6 +187,8 @@ const Header = observer(() => {
             </MenuItem>
           </NavItem>
         </NavSection>
+
+
         {blockchainStore.initialLoadComplete ? (
           <NavSection>
             {account && (
@@ -153,7 +209,7 @@ const Header = observer(() => {
               </>
             )}
             <Web3ConnectStatus text="Connect Wallet" />
-            <NavItem route={`/dungeon-master`}>
+            <NavItem route={`/${networkName}/dungeon-master`}>
               <ItemBox> Dungeon Master </ItemBox>
             </NavItem>
             <NavItem route={`/${networkName}/info`}>
@@ -175,13 +231,24 @@ const Header = observer(() => {
             )}
           </NavSection>
         ) : (
+
           <NavSection>
-            <Web3ConnectStatus text="Connect Wallet" />
-            <NavItem route={`/config`}>
-              <a>
-                <FiSettings style={{ margin: '0px 10px', color: '#616161' }} />
-              </a>
+            <MenuItem style={{fontSize:'10px'}}>
+              <SelectStyle name="Choose Guild">
+                <option label="Guild 1">{'Guild1'}</option>
+                <option label="Guild 2">{'Guild2'}</option>
+              </SelectStyle>
+            </MenuItem>
+            <NavItem route={`/${networkName}/dungeon-master`}>
+              <StyledNavBox> Dungeon Master </StyledNavBox>
             </NavItem>
+
+            {/*<Web3ConnectStatus text="Connect Wallet" />*/}
+            {/*<NavItem route={`/config`}>*/}
+            {/*  <a>*/}
+            {/*    <FiSettings style={{ margin: '0px 10px', color: '#616161' }} />*/}
+            {/*  </a>*/}
+            {/*</NavItem>*/}
           </NavSection>
         )}
       </NavWrapper>
