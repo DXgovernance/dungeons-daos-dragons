@@ -18,7 +18,7 @@ contract DDnD {
   using ECDSA for bytes32;
   using SignatureChecker for address;
 
-  /* enum GameState {None, PlayersTurn, MasterTurn, Ended} */
+  /* enum GameState {None, Playing, Ended} */
 
   DDnDNFT public DDnDNFTMinter;
 
@@ -87,7 +87,7 @@ contract DDnD {
 
     require(
       players.length ==
-        getValidSignatures(gameCount, gameStateHash, signatures),
+        getValidStartSignatures(gameCount, gameStateHash, signatures),
       'DDnD: Error in signature verification'
     );
 
@@ -111,9 +111,10 @@ contract DDnD {
     uint256 gameState,
     bytes32[] memory playersState,
     address winner,
-    bytes[] memory signatures
+    bytes[] memory signatures,
+    bytes32[] memory nextPlayerState
   ) public {
-    uint256 turnsThatPassed = turnNumber - games[gameId].turnNumber;
+    /* uint256 turnsThatPassed = turnNumber.sub(games[gameId].turnNumber);
     require(
       block.timestamp >
         lastTimestampUpdate[gameCount].add(
@@ -122,7 +123,7 @@ contract DDnD {
           )
         ),
       'DDnD: Wrong time to update'
-    );
+    ); */
 
     // Get the future hash of the game
     bytes32 gameStateHash =
@@ -130,21 +131,23 @@ contract DDnD {
         gameId,
         turnNumber,
         gameState,
-        winner,
-        playersState
+        playersState,
+        winner
       );
+
+    playersState[0] = gameStateHash;
 
     // Check that the signatures match the future state of the game
     if (msg.sender != games[gameId].daoArbitrator) {
       require(
-        games[gameId].players.length >
-          getValidSignatures(gameId, gameStateHash, signatures),
+        games[gameId].players.length ==
+          getValidSignatures(gameId, playersState, signatures),
         'DDnD: Error in signature verification'
       );
-    } else if (gameState == 3) {
+    } else if (gameState == 2) {
       require(
         games[gameId].requiredSignaturesToArbitrate >=
-          getValidSignatures(gameId, gameStateHash, signatures),
+          getValidSignatures(gameId, playersState, signatures),
         'DDnD: Error in signature verification'
       );
     }
@@ -152,12 +155,12 @@ contract DDnD {
     // Everything is valid, change the game state
     games[gameId].turnNumber = turnNumber;
     games[gameId].gameState = gameState;
-    games[gameId].playersState = playersState;
+    games[gameId].playersState = nextPlayerState;
     games[gameId].winner = winner;
     lastTimestampUpdate[gameId] = block.timestamp;
 
     // If the game finish, transfer the tokens
-    if (games[gameId].gameState == 3) {
+    if (games[gameId].gameState == 2) {
       // Finish game
 
       if (msg.sender == games[gameId].daoArbitrator) {
@@ -210,10 +213,10 @@ contract DDnD {
     _game.dungeonMasterArbitrationFee = dungeonMasterArbitrationFee;
     _game.requiredSignaturesToArbitrate = requiredSignaturesToArbitrate;
     _game.daoArbitrator = daoArbitrator;
-    _game.turnNumber = 0;
-    _game.gameState = 1;
-    _game.playersState = new bytes32[](players.length);
-    _game.winner = address(0);
+    _game.turnNumber = turnNumber;
+    _game.gameState = gameState;
+    _game.playersState = playersState;
+    _game.winner = winner;
 
     return keccak256(abi.encode(_game));
   }
@@ -222,8 +225,8 @@ contract DDnD {
     uint256 gameId,
     uint256 turnNumber,
     uint256 gameState,
-    address winner,
-    bytes32[] memory playersState
+    bytes32[] memory playersState,
+    address winner
   ) public view returns (bytes32) {
     Game memory updatedGame = games[gameId];
 
@@ -235,20 +238,39 @@ contract DDnD {
     return keccak256(abi.encode(updatedGame));
   }
 
-  function getValidSignatures(
+  function getValidStartSignatures(
     uint256 gameId,
-    bytes32 gameStateHash,
+    bytes32 gameHash,
     bytes[] memory signatures
   ) public view returns (uint256 validSignatures) {
     for (uint256 i = 0; i < signatures.length; i++) {
       console.log('Signer', games[gameId].players[i], i);
       if (
         games[gameId].players[i].isValidSignatureNow(
-          gameStateHash.toEthSignedMessageHash(),
+          gameHash.toEthSignedMessageHash(),
           signatures[i]
         )
       ) {
-        console.log('Valid Sgnature', i);
+        validSignatures++;
+        console.log('Valid Sgnature', i, validSignatures);
+      }
+    }
+  }
+
+  function getValidSignatures(
+    uint256 gameId,
+    bytes32[] memory playersState,
+    bytes[] memory signatures
+  ) public view returns (uint256 validSignatures) {
+    for (uint256 i = 0; i < signatures.length; i++) {
+      console.log('Signer', games[gameId].players[i], i);
+      if (
+        games[gameId].players[i].isValidSignatureNow(
+          playersState[i].toEthSignedMessageHash(),
+          signatures[i]
+        )
+      ) {
+        console.log('Valid Signature', i);
         validSignatures++;
       }
     }

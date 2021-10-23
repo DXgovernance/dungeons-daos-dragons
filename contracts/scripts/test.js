@@ -48,7 +48,7 @@ async function main() {
   const guildA = await ERC20Guild.new();
   await guildA.initialize(
     guildAToken.address, // address _token,
-    moment.duration(1, 'days').asSeconds(), // uint256 _proposalTime,
+    moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
     moment.duration(1, 'days').asSeconds(), // uint256 _timeForExecution,
     web3.utils.toWei('10'), // uint256 _votesForExecution,
     web3.utils.toWei('1'), // uint256 _votesForCreation,
@@ -75,7 +75,7 @@ async function main() {
   const guildB = await ERC20Guild.new();
   await guildB.initialize(
     guildBToken.address, // address _token,
-    moment.duration(1, 'days').asSeconds(), // uint256 _proposalTime,
+    moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
     moment.duration(1, 'days').asSeconds(), // uint256 _timeForExecution,
     web3.utils.toWei('10'), // uint256 _votesForExecution,
     web3.utils.toWei('1'), // uint256 _votesForCreation,
@@ -148,13 +148,9 @@ async function main() {
               type: 'bytes32',
               name: '_hash',
             },
-            {
-              type: 'bool',
-              name: 'valid',
-            },
           ],
         },
-        [toEthSignedMessageHash(setUpGameHash), true]
+        [toEthSignedMessageHash(setUpGameHash)]
       ),
     ],
     ['0', '0'],
@@ -196,13 +192,9 @@ async function main() {
               type: 'bytes32',
               name: '_hash',
             },
-            {
-              type: 'bool',
-              name: 'valid',
-            },
           ],
         },
-        [toEthSignedMessageHash(setUpGameHash), true]
+        [toEthSignedMessageHash(setUpGameHash)]
       ),
     ],
     ['0', '0'],
@@ -215,17 +207,14 @@ async function main() {
     setUpDDnDFromGuildB.logs[0].args.proposalId
   );
 
-  await time.increase(moment.duration(1, 'days').asSeconds());
+  await time.increase(moment.duration(1, 'hours').asSeconds());
 
   const proposalSetUpFromGuildA = await guildA.endProposal(
     setUpDDnDFromGuildA.logs[0].args.proposalId
   );
-  console.log(proposalSetUpFromGuildA.logs[0].args);
-
   const proposalSetUpFromGuildB = await guildB.endProposal(
     setUpDDnDFromGuildB.logs[0].args.proposalId
   );
-  console.log(proposalSetUpFromGuildB.logs[0].args);
 
   const signatures = [
     await web3.eth.sign(setUpGameHash, dungeonMaster),
@@ -242,6 +231,224 @@ async function main() {
     2,
     daoArbitrator,
     signatures,
+    { from: dungeonMaster }
+  );
+
+  console.log(await ddnd.games(1));
+
+  ////////////////////////////////// TURN ONE //////////////////////////////////
+
+  const DM_TURN_ONE_INSTRUCTIONS = web3.utils.sha3('DM_TURN_ONE_INSTRUCTIONS');
+
+  const TURN_ONE_PROPOSAL_GUILD_A = (
+    await guildA.createProposal(
+      [guildA.address],
+      [
+        web3.eth.abi.encodeFunctionCall(
+          {
+            name: 'setEIP1271SignedHash',
+            type: 'function',
+            inputs: [
+              {
+                type: 'bytes32',
+                name: '_hash',
+              },
+            ],
+          },
+          [toEthSignedMessageHash(web3.utils.sha3('GUILD_A_TURN_ONE_ACTION'))]
+        ),
+      ],
+      ['0'],
+      'Desc',
+      web3.utils.sha3('GUILD_A_TURN_ONE_ACTION'),
+      { from: guildASingleOwner }
+    )
+  ).logs[0].args.proposalId;
+  console.log('Turn TWO proposal action guild A', TURN_ONE_PROPOSAL_GUILD_A);
+
+  const TURN_ONE_PROPOSAL_GUILD_B = (
+    await guildB.createProposal(
+      [guildB.address],
+      [
+        web3.eth.abi.encodeFunctionCall(
+          {
+            name: 'setEIP1271SignedHash',
+            type: 'function',
+            inputs: [
+              {
+                type: 'bytes32',
+                name: '_hash',
+              },
+            ],
+          },
+          [toEthSignedMessageHash(web3.utils.sha3('GUILD_B_TURN_ONE_ACTION'))]
+        ),
+      ],
+      ['0'],
+      'Desc',
+      web3.utils.sha3('GUILD_B_TURN_ONE_ACTION'),
+      { from: guildBSingleOwner }
+    )
+  ).logs[0].args.proposalId;
+  console.log('Turn TWO proposal action guild B', TURN_ONE_PROPOSAL_GUILD_B);
+
+  await time.increase(moment.duration(1, 'hours').asSeconds());
+
+  await guildA.endProposal(TURN_ONE_PROPOSAL_GUILD_A);
+
+  await guildB.endProposal(TURN_ONE_PROPOSAL_GUILD_B);
+
+  const TURN_ONE_HASH = await ddnd.getFutureGameStateHash(
+    1, // uint256 gameId,
+    1, // uint256 turnNumber,
+    1, // uint256 gameState,
+    [
+      DM_TURN_ONE_INSTRUCTIONS,
+      web3.utils.sha3('GUILD_A_TURN_ONE_ACTION'),
+      web3.utils.sha3('GUILD_B_TURN_ONE_ACTION'),
+    ], // bytes32[] memory playersState
+    NULL_ADDRESS, // address winner,
+    { from: dungeonMaster }
+  );
+
+  const TURN_ONE_SIGNATURES = [
+    await web3.eth.sign(TURN_ONE_HASH, dungeonMaster),
+    await web3.eth.sign(
+      web3.utils.sha3('GUILD_A_TURN_ONE_ACTION'),
+      guildASingleOwner
+    ),
+    await web3.eth.sign(
+      web3.utils.sha3('GUILD_B_TURN_ONE_ACTION'),
+      guildBSingleOwner
+    ),
+  ];
+
+  console.log('TURN ONE HASH', TURN_ONE_HASH);
+
+  await ddnd.setGameState(
+    1, // uint256 gameId,
+    1, // uint256 turnNumber,
+    1, // uint256 gameState,
+    [
+      web3.utils.sha3('DM_TURN_ONE_INSTRUCTIONS'),
+      web3.utils.sha3('GUILD_A_TURN_ONE_ACTION'),
+      web3.utils.sha3('GUILD_B_TURN_ONE_ACTION'),
+    ], // bytes32[] memory playersState
+    NULL_ADDRESS, // address winner,
+    TURN_ONE_SIGNATURES,
+    [
+      web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS'),
+      web3.utils.sha3('GUILD_A_TURN_TWO_START'),
+      web3.utils.sha3('GUILD_B_TURN_TWO_START'),
+    ],
+    { from: dungeonMaster }
+  );
+
+  ////////////////////////////////// TURN TWO //////////////////////////////////
+
+  const DM_TURN_TWO_INSTRUCTIONS = web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS');
+
+  const TURN_TWO_PROPOSAL_GUILD_A = (
+    await guildA.createProposal(
+      [guildA.address],
+      [
+        web3.eth.abi.encodeFunctionCall(
+          {
+            name: 'setEIP1271SignedHash',
+            type: 'function',
+            inputs: [
+              {
+                type: 'bytes32',
+                name: '_hash',
+              },
+            ],
+          },
+          [toEthSignedMessageHash(web3.utils.sha3('GUILD_A_TURN_TWO_ACTION'))]
+        ),
+      ],
+      ['0'],
+      'Desc',
+      web3.utils.sha3('GUILD_A_TURN_TWO_ACTION'),
+      { from: guildASingleOwner }
+    )
+  ).logs[0].args.proposalId;
+  console.log('Turn TWO proposal action guild B', TURN_TWO_PROPOSAL_GUILD_A);
+
+  const TURN_TWO_PROPOSAL_GUILD_B = (
+    await guildB.createProposal(
+      [guildB.address],
+      [
+        web3.eth.abi.encodeFunctionCall(
+          {
+            name: 'setEIP1271SignedHash',
+            type: 'function',
+            inputs: [
+              {
+                type: 'bytes32',
+                name: '_hash',
+              },
+            ],
+          },
+          [toEthSignedMessageHash(web3.utils.sha3('GUILD_B_TURN_TWO_ACTION'))]
+        ),
+      ],
+      ['0'],
+      'Desc',
+      web3.utils.sha3('GUILD_B_TURN_TWO_ACTION'),
+      { from: guildBSingleOwner }
+    )
+  ).logs[0].args.proposalId;
+  console.log('Turn TWO proposal action guild B', TURN_TWO_PROPOSAL_GUILD_B);
+
+  await time.increase(moment.duration(1, 'hours').asSeconds());
+
+  await guildA.endProposal(TURN_TWO_PROPOSAL_GUILD_A);
+
+  await guildB.endProposal(TURN_TWO_PROPOSAL_GUILD_B);
+
+  const TURN_TWO_HASH = await ddnd.getFutureGameStateHash(
+    1, // uint256 gameId,
+    1, // uint256 turnNumber,
+    1, // uint256 gameState,
+    [
+      DM_TURN_TWO_INSTRUCTIONS,
+      web3.utils.sha3('GUILD_A_TURN_TWO_ACTION'),
+      web3.utils.sha3('GUILD_B_TURN_TWO_ACTION'),
+    ], // bytes32[] memory playersState
+    NULL_ADDRESS, // address winner,
+    { from: dungeonMaster }
+  );
+
+  const TURN_TWO_SIGNATURES = [
+    await web3.eth.sign(TURN_TWO_HASH, dungeonMaster),
+    await web3.eth.sign(
+      web3.utils.sha3('GUILD_A_TURN_TWO_ACTION'),
+      guildASingleOwner
+    ),
+    await web3.eth.sign(
+      web3.utils.sha3('GUILD_B_TURN_TWO_ACTION'),
+      guildBSingleOwner
+    ),
+  ];
+
+  console.log('TURN TWO HASH', TURN_TWO_HASH);
+
+  await ddnd.setGameState(
+    1, // uint256 gameId,
+    1, // uint256 turnNumber,
+    1, // uint256 gameState,
+    [
+      web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS'),
+      web3.utils.sha3('GUILD_A_TURN_TWO_ACTION'),
+      web3.utils.sha3('GUILD_B_TURN_TWO_ACTION'),
+    ], // bytes32[] memory playersState
+    NULL_ADDRESS, // address winner,
+    TURN_TWO_SIGNATURES,
+    [
+      web3.utils.sha3('DM_TURN_THREE_INSTRUCTIONS'),
+      web3.utils.sha3('GUILD_A_TURN_THREE_START'),
+      web3.utils.sha3('GUILD_B_TURN_THREE_START'),
+    ],
     { from: dungeonMaster }
   );
 }
