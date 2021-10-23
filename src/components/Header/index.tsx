@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Web3ConnectStatus from '../Web3ConnectStatus';
 import { useContext } from '../../contexts';
 import { FiSettings, FiUser, FiBarChart2 } from 'react-icons/fi';
-import dxdaoIcon from 'assets/images/DXdao.svg';
+import dragon from 'assets/images/dragon.png';
 import Web3 from 'web3';
 // import { bnum } from '../../utils';
 import { Box } from '../../components/common';
@@ -41,6 +41,10 @@ const ItemBox = styled(Box)`
   height: 28px;
   border-radius: 6px;
 `;
+const StyledLogo=styled.img`
+width:26px;
+height:26px;
+`
 
 const Header = observer(() => {
   const NavItem = withRouter(({ route, history, children }) => {
@@ -75,8 +79,9 @@ const Header = observer(() => {
         <NavSection>
           <NavItem route={`/`}>
             <MenuItem>
-              <img alt="dxdao" src={dxdaoIcon} />
+              🐉
             </MenuItem>
+            <div>here</div>
           </NavItem>
         </NavSection>
         <NavSection>
@@ -125,7 +130,7 @@ const Header = observer(() => {
         <NavSection>
           <NavItem route={`/${networkName}/proposals`}>
             <MenuItem>
-              <img alt="dxdao" src={dxdaoIcon} />
+              <StyledLogo alt="dxdao" src={dragon} />
             </MenuItem>
           </NavItem>
         </NavSection>
