@@ -47,6 +47,7 @@ export const GuildMain: React.FC = () => {
       }
     });
   }, []);
+  console.log("DDND_ADDRESS", process.env.REACT_APP_DDND_ADDRESS)
 
   console.log({ guildOnePos, guildTwoPos, originalMap, json });
 

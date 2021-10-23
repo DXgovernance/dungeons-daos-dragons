@@ -1,9 +1,6 @@
 const hre = require('hardhat');
-const fs = require('fs');
 const web3 = hre.web3;
 let moment = require('moment');
-const HDWalletProvider = require('@truffle/hdwallet-provider');
-const BN = web3.utils.BN;
 const { time } = require('@openzeppelin/test-helpers');
 
 const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';

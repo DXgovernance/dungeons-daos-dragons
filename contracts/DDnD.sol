@@ -10,6 +10,7 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import './DDnDNFT.sol';
 import 'hardhat/console.sol';
+import './erc20guild/ERC20Guild.sol';
 
 /// @title DDnD
 contract DDnD {
@@ -43,9 +44,36 @@ contract DDnD {
 
   mapping(uint256 => uint256) public lastTimestampUpdate;
   mapping(uint256 => Game) public games;
+  address[] public guilds;
 
   constructor(address _DDnDNFT) public {
     DDnDNFTMinter = DDnDNFT(_DDnDNFT);
+  }
+  
+  function createGuild(
+    address _token,
+    uint256 _proposalTime,
+    uint256 _timeForExecution,
+    uint256 _votesForExecution,
+    uint256 _votesForCreation,
+    string memory _name,
+    uint256 _voteGas,
+    uint256 _maxGasPrice,
+    uint256 _lockTime
+  ) public {
+    ERC20Guild newGuild = new ERC20Guild();
+    newGuild.initialize(
+      _token,
+      _proposalTime,
+      _timeForExecution,
+      _votesForExecution,
+      _votesForCreation,
+      _name,
+      _voteGas,
+      _maxGasPrice,
+      _lockTime
+    );
+    guilds.push(address(newGuild));
   }
 
   function setUpGame(

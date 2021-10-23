@@ -8,6 +8,7 @@ import { PlayerInfo } from './PlayerInfo';
 const Wrapper=styled.div`
 display: flex;
 width:50%;
+justify-content: space-around;
 `
 
 const StyledAvatar=styled.img`
