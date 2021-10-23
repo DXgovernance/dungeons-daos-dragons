@@ -1,5 +1,5 @@
 // Externals
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button,Select } from 'retro-ui'
 import styled from 'styled-components'
 
@@ -28,20 +28,43 @@ background-color: #98a7fe !important;
 interface LinkedButtonsProps {
 
 }
+enum Actions {
+  up,
+  down,
+  left,
+  right,
+  attack,
+  heal
+
+}
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
-
-
+    const [action,setAction]=useState<Actions>(Actions.attack)
+    useEffect(()=>{
+      console.log(action)
+    },[action])
   return (
    <PlayerActionsWrapper>
      <StyledSelect multiple name="Move">
-       <StyledOption>↑</StyledOption>
-       <StyledOption>↓</StyledOption>
-       <StyledOption>→</StyledOption>
-       <StyledOption>←</StyledOption>
+       <StyledOption onClick={()=>{
+         setAction(Actions.up)
+       }}>↑</StyledOption>
+       <StyledOption onClick={()=>{
+         setAction(Actions.down)
+       }}>↓</StyledOption>
+       <StyledOption onClick={()=>{
+         setAction(Actions.right)
+       }}>→</StyledOption>
+       <StyledOption onClick={()=>{
+         setAction(Actions.left)
+       }}>←</StyledOption>
      </StyledSelect>
-     <StyledButton>Attack</StyledButton>
-     <StyledButton>Heal</StyledButton>
+     <StyledButton onClick={()=>{
+        setAction(Actions.attack)
+     }}>Attack</StyledButton>
+     <StyledButton onClick={()=>{
+       setAction(Actions.heal)
+     }}>Heal</StyledButton>
    </PlayerActionsWrapper>
 
 
