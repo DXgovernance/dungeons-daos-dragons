@@ -1,8 +1,13 @@
 // Externals
 import React, { useEffect, useState } from 'react';
-import { Button, Box } from 'retro-ui';
+import { Button, Box,Modal } from 'retro-ui';
 import styled from 'styled-components';
+<<<<<<< HEAD
 import { useContext } from '../../../../contexts';
+=======
+ import { useContext } from '../../../../contexts';
+
+>>>>>>> 1701b4938bb6b77f835dd4f38eff5eabb1e71c18
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
@@ -27,9 +32,12 @@ const StyledOption = styled.option`
 const StyledOptionRotated = styled(StyledOption)`
   transform: rotate(90deg);
 `;
+const ExecuteButton=styled(Button)`
+background-color: #ff9051;
+`
 
 interface LinkedButtonsProps {}
-enum Actions {
+export enum Actions {
   up,
   down,
   left,
@@ -45,11 +53,41 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     },
   } = useContext();
   const [action, setAction] = useState<Actions>(Actions.attack);
+  const [showModal,setShowModal]=useState(false)
+  const {
+    context: { ddndService },
+  } = useContext();
+
+  async function createProposal(){
+    setShowModal(true)
+    try{
+      const guild=JSON.parse(localStorage.getItem('GuildSelected'));
+       console.log(guild)
+      const dataFor=[
+        '0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe' ,
+      ,
+        [0],
+        action,
+        "0x0000000000000000000000000000000000000000"]
+
+      await ddndService.createProposal(' 0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe',dataFor)
+    }catch (e) {
+      console.log(e)
+      setShowModal(false)
+    }
+    setShowModal(false)
+
+
+  }
   useEffect(() => {
     console.log(action);
   }, [action]);
   return (
     <PlayerActionsWrapper>
+      {showModal &&
+      <Modal open={showModal}>
+        <Button >Confirm Transaction in Metamsk</Button>
+      </Modal>}
       <StyledSelect multiple name="Move">
         <StyledOption
           onClick={() => {
@@ -95,6 +133,12 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       >
         Heal
       </StyledButton>
+      <ExecuteButton  onClick={async () => {
+
+        await createProposal()
+      }}>
+        Execute!
+      </ExecuteButton>
     </PlayerActionsWrapper>
   );
 };

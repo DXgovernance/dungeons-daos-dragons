@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Box } from 'retro-ui';
+import { Box, Message, Input, Button } from 'retro-ui';
 
 import { generateMap } from '../../../../map-generator/index';
 import { SplitMap } from '../Maps';
@@ -13,22 +13,27 @@ const UserInfoWrap = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-const Guild = styled(Box)`
-  width: 50%;
+const StyledBox = styled(Box)`
+  width: 40%;
+  margin: 10px;
 `;
 const GuildsWrapper = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  grid-gap: 2px;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
-const GuildName = styled.div`
-  font-family: 'Press Start 2P';
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
 `;
-const GuildActions = styled(Box)`
-  flex-direction: column;
-  margin-left: auto;
-  width: 50%;
+const StyledButton = styled(Button)`
+  margin: 5px;
+`;
+const LargeStyledButton = styled(Button)`
+  width: 40%;
+  margin: 10px;
 `;
 
 export const DungeonMaster: React.FC = () => {
@@ -36,6 +41,8 @@ export const DungeonMaster: React.FC = () => {
   const [json, setJson] = useState(null);
   const [guildOneState, setGuildOneState] = useState(null);
   const [guildTwoState, setGuildTwoState] = useState(null);
+  const [guildOneDesc, setGuildOneDesc] = useState(null);
+  const [guildTwoDesc, setGuildTwoDesc] = useState(null);
 
   useEffect(() => {
     const { svg, json } = generateMap();
@@ -53,6 +60,12 @@ export const DungeonMaster: React.FC = () => {
 
   console.log({ json });
 
+  const constructButtonsForAvailableDoors = room => {
+    return room?.doors.map(door => {
+      return <StyledButton>Go {door.connection.direction}</StyledButton>;
+    });
+  };
+
   return (
     <UserInfoWrap>
       <Box style={{ marginBottom: '15px' }}>DungeonMaster</Box>
@@ -65,20 +78,48 @@ export const DungeonMaster: React.FC = () => {
         />
       ) : null}
       <GuildsWrapper>
-        <Guild>
-          <GuildName>Guild name 1</GuildName>
-          <GuildActions>
-            <div>Move</div>
-            <div>Attack</div>
-          </GuildActions>
-        </Guild>
-        <Guild>
-          <GuildName>Guild name 2</GuildName>
-          <GuildActions>
-            <div>Move</div>
-            <div>Attack</div>
-          </GuildActions>
-        </Guild>
+        <StyledBox>
+          <Message>Guild #1 Decision - Move 4</Message>
+          <Message type="success">Move down</Message>
+        </StyledBox>
+        <StyledBox>
+          <Message>Guild #2 Decision - Move 4</Message>
+          <Message type="success">Attack</Message>
+        </StyledBox>
+        <StyledBox>
+          <Message>Guild #1 - Move 4 - Action</Message>
+          <ButtonWrapper>
+            <Button>Attack</Button>
+            {constructButtonsForAvailableDoors(guildOneState?.room)}
+            <Button>Nothing</Button>
+          </ButtonWrapper>
+        </StyledBox>
+        <StyledBox>
+          <Message>Guild #2 - Move 4 - Action</Message>
+          <ButtonWrapper>
+            <StyledButton>Attack</StyledButton>
+            {constructButtonsForAvailableDoors(guildTwoState?.room)}
+            <StyledButton>Do nothing</StyledButton>
+          </ButtonWrapper>
+        </StyledBox>
+        <StyledBox>
+          <Input
+            name="Guild #1 Next description"
+            id="guildOneDesc"
+            value={guildOneDesc}
+            onChange={e => setGuildOneDesc(e.target.value)}
+          />
+        </StyledBox>
+        <StyledBox>
+          <Input
+            name="Guild #2 Next description"
+            id="guildTwoDesc"
+            value={guildTwoDesc}
+            onChange={e => setGuildTwoDesc(e.target.value)}
+          />
+        </StyledBox>
+        <LargeStyledButton>Send</LargeStyledButton>
+        <LargeStyledButton>Send</LargeStyledButton>
       </GuildsWrapper>
     </UserInfoWrap>
   );

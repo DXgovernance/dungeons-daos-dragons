@@ -14,7 +14,7 @@ import ThemeProvider, { GlobalStyle } from './theme';
 import { web3ContextNames } from 'provider/connectors';
 
 import Header from './components/Header';
-// import Footer from './components/Footer';
+
 import PageRouter from './PageRouter';
 
 import { GuildMain } from './components/Guild/GuildMain';
