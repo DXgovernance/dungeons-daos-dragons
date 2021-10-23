@@ -29,6 +29,7 @@ const ProgressBar = styled.div<{ height?: number }>`
 interface LinkedButtonsProps {}
 
 export const PlayerInfo: React.FC<LinkedButtonsProps> = () => {
+
   return (
     <StyledWrapper>
       <ProgressBar>
