@@ -6,7 +6,7 @@ import { useContext } from '../../contexts';
 import { FiSettings, FiUser, FiBarChart2 } from 'react-icons/fi';
 import dxdaoIcon from 'assets/images/DXdao.svg';
 import Web3 from 'web3';
-import { bnum } from '../../utils';
+// import { bnum } from '../../utils';
 import { Box } from '../../components/common';
 
 const NavWrapper = styled.div`
@@ -63,7 +63,7 @@ const Header = observer(() => {
       providerStore,
       blockchainStore,
       configStore,
-      daoStore,
+      // daoStore,
     },
   } = useContext();
 
@@ -104,21 +104,21 @@ const Header = observer(() => {
             )
           )
         : 0;
-    const genBalance =
-      active && userInfo.genBalance
-        ? parseFloat(
-            Number(Web3.utils.fromWei(userInfo.genBalance.toString())).toFixed(
-              2
-            )
-          )
-        : 0;
-    const { userRep, totalSupply } =
-      active && blockchainStore.initialLoadComplete
-        ? daoStore.getRepAt(account, providerStore.getCurrentBlockNumber())
-        : { userRep: bnum(0), totalSupply: bnum(0) };
-    const repPercentage = active
-      ? userRep.times(100).div(totalSupply).toFixed(4)
-      : bnum(0);
+    // const genBalance =
+    //   active && userInfo.genBalance
+    //     ? parseFloat(
+    //         Number(Web3.utils.fromWei(userInfo.genBalance.toString())).toFixed(
+    //           2
+    //         )
+    //       )
+    //     : 0;
+    // const { userRep, totalSupply } =
+    //   active && blockchainStore.initialLoadComplete
+    //     ? daoStore.getRepAt(account, providerStore.getCurrentBlockNumber())
+    //     : { userRep: bnum(0), totalSupply: bnum(0) };
+    // const repPercentage = active
+    //   ? userRep.times(100).div(totalSupply).toFixed(4)
+    //   : bnum(0);
 
     return (
       <NavWrapper>
@@ -134,16 +134,16 @@ const Header = observer(() => {
             {account && (
               <>
                 {votingMachines.dxd ? (
-                  <ItemBox> {dxdBalance} DXD </ItemBox>
+                  <ItemBox> {dxdBalance} VOTE </ItemBox>
                 ) : (
                   <div />
                 )}
-                {votingMachines.gen ? (
-                  <ItemBox> {genBalance} GEN </ItemBox>
-                ) : (
-                  <div />
-                )}
-                <ItemBox> {repPercentage.toString()} % REP </ItemBox>
+                {/*{votingMachines.gen ? (*/}
+                {/*  <ItemBox> {genBalance} GEN </ItemBox>*/}
+                {/*) : (*/}
+                {/*  <div />*/}
+                {/*)}*/}
+                {/*<ItemBox> {repPercentage.toString()} % REP </ItemBox>*/}
               </>
             )}
             <Web3ConnectStatus text="Connect Wallet" />

@@ -16,7 +16,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PageRouter from './PageRouter';
 
-import ProposalsPage from './pages/Proposals';
 import { SubmitProposalPage } from './pages/SubmitProposal';
 import { NewProposalTypePage } from './pages/NewProposalType';
 import UserPage from './pages/User';
@@ -26,6 +25,7 @@ import ConfigPage from './pages/Configuration';
 import FAQPage from './pages/FAQ';
 import ForumPage from './pages/Forum';
 import { CreateMetadataPage } from 'pages/Metadata';
+import { GuildMain } from './components/Guild/GuildMain';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -48,7 +48,8 @@ const Routes = () => {
     <PageRouter>
       <Route exact path="/">
         {' '}
-        <ProposalsPage />{' '}
+        {/*<ProposalsPage />{' '}*/}\
+        <GuildMain/>
       </Route>
       <Route exact path="/config">
         {' '}
@@ -64,7 +65,7 @@ const Routes = () => {
       </Route>
       <Route exact path="/:network/proposals">
         {' '}
-        <ProposalsPage />{' '}
+        <GuildMain/>
       </Route>
       <Route exact path="/:network/create/type">
         {' '}
