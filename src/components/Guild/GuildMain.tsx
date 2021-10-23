@@ -6,6 +6,7 @@ import { UserInfo } from './guildComponents/UserInfo';
 
 const GuildWrap=styled.div`
 display:flex;
+flex-direction: row;
 `
 
 
@@ -21,6 +22,7 @@ export const GuildMain: React.FC<LinkedButtonsProps> = () => {
     <GuildWrap>
 
       {/*map goes here*/}
+      <div>Here</div>
       <UserInfo/>
 
     </GuildWrap>
