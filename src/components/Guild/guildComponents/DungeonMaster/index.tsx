@@ -29,6 +29,9 @@ const ButtonWrapper = styled.div`
   flex-wrap: wrap;
 `;
 const StyledButton = styled(Button)`
+  margin: 5px;
+`;
+const LargeStyledButton = styled(Button)`
   width: 40%;
   margin: 10px;
 `;
@@ -58,8 +61,8 @@ export const DungeonMaster: React.FC = () => {
   console.log({ json });
 
   const constructButtonsForAvailableDoors = room => {
-    return room.doors.map(door => {
-      return <Button>Go {door.connection.direction}</Button>;
+    return room?.doors.map(door => {
+      return <StyledButton>Go {door.connection.direction}</StyledButton>;
     });
   };
 
@@ -94,9 +97,9 @@ export const DungeonMaster: React.FC = () => {
         <StyledBox>
           <Message>Guild #2 - Move 4 - Action</Message>
           <ButtonWrapper>
-            <Button>Attack</Button>
+            <StyledButton>Attack</StyledButton>
             {constructButtonsForAvailableDoors(guildTwoState?.room)}
-            <Button>Do nothing</Button>
+            <StyledButton>Do nothing</StyledButton>
           </ButtonWrapper>
         </StyledBox>
         <StyledBox>
@@ -115,8 +118,8 @@ export const DungeonMaster: React.FC = () => {
             onChange={e => setGuildTwoDesc(e.target.value)}
           />
         </StyledBox>
-        <StyledButton>Send</StyledButton>
-        <StyledButton>Send</StyledButton>
+        <LargeStyledButton>Send</LargeStyledButton>
+        <LargeStyledButton>Send</LargeStyledButton>
       </GuildsWrapper>
     </UserInfoWrap>
   );
