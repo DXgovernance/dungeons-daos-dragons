@@ -305,7 +305,7 @@ function drawRoomText({ x, y, width, height }, { roomNumber, roomLabel }) {
   let fontSize = fontSizeNormal;
   let labelY = roomLabel ? middleY - fontSize / 2 : middleY;
 
-  let text = drawText(roomNumber, { x: middleX, y: labelY }, { fontSize });
+  let text = '';
 
   if (roomLabel) {
     let roomLabelY = labelY + fontSize;
