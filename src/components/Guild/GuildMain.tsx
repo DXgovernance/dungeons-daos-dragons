@@ -1,9 +1,12 @@
 // Externals
 import React from 'react';
+import styled from 'styled-components';
+import { UserInfo } from './guildComponents/UserInfo';
 
-import { Button } from 'retro-ui'
 
-
+const GuildWrap=styled.div`
+display:flex;
+`
 
 
 
@@ -15,12 +18,12 @@ export const GuildMain: React.FC<LinkedButtonsProps> = () => {
 
 
   return (
-    <div>
+    <GuildWrap>
 
-        <Button>{'DDND!'}</Button>
+      {/*map goes here*/}
+      <UserInfo/>
 
-
-    </div>
+    </GuildWrap>
 
 
   );
