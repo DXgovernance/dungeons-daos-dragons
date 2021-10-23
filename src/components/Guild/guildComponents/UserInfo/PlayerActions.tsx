@@ -2,12 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box,Modal } from 'retro-ui';
 import styled from 'styled-components';
-<<<<<<< HEAD
 import { useContext } from '../../../../contexts';
-=======
- import { useContext } from '../../../../contexts';
-
->>>>>>> 1701b4938bb6b77f835dd4f38eff5eabb1e71c18
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
