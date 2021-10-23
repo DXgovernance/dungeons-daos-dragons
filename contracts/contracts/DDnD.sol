@@ -114,16 +114,15 @@ contract DDnD {
     bytes[] memory signatures,
     bytes32[] memory nextPlayersState
   ) public {
-    /* uint256 turnsThatPassed = turnNumber - games[gameId].turnNumber;
     require(
-      block.timestamp >
+      block.timestamp <
         lastTimestampUpdate[gameCount].add(
           (turnNumber.sub(games[gameId].turnNumber)).mul(
             games[gameId].secondsPerTurn
           )
         ),
       'DDnD: Wrong time to update'
-    ); */
+    );
 
     // Get the future hash of the game
     bytes32 gameStateHash =

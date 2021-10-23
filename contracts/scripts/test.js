@@ -409,7 +409,7 @@ async function main() {
 
   const TURN_TWO_HASH = await ddnd.getFutureGameStateHash(
     1, // uint256 gameId,
-    1, // uint256 turnNumber,
+    2, // uint256 turnNumber,
     1, // uint256 gameState,
     [
       DM_TURN_TWO_INSTRUCTIONS,
@@ -436,7 +436,7 @@ async function main() {
 
   await ddnd.setGameState(
     1, // uint256 gameId,
-    1, // uint256 turnNumber,
+    2, // uint256 turnNumber,
     1, // uint256 gameState,
     [
       web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS'),
