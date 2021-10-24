@@ -62,6 +62,15 @@ export default class DDnDService {
       process.env.REACT_APP_DDND_ADDRESS,
     ).methods.getGuilds().call();
   }
+  getGuildName(guildAddress): PromiEvent<any> {
+    const { providerStore } = this.context;
+    // const { library } = providerStore.getActiveWeb3React();
+    return providerStore.getContract(
+      providerStore.getActiveWeb3React(),
+      ContractType.ERC20Guild,
+      guildAddress,
+    ).methods.name().call();
+  }
   
   getProposalIds(guildAddress): PromiEvent<any> {
     const { providerStore } = this.context;

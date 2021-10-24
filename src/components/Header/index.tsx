@@ -52,10 +52,25 @@ const Header = observer(() => {
   ddndService.getAllGameData(1).then(console.log);
 
   const [selectedClient, setSelectedClient] = useState(Guilds.Guild1); //default value
+  const [guilds,setGuild]=useState(null)
   useEffect(() => {
     console.log(selectedClient);
     JSON.parse(localStorage.getItem('GuildSelected'));
   }, [selectedClient]);
+  useEffect(()=>{
+    async function fetchData(){
+      const guildData=await ddndService.getGuilds()
+      console.log('guildData',guildData)
+      const guild1name=await ddndService.getGuildName(guildData[0])
+      const guild2name=await ddndService.getGuildName(guildData[1])
+      console.log('works?',guild1name)
+      console.log('guild2',guild2name)
+      setGuild([guild1name,guild2name])
+
+    }
+    fetchData()
+  },[])
+
 
   function handleSelectChange(event) {
     localStorage.setItem('GuildSelected', JSON.stringify(selectedClient));
@@ -110,15 +125,14 @@ const Header = observer(() => {
         <NavSection>
           <MenuItem style={{ fontSize: '10px' }}>
             <SelectStyle onChange={handleSelectChange} name="Choose Game">
-              <option value={Guilds.Guild1} onChange={() => {}} label="Guild 1">
+              <option value={Guilds.Guild1} onChange={() => {}} label={guilds[0]}>
                 {'Guild1'}
               </option>
               <option
                 value={Guilds.Guild2}
                 onChange={() => {
-                  console.log('hersss');
                 }}
-                label="Guild 2"
+                label={guilds[1]}
               >
                 {'Guild2'}
               </option>
