@@ -88,6 +88,11 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     }
     fetchData();
   }, []);
+  useEffect(()=>{
+    setInterval(async function() {
+      await getAllGameData();
+    }, 1000);
+  },[])
   return (
     <PlayerActionsWrapper>
       {showModal &&
