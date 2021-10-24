@@ -22,7 +22,8 @@ const StyledSelect = styled(Box)`
   background-color: #98a7fe;
 `;
 const StyledOption = styled.option`
-  background-color: #98a7fe !important;
+  background-color: #98a7fe ;
+  border-radius: 6px;
   margin: 0 10px;
   cursor: pointer;
 `;
@@ -63,7 +64,6 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   async function vote() {
     setShowModal(true);
     try {
-      console.log(action);
       const getData = await ddndService.getAllGameData(1);
       const guildSelected = parseInt(
         JSON.parse(localStorage.getItem('GuildSelected'))
@@ -117,6 +117,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       )}
       <StyledSelect multiple name="Move">
         <StyledOption
+          style={{backgroundColor:action===Actions.up && "#cf5f3b"}}
           onClick={() => {
             setAction(Actions.up);
           }}
@@ -124,6 +125,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
           ↑ {directionVotes && formatEther(directionVotes.move_north.votes)}
         </StyledOption>
         <StyledOption
+          style={{backgroundColor:action===Actions.down && "#cf5f3b"}}
           onClick={() => {
             setAction(Actions.down);
           }}
@@ -133,6 +135,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       </StyledSelect>
       <StyledSelect>
         <StyledOptionRotated
+          style={{backgroundColor:action===Actions.left && "#cf5f3b"}}
           onClick={() => {
             setAction(Actions.left);
           }}
@@ -140,6 +143,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
           ← {directionVotes && formatEther(directionVotes.move_east.votes)}
         </StyledOptionRotated>
         <StyledOptionRotated
+          style={{backgroundColor:action===Actions.right && "#cf5f3b"}}
           onClick={() => {
             setAction(Actions.right);
           }}
