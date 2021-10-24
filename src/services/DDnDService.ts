@@ -222,31 +222,35 @@ export default class DDnDService {
     );
   }
 
-  voteAction(guildAddress: string, proposalId: string, amount: string, voteAction: string, gameTopic: string) {
+  async voteAction(guildAddress: string, proposalId: string, amount: string, voteAction: string, gameTopic: string) {
     const { providerStore } = this.context;
     const { library, account } = providerStore.getActiveWeb3React();
 
-    library.eth.sign(
-      voteAction,
-      account
-    ).then((eip1271Signature) => {
-      console.log(eip1271Signature)
-      providerStore.sendTransaction(
-        providerStore.getActiveWeb3React(),
-        ContractType.MessageLogger,
-        process.env.REACT_APP_MESSAGE_LOGGER,
-        'broadcast',
-        [gameTopic, `${guildAddress}:${proposalId}:${voteAction}:${eip1271Signature}`]
-      ).then(async () => {
-        return await providerStore.sendTransaction(
+    return await new Promise((resolve) => {
+      library.eth.sign(
+        voteAction,
+        account
+      ).then((eip1271Signature) => {
+        console.log(eip1271Signature)
+        resolve(eip1271Signature)
+        providerStore.sendTransaction(
           providerStore.getActiveWeb3React(),
-          ContractType.ERC20Guild,
-          guildAddress,
-          'setVote',
-          [proposalId, amount]
-        );
-      })
-    });
+          ContractType.MessageLogger,
+          process.env.REACT_APP_MESSAGE_LOGGER,
+          'broadcast',
+          [gameTopic, `${guildAddress}:${proposalId}:${voteAction}:${eip1271Signature}`]
+        ).then(async () => {
+          return await providerStore.sendTransaction(
+            providerStore.getActiveWeb3React(),
+            ContractType.ERC20Guild,
+            guildAddress,
+            'setVote',
+            [proposalId, amount]
+          );
+        })
+      });
+    })
+    
   }
   
   endProposal(guildAddress:string, proposalId: string): PromiEvent<any> {
