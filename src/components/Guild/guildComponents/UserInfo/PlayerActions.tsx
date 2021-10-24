@@ -7,6 +7,8 @@ import { formatEther } from 'ethers/utils';
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
+      grid-gap: 5px;
+;
   display: flex;
   flex-direction: column;
   align-items: center;
