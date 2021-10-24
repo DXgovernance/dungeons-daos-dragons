@@ -86,7 +86,8 @@ contract DDnD {
     uint256 dungeonMasterArbitrationFee,
     uint256 requiredSignaturesToArbitrate,
     address daoArbitrator,
-    bytes[] memory signatures
+    bytes[] memory signatures,
+    bytes32 rootGameState
   ) public {
     require(
       msg.sender == players[0],
@@ -107,7 +108,7 @@ contract DDnD {
     newGame.gameState = 1;
     newGame.playersState = new bytes32[](players.length);
     newGame.winner = address(0);
-
+    newGame.playersState[0] = rootGameState;
     gameCount++;
 
     bytes32 gameStateHash = keccak256(abi.encode(newGame));
@@ -241,7 +242,7 @@ contract DDnD {
     _game.daoArbitrator = daoArbitrator;
     _game.turnNumber = 0;
     _game.gameState = 1;
-    _game.playersState = new bytes32[](players.length);
+    _game.playersState = playersState;
     _game.winner = address(0);
 
     return keccak256(abi.encode(_game));
@@ -262,6 +263,18 @@ contract DDnD {
     updatedGame.winner = winner;
 
     return keccak256(abi.encode(updatedGame));
+  }
+  
+  function getGuilds() public view returns(address[] memory){
+    return guilds;
+  }
+  
+  function getPlayersAddresses(uint256 gameId) public view returns(address[] memory){
+    return games[gameId].players;
+  }
+  
+  function getPlayersState(uint256 gameId) public view returns(bytes32[] memory){
+    return games[gameId].playersState;
   }
 
   function getValidSignatures(

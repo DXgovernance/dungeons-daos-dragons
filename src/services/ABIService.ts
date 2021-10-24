@@ -5,6 +5,7 @@ import RootContext from '../contexts';
 export const schema = {
   ERC20Guild: require('../contracts/ERC20Guild').abi,
   DDND: require('../contracts/DDnD').abi,
+  MessageLogger: require('../contracts/MessageLogger').abi,
   Multicall: require('../contracts/Multicall').abi
 };
 

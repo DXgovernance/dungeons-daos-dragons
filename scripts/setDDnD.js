@@ -213,7 +213,10 @@ async function main() {
   await paymentToken.transfer(PLDGuild.address, web3.utils.toWei('50'));
   await paymentToken.transfer(DoyayaGuild.address, web3.utils.toWei('50'));
 
-  const DM_TURN_ONE_INSTRUCTIONS = web3.utils.sha3('DM_TURN_ONE_INSTRUCTIONS');
+  const INITIAL_HASH = "QmdfuxY5wGwxowZA4mnbfr642rpp7ccP91mAVLvzDKrk31";
+  const GAME_TOPIC = web3.utils.soliditySha3(dungeonMaster, PLDGuild.address, DoyayaGuild.address, "1");
+  const DM_TURN_ONE_INSTRUCTIONS = web3.utils.sha3(INITIAL_HASH);
+  await messageLogger.broadcast(GAME_TOPIC, INITIAL_HASH, {from: dungeonMaster});
   const setUpGameHash = await ddnd.getGameHash(
     [dungeonMaster, PLDGuild.address, DoyayaGuild.address],
     moment.duration(1, 'days').asSeconds(),
@@ -269,10 +272,6 @@ async function main() {
     'Desc',
     setUpGameHash,
     { from: tokenOwner1 }
-  );
-  console.log(
-    'Set up DDnD proposal form guild A',
-    setUpDDnDFromGuildA.logs[0].args.proposalId
   );
 
   const setUpDDnDFromGuildB = await DoyayaGuild.createProposal(
@@ -341,6 +340,7 @@ async function main() {
     2,
     daoArbitrator,
     signatures,
+    DM_TURN_ONE_INSTRUCTIONS,
     { from: dungeonMaster }
   );
   

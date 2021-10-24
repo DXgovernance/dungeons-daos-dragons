@@ -105,6 +105,11 @@ fi
 # Compile your contracts
 yarn hardhat compile
 
+cp artifacts/contracts/DDnD.sol/DDnD.json src/contracts/DDnD.json
+cp artifacts/contracts/DDnDNFT.sol/DDnDNFT.json src/contracts/DDnDNFT.json
+cp artifacts/contracts/utils/MessageLogger.sol/MessageLogger.json src/contracts/MessageLogger.json
+cp artifacts/contracts/erc20guild/ERC20Guild.sol/ERC20Guild.json src/contracts/ERC20Guild.json
+
 # Disable isolatedModules and use commonjs in tsconfig
 contents="$(jq '.compilerOptions.isolatedModules = false' tsconfig.json)" && \
 echo "${contents}" > tsconfig.json

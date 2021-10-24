@@ -25,25 +25,43 @@ export default class DDnDService {
     ).methods.gameCount().call();
   }
   
-  getGame(gameId): PromiEvent<any> {
+  async getGame(gameId){
+    const { providerStore } = this.context;
+    // const { library } = providerStore.getActiveWeb3React();
+    return await providerStore.getContract(
+      providerStore.getActiveWeb3React(),
+      ContractType.DDND,
+      process.env.REACT_APP_DDND_ADDRESS,
+    ).methods.games(gameId).call()
+  }
+  
+  async getGamePlayers(gameId){
+    const { providerStore } = this.context;
+    return await providerStore.getContract(
+        providerStore.getActiveWeb3React(),
+        ContractType.DDND,
+        process.env.REACT_APP_DDND_ADDRESS,
+      ).methods.getPlayersAddresses(gameId).call()
+  }
+  
+  async getGamePlayersState(gameId){
+    const { providerStore } = this.context;
+    return await providerStore.getContract(
+        providerStore.getActiveWeb3React(),
+        ContractType.DDND,
+        process.env.REACT_APP_DDND_ADDRESS,
+      ).methods.getPlayersState(gameId).call()
+  }
+  
+  getGuilds(): PromiEvent<any> {
     const { providerStore } = this.context;
     // const { library } = providerStore.getActiveWeb3React();
     return providerStore.getContract(
       providerStore.getActiveWeb3React(),
       ContractType.DDND,
       process.env.REACT_APP_DDND_ADDRESS,
-    ).methods.games(gameId).call();
+    ).methods.getGuilds().call();
   }
-  
-  // getGuilds(): PromiEvent<any> {
-  //   const { providerStore } = this.context;
-  //   // const { library } = providerStore.getActiveWeb3React();
-  //   return providerStore.getContract(
-  //     providerStore.getActiveWeb3React(),
-  //     ContractType.DDND,
-  //     process.env.REACT_APP_DDND_ADDRESS,
-  //   ).methods.guilds().call();
-  // }
 
   createProposal(
     scheme: string,
