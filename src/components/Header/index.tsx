@@ -54,7 +54,7 @@ const Header = observer(() => {
   const [selectedClient, setSelectedClient] = useState(Guilds.Guild1); //default value
   const [guilds,setGuild]=useState(null)
   useEffect(() => {
-    console.log(selectedClient);
+
     JSON.parse(localStorage.getItem('GuildSelected'));
   }, [selectedClient]);
   useEffect(()=>{
@@ -72,7 +72,7 @@ const Header = observer(() => {
     localStorage.setItem('GuildSelected', JSON.stringify(selectedClient));
     setSelectedClient(event.target.value);
   }
-  console.log(providerStore);
+
   const { active } = providerStore.getActiveWeb3React();
 
   const NavItem = withRouter(({ route, history, children }) => {
