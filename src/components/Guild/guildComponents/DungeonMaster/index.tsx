@@ -47,18 +47,23 @@ export const DungeonMaster: React.FC = () => {
   const [guildTwoDesc, setGuildTwoDesc] = useState(null);
 
   const {
-    context: { ipfsService },
+    context: { ipfsService,ddndService },
   } = useContext();
 
   const uploadToIpfs = async (json, svg) => {
-    const jsonString = JSON.stringify({ rooms: json, map: svg });
-    console.log({ jsonString });
-    const jsonHash = await ipfsService.add(jsonString);
-    console.log({ jsonHash });
-    const mapString = JSON.stringify(svg);
-    console.log({ mapString });
-    const mapHash = await ipfsService.add(svg);
-    console.log({ mapHash });
+    try{
+      const jsonString = JSON.stringify({ rooms: json, map: svg });
+      console.log({ jsonString });
+      const jsonHash = await ipfsService.add(jsonString);
+      console.log({ jsonHash });
+      const mapString = JSON.stringify(svg);
+      console.log({ mapString });
+      const mapHash = await ipfsService.add(svg);
+      console.log({ mapHash });
+    }catch (e) {
+console.log(e)
+    }
+
   };
 
   useEffect(() => {
@@ -83,6 +88,20 @@ export const DungeonMaster: React.FC = () => {
       return <StyledButton>Go {door.connection.direction}</StyledButton>;
     });
   };
+  const [guilds,setGuild]=useState(null)
+  useEffect(()=>{
+    async function fetchData(){
+      const guildData=await ddndService.getGuilds()
+      console.log('guildData',guildData)
+      const guild1name=await ddndService.getGuildName(guildData[0])
+      const guild2name=await ddndService.getGuildName(guildData[1])
+      console.log('works?',guild1name)
+      console.log('guild2',guild2name)
+      setGuild([guild1name,guild2name])
+
+    }
+    fetchData()
+  },[])
 
   return (
     <UserInfoWrap>
@@ -95,15 +114,15 @@ export const DungeonMaster: React.FC = () => {
       ) : null}
       <GuildsWrapper>
         <StyledBox>
-          <Message>Guild #1 Decision - Move 4</Message>
+          <Message>{guilds && guilds[0]} Decision - Move 4</Message>
           <Message type="success">Move down</Message>
         </StyledBox>
         <StyledBox>
-          <Message>Guild #2 Decision - Move 4</Message>
+          <Message>{guilds && guilds[1]} Decision - Move 4</Message>
           <Message type="success">Attack</Message>
         </StyledBox>
         <StyledBox>
-          <Message>Guild #1 - Move 4 - Action</Message>
+          <Message>{guilds && guilds[0]} - Move 4 - Action</Message>
           <ButtonWrapper>
             <Button>Attack</Button>
             {constructButtonsForAvailableDoors(guildOneState?.room)}
@@ -111,7 +130,7 @@ export const DungeonMaster: React.FC = () => {
           </ButtonWrapper>
         </StyledBox>
         <StyledBox>
-          <Message>Guild #2 - Move 4 - Action</Message>
+          <Message>{guilds && guilds[1]} - Move 4 - Action</Message>
           <ButtonWrapper>
             <StyledButton>Attack</StyledButton>
             {constructButtonsForAvailableDoors(guildTwoState?.room)}
@@ -120,7 +139,7 @@ export const DungeonMaster: React.FC = () => {
         </StyledBox>
         <StyledBox>
           <Input
-            name="Guild #1 Next description"
+            name={`${guilds && guilds[0]} Next description`}
             id="guildOneDesc"
             value={guildOneDesc}
             onChange={e => setGuildOneDesc(e.target.value)}
@@ -128,7 +147,7 @@ export const DungeonMaster: React.FC = () => {
         </StyledBox>
         <StyledBox>
           <Input
-            name="Guild #2 Next description"
+            name={`${guilds && guilds[1]} Next      description`}
             id="guildTwoDesc"
             value={guildTwoDesc}
             onChange={e => setGuildTwoDesc(e.target.value)}

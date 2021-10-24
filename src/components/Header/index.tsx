@@ -125,14 +125,14 @@ const Header = observer(() => {
         <NavSection>
           <MenuItem style={{ fontSize: '10px' }}>
             <SelectStyle onChange={handleSelectChange} name="Choose Game">
-              <option value={Guilds.Guild1} onChange={() => {}} label={guilds[0]}>
+              <option value={Guilds.Guild1} onChange={() => {}} label={guilds && guilds[0]}>
                 {'Guild1'}
               </option>
               <option
                 value={Guilds.Guild2}
                 onChange={() => {
                 }}
-                label={guilds[1]}
+                label={guilds && guilds[1]}
               >
                 {'Guild2'}
               </option>
