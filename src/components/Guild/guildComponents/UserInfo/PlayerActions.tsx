@@ -64,7 +64,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
 
 
     const directionProposal = gameData.actions[guildsAddresses[guildSelected]][action];
-    ddndService.voteAction(
+    await ddndService.voteAction(
       guildsAddresses[guildSelected],
       directionProposal.proposalId,
       "1000000000",
