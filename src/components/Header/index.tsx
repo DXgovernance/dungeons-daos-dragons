@@ -54,17 +54,16 @@ const Header = observer(() => {
   const [selectedClient, setSelectedClient] = useState(Guilds.Guild1); //default value
   const [guilds,setGuild]=useState(null)
   useEffect(() => {
-    console.log(selectedClient);
+
     JSON.parse(localStorage.getItem('GuildSelected'));
   }, [selectedClient]);
   useEffect(()=>{
     async function fetchData(){
       const guildData=await ddndService.getGuilds()
-      console.log('guildData',guildData)
+
       const guild1name=await ddndService.getGuildName(guildData[0])
       const guild2name=await ddndService.getGuildName(guildData[1])
-      console.log('works?',guild1name)
-      console.log('guild2',guild2name)
+
       setGuild([guild1name,guild2name])
 
     }
@@ -76,7 +75,7 @@ const Header = observer(() => {
     localStorage.setItem('GuildSelected', JSON.stringify(selectedClient));
     setSelectedClient(event.target.value);
   }
-  console.log(providerStore);
+
   const { active } = providerStore.getActiveWeb3React();
 
   const NavItem = withRouter(({ route, history, children }) => {
