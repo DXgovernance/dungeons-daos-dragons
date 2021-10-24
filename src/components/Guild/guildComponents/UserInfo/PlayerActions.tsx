@@ -1,6 +1,6 @@
 // Externals
 import React, { useEffect, useState } from 'react';
-import { Button, Box,Modal } from 'retro-ui';
+import { Button, Box, Modal } from 'retro-ui';
 import styled from 'styled-components';
 import { useContext } from '../../../../contexts';
 
@@ -28,9 +28,9 @@ const StyledOption = styled.option`
 const StyledOptionRotated = styled(StyledOption)`
   transform: rotate(90deg);
 `;
-const ExecuteButton=styled(Button)`
-background-color: #ff9051;
-`
+const ExecuteButton = styled(Button)`
+  background-color: #ff9051;
+`;
 
 interface LinkedButtonsProps {}
 export enum Actions {
@@ -44,33 +44,32 @@ export enum Actions {
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   const {
-    context: {
-      messageService
-    },
+    context: { messageService },
   } = useContext();
   const [action, setAction] = useState<Actions>(Actions.attack);
-  const [showModal,setShowModal]=useState(false)
-  const [directionVotes,setDirectionVotes]=useState(null)
+  const [showModal, setShowModal] = useState(false);
+  const [directionVotes, setDirectionVotes] = useState(null);
   const {
     context: { ddndService },
   } = useContext();
-  async function getAllGameData(){
-    try{
-      const getData=await ddndService.getAllGameData(1)
+  console.log({ action });
 
-      const guildSelected=parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
-      const getGuilds=await ddndService.getGuilds()
+  async function getAllGameData() {
+    try {
+      const getData = await ddndService.getAllGameData(1);
 
-      setDirectionVotes(getData.actions[getGuilds[guildSelected]])
-      return getData.actions
-    }catch (e) {
+      const guildSelected = parseInt(
+        JSON.parse(localStorage.getItem('GuildSelected'))
+      );
+      const getGuilds = await ddndService.getGuilds();
 
-    }
+      setDirectionVotes(getData.actions[getGuilds[guildSelected]]);
+      return getData.actions;
+    } catch (e) {}
   }
-  async function createProposal(){
-    setShowModal(true)
-    try{
-
+  async function createProposal() {
+    setShowModal(true);
+    try {
       // const guild=JSON.parse(localStorage.getItem('GuildSelected'));
       //  console.log(guild)
       // const dataFor=[
@@ -81,42 +80,39 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       //   "0x0000000000000000000000000000000000000000"]
       //
       // await ddndService.createProposal(' 0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe',dataFor)
-    }catch (e) {
-      setShowModal(false)
+    } catch (e) {
+      setShowModal(false);
     }
-    setShowModal(false)
-
-
+    setShowModal(false);
   }
   useEffect(() => {
-
     async function fetchData() {
-     await getAllGameData()
+      await getAllGameData();
     }
-    fetchData()
+    fetchData();
   }, []);
   return (
     <PlayerActionsWrapper>
-      {showModal &&
-      <Modal open={showModal}>
-        <Button >Confirm Transaction in Metamask</Button>
-      </Modal>}
+      {showModal && (
+        <Modal open={showModal}>
+          <Button>Confirm Transaction in Metamask</Button>
+        </Modal>
+      )}
       <StyledSelect multiple name="Move">
         <StyledOption
           onClick={() => {
             setAction(Actions.up);
           }}
         >
-          ↑ { directionVotes && directionVotes.move_north.votes}
+          ↑ {directionVotes && directionVotes.move_north.votes}
         </StyledOption>
         <StyledOption
           onClick={() => {
             setAction(Actions.down);
           }}
         >
-          ↓ { directionVotes && directionVotes.move_south.votes}
+          ↓ {directionVotes && directionVotes.move_south.votes}
         </StyledOption>
-
       </StyledSelect>
       <StyledSelect>
         <StyledOptionRotated
@@ -124,18 +120,18 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
             setAction(Actions.left);
           }}
         >
-          ↓ { directionVotes && directionVotes.move_east.votes}
+          ↓ {directionVotes && directionVotes.move_east.votes}
         </StyledOptionRotated>
         <StyledOptionRotated
           onClick={() => {
             setAction(Actions.right);
           }}
         >
-          ↑ { directionVotes && directionVotes.move_west.votes}
+          ↑ {directionVotes && directionVotes.move_west.votes}
         </StyledOptionRotated>
       </StyledSelect>
       <StyledButton
-        style={{backgroundColor:"#cf5f3b"}}
+        style={{ backgroundColor: '#cf5f3b' }}
         onClick={() => {
           setAction(Actions.attack);
           messageService.write();
@@ -147,14 +143,15 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         onClick={() => {
           setAction(Actions.heal);
         }}
-        style={{backgroundColor:"#bbee9e"}}
+        style={{ backgroundColor: '#bbee9e' }}
       >
         Heal 0
       </StyledButton>
-      <ExecuteButton  onClick={async () => {
-
-        await createProposal()
-      }}>
+      <ExecuteButton
+        onClick={async () => {
+          await createProposal();
+        }}
+      >
         Execute!
       </ExecuteButton>
     </PlayerActionsWrapper>

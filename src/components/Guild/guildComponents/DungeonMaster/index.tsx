@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 import { Box, Message, Input, Button } from 'retro-ui';
 
-import { generateMap } from '../../../../map-generator/index';
+// import { generateMap } from '../../../../map-generator/index';
+
 import { SplitMap } from '../Maps';
 import { useContext } from '../../../../contexts';
 
@@ -49,50 +50,60 @@ export const DungeonMaster: React.FC = () => {
   const {
     context: { ipfsService, ddndService },
   } = useContext();
-  const uploadToIpfs = async (json, svg) => {
-    try{
-      const jsonString = JSON.stringify({ rooms: json, map: svg });
-      console.log({ jsonString });
-      const jsonHash = await ipfsService.add(jsonString);
-      console.log({ jsonHash });
-      const mapString = JSON.stringify(svg);
-      console.log({ mapString });
-      const mapHash = await ipfsService.add(svg);
-      console.log({ mapHash });
-    }catch (e) {
-console.log(e)
-    }
 
-  };
-  
-  const setNextTurn = function() {
-    const actualTurn = 1;
-    const finalActionSignatures = [];
-    const startActionsOfNextTurn = [`${guildOneDesc}:${guildTwoDesc}`, "StateOfGuild", "StateOfGuild"];
-    ddndService.setNextTurnFromDM(
-      1,
-      actualTurn + 1,
-      1,
-      `${guildOneDesc}:${guildTwoDesc}`,
-      "0x0", // address 0x0
-      finalActionSignatures,
-      startActionsOfNextTurn
+  const getInitialMapFromIpfs = async () => {
+    const { map, rooms } = await ipfsService.getContentFromIPFS(
+      process.env.REACT_APP_STATE_HASH_IPFS
     );
-  }
-
-  useEffect(() => {
-    const { svg, json } = generateMap();
-    json.map(room => {
+    console.log({ map, rooms });
+    rooms.map(room => {
       if (room.roomNumber === 1) {
         setGuildOneState({ room });
         setGuildTwoState({ room });
       }
     });
 
-    setOriginalMap(svg);
+    setOriginalMap(map);
 
-    setJson(json);
-    uploadToIpfs(json, svg);
+    setJson(rooms);
+  };
+
+  // const uploadToIpfs = async (json, svg) => {
+  //   try {
+  //     const jsonString = JSON.stringify({ rooms: json, map: svg });
+  //     console.log({ jsonString });
+  //     const jsonHash = await ipfsService.add(jsonString);
+  //     console.log({ jsonHash });
+  //     const mapString = JSON.stringify(svg);
+  //     console.log({ mapString });
+  //     const mapHash = await ipfsService.add(svg);
+  //     console.log({ mapHash });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  const setNextTurn = function () {
+    const actualTurn = 1;
+    const finalActionSignatures = [];
+    const startActionsOfNextTurn = [
+      `${guildOneDesc}:${guildTwoDesc}`,
+      'StateOfGuild',
+      'StateOfGuild',
+    ];
+    ddndService.setNextTurnFromDM(
+      1,
+      actualTurn + 1,
+      1,
+      `${guildOneDesc}:${guildTwoDesc}`,
+      '0x0', // address 0x0
+      finalActionSignatures,
+      startActionsOfNextTurn
+    );
+  };
+
+  useEffect(() => {
+    getInitialMapFromIpfs();
   }, []);
 
   console.log({ json });
@@ -102,28 +113,43 @@ console.log(e)
       return <StyledButton>Go {door.connection.direction}</StyledButton>;
     });
   };
-  const [guilds, setGuild] = useState(null)
-  const [turnNumber, setTurnNumber] = useState(null)
-  const [guildsApprovedActions, setGuildApprovedActions] = useState(["waiting for decision..", "waiting for decision.."])
-  useEffect(()=>{
-    async function fetchData(){
+  const [guilds, setGuild] = useState(null);
+  const [turnNumber, setTurnNumber] = useState(null);
+  const [guildsApprovedActions, setGuildApprovedActions] = useState([
+    'waiting for decision..',
+    'waiting for decision..',
+  ]);
+  useEffect(() => {
+    async function fetchData() {
       const gameData = await ddndService.getAllGameData(1);
-      const guild1name = await ddndService.getGuildName(gameData.playersAddresses[1]);
-      const guild2name = await ddndService.getGuildName(gameData.playersAddresses[2]);
-      setTurnNumber(Number(gameData.turnNumber)+1);
-      Object.keys(gameData.actions[gameData.playersAddresses[1]]).map((action) => {
-        if (gameData.actions[gameData.playersAddresses[1]][action].state == "3")
-          guildsApprovedActions[0] = action;
-      })
-      Object.keys(gameData.actions[gameData.playersAddresses[2]]).map((action) => {
-        if (gameData.actions[gameData.playersAddresses[2]][action].state == "3")
-          guildsApprovedActions[1] = action;
-      })
-      setGuild([guild1name , guild2name])
-      setGuildApprovedActions(guildsApprovedActions)
+      const guild1name = await ddndService.getGuildName(
+        gameData.playersAddresses[1]
+      );
+      const guild2name = await ddndService.getGuildName(
+        gameData.playersAddresses[2]
+      );
+      setTurnNumber(Number(gameData.turnNumber) + 1);
+      Object.keys(gameData.actions[gameData.playersAddresses[1]]).map(
+        action => {
+          if (
+            gameData.actions[gameData.playersAddresses[1]][action].state == '3'
+          )
+            guildsApprovedActions[0] = action;
+        }
+      );
+      Object.keys(gameData.actions[gameData.playersAddresses[2]]).map(
+        action => {
+          if (
+            gameData.actions[gameData.playersAddresses[2]][action].state == '3'
+          )
+            guildsApprovedActions[1] = action;
+        }
+      );
+      setGuild([guild1name, guild2name]);
+      setGuildApprovedActions(guildsApprovedActions);
     }
-    fetchData()
-  },[])
+    fetchData();
+  }, []);
 
   return (
     <UserInfoWrap>
@@ -136,12 +162,20 @@ console.log(e)
       ) : null}
       <GuildsWrapper>
         <StyledBox>
-          <Message>{guilds && guilds[0]} Decision - Move {turnNumber}</Message>
-          <Message type="success">{guildsApprovedActions && guildsApprovedActions[0]}</Message>
+          <Message>
+            {guilds && guilds[0]} Decision - Move {turnNumber}
+          </Message>
+          <Message type="success">
+            {guildsApprovedActions && guildsApprovedActions[0]}
+          </Message>
         </StyledBox>
         <StyledBox>
-          <Message>{guilds && guilds[1]} Decision - Move {turnNumber}</Message>
-          <Message type="success">{guildsApprovedActions && guildsApprovedActions[1]}</Message>
+          <Message>
+            {guilds && guilds[1]} Decision - Move {turnNumber}
+          </Message>
+          <Message type="success">
+            {guildsApprovedActions && guildsApprovedActions[1]}
+          </Message>
         </StyledBox>
         <StyledBox>
           <Message>{guilds && guilds[0]} - Move 4 - Action</Message>
@@ -175,7 +209,9 @@ console.log(e)
             onChange={e => setGuildTwoDesc(e.target.value)}
           />
         </StyledBox>
-        <LargeStyledButton onClick={() => setNextTurn()} >Send</LargeStyledButton>
+        <LargeStyledButton onClick={() => setNextTurn()}>
+          Send
+        </LargeStyledButton>
       </GuildsWrapper>
     </UserInfoWrap>
   );

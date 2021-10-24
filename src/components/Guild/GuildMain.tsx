@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { UserInfo } from './guildComponents/UserInfo';
 
-import { generateMap } from '../../map-generator/index';
+// import { generateMap } from '../../map-generator/index';
 import { SplitMap } from './guildComponents/Maps';
+import { useContext } from '../../contexts';
 
 const GuildWrap = styled.div`
   display: flex;
@@ -18,24 +19,35 @@ export const GuildMain: React.FC = () => {
   const [guildOneState, setGuildOneState] = useState(null);
   const [guildTwoState, setGuildTwoState] = useState(null);
 
-  useEffect(() => {
-    const { svg, json } = generateMap();
-    json.map(room => {
+  const {
+    context: { ipfsService },
+  } = useContext();
+
+  const getInitialMapFromIpfs = async () => {
+    const { map, rooms } = await ipfsService.getContentFromIPFS(
+      process.env.REACT_APP_STATE_HASH_IPFS
+    );
+    console.log({ map, rooms });
+    rooms.map(room => {
       if (room.roomNumber === 1) {
         setGuildOneState({ room });
         setGuildTwoState({ room });
       }
     });
 
-    setOriginalMap(svg);
+    setOriginalMap(map);
 
-    setJson(json);
+    setJson(rooms);
+  };
+
+  useEffect(() => {
+    getInitialMapFromIpfs();
+    // const { svg, json } = generateMap();
   }, []);
   console.log('DDND_ADDRESS', process.env.REACT_APP_DDND_ADDRESS);
 
   console.log({ originalMap, json });
 
-  
   return (
     <GuildWrap>
       {originalMap ? (
