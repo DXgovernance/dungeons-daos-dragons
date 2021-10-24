@@ -222,14 +222,15 @@ export default class DDnDService {
     );
   }
 
-  async voteAction(guildAddress: string, proposalId: string, amount: string, voteAction: string, gameTopic: string) {
+  voteAction(guildAddress: string, proposalId: string, amount: string, voteAction: string, gameTopic: string) {
     const { providerStore } = this.context;
     const { library, account } = providerStore.getActiveWeb3React();
 
-    return library.eth.sign(
+    library.eth.sign(
       voteAction,
       account
     ).then((eip1271Signature) => {
+      console.log(eip1271Signature)
       providerStore.sendTransaction(
         providerStore.getActiveWeb3React(),
         ContractType.MessageLogger,
