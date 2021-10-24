@@ -47,9 +47,9 @@ export const DungeonMaster: React.FC = () => {
   const [guildTwoDesc, setGuildTwoDesc] = useState(null);
 
   const {
-    context: { ipfsService },
+    context: { ipfsService, ddndService },
   } = useContext();
-
+  ddndService.getAllGameData(1);
   const uploadToIpfs = async (json, svg) => {
     const jsonString = JSON.stringify({ rooms: json, map: svg });
     console.log({ jsonString });
@@ -60,6 +60,21 @@ export const DungeonMaster: React.FC = () => {
     const mapHash = await ipfsService.add(svg);
     console.log({ mapHash });
   };
+  
+  const setNextTurn = function() {
+    const actualTurn = 1;
+    const finalActionSignatures = [];
+    const startActionsOfNextTurn = [`${guildOneDesc}:${guildTwoDesc}`, "StateOfGuild", "StateOfGuild"];
+    ddndService.setNextTurnFromDM(
+      1,
+      actualTurn + 1,
+      1,
+      `${guildOneDesc}:${guildTwoDesc}`,
+      "0x0", // address 0x0
+      finalActionSignatures,
+      startActionsOfNextTurn
+    );
+  }
 
   useEffect(() => {
     const { svg, json } = generateMap();
@@ -134,8 +149,7 @@ export const DungeonMaster: React.FC = () => {
             onChange={e => setGuildTwoDesc(e.target.value)}
           />
         </StyledBox>
-        <LargeStyledButton>Send</LargeStyledButton>
-        <LargeStyledButton>Send</LargeStyledButton>
+        <LargeStyledButton onClick={() => setNextTurn()} >Send</LargeStyledButton>
       </GuildsWrapper>
     </UserInfoWrap>
   );

@@ -361,10 +361,10 @@ const [
   
   // Create Turn One Proposals 
   const DEFAULT_ACTIONS_TURN_ONE = [
-    'turn_1:move:south',
-    'turn_1:move:north',
-    'turn_1:move:east',
-    'turn_1:move:west',
+    '1:move_south',
+    '1:move_north',
+    '1:move_east',
+    '1:move_west',
   ]
   const PLDGuild_TURN_ONE_PROPOSALS_ID = await createProposals(
     PLDGuild, messageLogger, GAME_TOPIC, PLDGuildTokenOwner1, DEFAULT_ACTIONS_TURN_ONE
@@ -392,22 +392,22 @@ const [
   );
   
   // This vote is important
-  // await PLDGuild.setVote(
-  //   PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId,
-  //   web3.utils.toWei('30'), {from: tokenOwner1}
-  // );
+  await PLDGuild.setVote(
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId,
+    web3.utils.toWei('30'), {from: PLDGuildTokenOwner1}
+  );
   
   await DoyayaGuild.setVote(
     DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
-    web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner1}
-  );
-  await DoyayaGuild.setVote(
-    DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
     web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner2}
   );
   await DoyayaGuild.setVote(
     DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
     web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner3}
+  );
+  await DoyayaGuild.setVote(
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
+    web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner4}
   );
 
   // This vote is important
@@ -416,9 +416,9 @@ const [
   //   web3.utils.toWei('30'), {from: tokenOwner1}
   // );
   
-  await time.increase(moment.duration(59, 'minutes').asSeconds());
+  await time.increase(moment.duration(60, 'minutes').asSeconds());
   // 
-  // await PLDGuild.endProposal(PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId);
+  await PLDGuild.endProposal(PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId);
   // await DoyayaGuild.endProposal(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId);
   // 
   // console.log(await PLDGuild.isValidSignature(
