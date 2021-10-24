@@ -19,6 +19,7 @@ const StyledBox = styled(Box)`
   margin: 10px;
 `;
 const GuildsWrapper = styled.div`
+  margin-top: 15px;
   display: flex;
   width: 100%;
   align-items: center;
@@ -85,8 +86,6 @@ export const DungeonMaster: React.FC = () => {
 
   return (
     <UserInfoWrap>
-      <Box style={{ marginBottom: '15px' }}>DungeonMaster</Box>
-
       {originalMap ? (
         <SplitMap
           originalMap={originalMap}

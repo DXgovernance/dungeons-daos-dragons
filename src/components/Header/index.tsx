@@ -129,11 +129,7 @@ const Header = observer(() => {
           </NavItem>
 
           <Web3ConnectStatus text="Connect Wallet" />
-          {/*<NavItem route={`/config`}>*/}
-          {/*  <a>*/}
-          {/*    <FiSettings style={{ margin: '0px 10px', color: '#616161' }} />*/}
-          {/*  </a>*/}
-          {/*</NavItem>*/}
+
         </NavSection>
       </NavWrapper>
     );

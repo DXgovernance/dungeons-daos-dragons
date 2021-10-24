@@ -9,6 +9,7 @@ const PlayerActionsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-flow: wrap;
 `;
 
 const StyledButton = styled(Button)`

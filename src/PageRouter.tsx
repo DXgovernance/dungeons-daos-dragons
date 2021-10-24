@@ -7,7 +7,6 @@ import PulsingIcon from './components/common/LoadingIcon';
 // import { GlobalLoadingState } from './stores/NotificationStore';
 
 const PageRouterWrapper = styled.div`
-  margin-top: 20px;
   flex: 1;
 `;
 
