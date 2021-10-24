@@ -411,54 +411,54 @@ const [
   );
 
   // This vote is important
-  // await DoyayaGuild.setVote(
-  //   DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
-  //   web3.utils.toWei('30'), {from: tokenOwner1}
-  // );
+  await DoyayaGuild.setVote(
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
+    web3.utils.toWei('30'), {from: DoyayaGuildTokenOwner1}
+  );
   
   await time.increase(moment.duration(60, 'minutes').asSeconds());
   // 
   await PLDGuild.endProposal(PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId);
-  // await DoyayaGuild.endProposal(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId);
-  // 
-  // console.log(await PLDGuild.isValidSignature(
-  //   toEthSignedMessageHash(PLDGuild_TURN_ONE_PROPOSALS_ID[0].actionHashed),
-  //   PLDGuild_TURN_ONE_PROPOSALS_ID[0].eip1271Signature
-  // ))
-  // console.log(await DoyayaGuild.isValidSignature(
-  //   toEthSignedMessageHash(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].actionHashed),
-  //   DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].eip1271Signature
-  // ))
-  // 
-  // const DM_TURN_ONE_FINISH = web3.utils.sha3('DM_TURN_ONE_FINISH');
-  // const turnOneDungeonMasterSignature = await web3.eth.sign(DM_TURN_ONE_FINISH, dungeonMaster)
-  // const TURN_ONE_END_SIGNATURES = [
-  //   turnOneDungeonMasterSignature,
-  //   PLDGuild_TURN_ONE_PROPOSALS_ID[0].eip1271Signature,
-  //   DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].eip1271Signature,
-  // ];
-  // 
-  // const DM_TURN_TWO_INSTRUCTIONS = web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS');
-  // 
-  // await ddnd.setGameState(
-  //   1, // uint256 gameId,
-  //   1, // uint256 turnNumber,
-  //   1, // uint256 gameState,
-  //   [
-  //     DM_TURN_ONE_FINISH, // The DM ends in turn one
-  //     PLDGuild_TURN_ONE_PROPOSALS_ID[0].actionHashed,// The next actions they want to do
-  //     DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].actionHashed,// The next actions they want to do
-  //   ], // bytes32[] memory playersState
-  //   NULL_ADDRESS, // address winner,
-  //   TURN_ONE_END_SIGNATURES,
-  //   [
-  //     DM_TURN_TWO_INSTRUCTIONS,
-  //     web3.utils.sha3('GUILD_A_TURN_TWO_START'),// The next state of the player 
-  //     web3.utils.sha3('GUILD_B_TURN_TWO_START'),// The next state of the player 
-  //   ],
-  //   { from: dungeonMaster }
-  // );
-  // 
+  await DoyayaGuild.endProposal(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId);
+  
+  console.log(await PLDGuild.isValidSignature(
+    toEthSignedMessageHash(PLDGuild_TURN_ONE_PROPOSALS_ID[0].actionHashed),
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].eip1271Signature
+  ))
+  console.log(await DoyayaGuild.isValidSignature(
+    toEthSignedMessageHash(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].actionHashed),
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].eip1271Signature
+  ))
+  
+  const DM_TURN_ONE_FINISH = web3.utils.sha3('DM_TURN_ONE_FINISH');
+  const turnOneDungeonMasterSignature = await web3.eth.sign(DM_TURN_ONE_FINISH, dungeonMaster)
+  const TURN_ONE_END_SIGNATURES = [
+    turnOneDungeonMasterSignature,
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].eip1271Signature,
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].eip1271Signature,
+  ];
+  
+  const DM_TURN_TWO_INSTRUCTIONS = web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS');
+  
+  await ddnd.setGameState(
+    1, // uint256 gameId,
+    1, // uint256 turnNumber,
+    1, // uint256 gameState,
+    [
+      DM_TURN_ONE_FINISH, // The DM ends in turn one
+      PLDGuild_TURN_ONE_PROPOSALS_ID[0].actionHashed,// The next actions they want to do
+      DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].actionHashed,// The next actions they want to do
+    ], // bytes32[] memory playersState
+    NULL_ADDRESS, // address winner,
+    TURN_ONE_END_SIGNATURES,
+    [
+      DM_TURN_TWO_INSTRUCTIONS,
+      web3.utils.sha3('GUILD_A_TURN_TWO_START'),// The next state of the player 
+      web3.utils.sha3('GUILD_B_TURN_TWO_START'),// The next state of the player 
+    ],
+    { from: dungeonMaster }
+  );
+  
 }
 
 main()
