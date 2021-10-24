@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box,Modal } from 'retro-ui';
 import styled from 'styled-components';
 import { useContext } from '../../../../contexts';
+import {   formatEther } from 'ethers/utils';
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
@@ -26,7 +27,7 @@ const StyledOption = styled.option`
   cursor: pointer;
 `;
 const StyledOptionRotated = styled(StyledOption)`
-  transform: rotate(90deg);
+  
 `;
 const ExecuteButton=styled(Button)`
 background-color: #ff9051;
@@ -43,11 +44,7 @@ export enum Actions {
 }
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
-  const {
-    context: {
-      messageService
-    },
-  } = useContext();
+
   const [action, setAction] = useState<Actions>(Actions.attack);
   const [showModal,setShowModal]=useState(false)
   const [directionVotes,setDirectionVotes]=useState(null)
@@ -67,20 +64,22 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
 
     }
   }
-  async function createProposal(){
+  async function vote(){
     setShowModal(true)
     try{
+      console.log(action)
+      const getData=await ddndService.getAllGameData(1)
+      const guildSelected=parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
+      const getGuilds=await ddndService.getGuilds()
 
-      // const guild=JSON.parse(localStorage.getItem('GuildSelected'));
-      //  console.log(guild)
-      // const dataFor=[
-      //   '0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe' ,
-      // ,
-      //   [0],
-      //   action,
-      //   "0x0000000000000000000000000000000000000000"]
-      //
-      // await ddndService.createProposal(' 0xa9190c4800149320c589197c747461f45962592b24754e87d715b8a304629ebe',dataFor)
+      let directionProposal
+      if(action===Actions.up) directionProposal= getData.actions[getGuilds[guildSelected]].move_north
+        if(action===Actions.down) directionProposal= getData.actions[getGuilds[guildSelected]].move_south
+          if(action===Actions.left) directionProposal= getData.actions[getGuilds[guildSelected]].move_west
+            if(action===Actions.right)  directionProposal=getData.actions[getGuilds[guildSelected]].move_east
+      const vote=await ddndService.vote(getGuilds[guildSelected],directionProposal.proposalId,"1000000000")
+      console.log(vote)
+
     }catch (e) {
       setShowModal(false)
     }
@@ -107,14 +106,14 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
             setAction(Actions.up);
           }}
         >
-          ↑ { directionVotes && directionVotes.move_north.votes}
+          ↑ { directionVotes &&  formatEther(directionVotes.move_north.votes)}
         </StyledOption>
         <StyledOption
           onClick={() => {
             setAction(Actions.down);
           }}
         >
-          ↓ { directionVotes && directionVotes.move_south.votes}
+          ↓ { directionVotes && formatEther(directionVotes.move_south.votes)}
         </StyledOption>
 
       </StyledSelect>
@@ -124,36 +123,34 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
             setAction(Actions.left);
           }}
         >
-          ↓ { directionVotes && directionVotes.move_east.votes}
+          ← { directionVotes && formatEther(directionVotes.move_east.votes)}
         </StyledOptionRotated>
         <StyledOptionRotated
           onClick={() => {
             setAction(Actions.right);
           }}
         >
-          ↑ { directionVotes && directionVotes.move_west.votes}
+          → { directionVotes && formatEther(directionVotes.move_west.votes)}
         </StyledOptionRotated>
       </StyledSelect>
       <StyledButton
         style={{backgroundColor:"#cf5f3b"}}
-        onClick={() => {
-          setAction(Actions.attack);
-          messageService.write();
-        }}
+        // onClick={() => {
+        //   setAction(Actions.attack);
+        //   messageService.write();
+        // }}
       >
         Attack 0
       </StyledButton>
       <StyledButton
-        onClick={() => {
-          setAction(Actions.heal);
-        }}
+
         style={{backgroundColor:"#bbee9e"}}
       >
         Heal 0
       </StyledButton>
       <ExecuteButton  onClick={async () => {
 
-        await createProposal()
+        await vote()
       }}>
         Execute!
       </ExecuteButton>
