@@ -26,31 +26,48 @@ function toEthSignedMessageHash(messageHex) {
   return web3.utils.sha3(Buffer.concat([prefix, messageBuffer]));
 }
 
-async function createProposals(guild, creator, proposedActions) {
-  return await Promise.all(proposedActions.map( async (proposedAction) => {
-    return (await guild.createProposal(
-      [guild.address],
-      [
-        web3.eth.abi.encodeFunctionCall(
-          {
-            name: 'setEIP1271SignedHash',
-            type: 'function',
-            inputs: [
-              {
-                type: 'bytes32',
-                name: '_hash',
-              },
+async function createProposals(guild, messageLogger, gameTopic, creator, proposedActions) {
+  return await Promise.all(
+    proposedActions.map(
+      async (proposedAction) => {
+        
+        const eip1271Signature = await web3.eth.sign(
+          web3.utils.sha3(proposedAction),
+          creator
+        );
+        await messageLogger.broadcast(gameTopic, proposedAction, {from: creator});
+        
+        return {
+          proposalId: (await guild.createProposal(
+            [guild.address],
+            [
+              web3.eth.abi.encodeFunctionCall(
+                {
+                  name: 'setEIP1271SignedHash',
+                  type: 'function',
+                  inputs: [
+                    {
+                      type: 'bytes32',
+                      name: '_hash',
+                    },
+                  ],
+                },
+                [toEthSignedMessageHash(web3.utils.sha3(proposedAction))]
+              ),
             ],
-          },
-          [toEthSignedMessageHash(web3.utils.sha3(proposedActions))]
-        ),
-      ],
-      ['0'],
-      proposedAction,
-      TEST_HASH,
-      { from: creator }
-    )).logs[0].args.proposalId;
-  }));
+            ['0'],
+            proposedAction,
+            TEST_HASH,
+            { from: creator }
+          )).logs[0].args.proposalId,
+          
+          eip1271Signature,
+          
+          actionHashed: web3.utils.sha3(proposedAction)
+        }
+      }
+    )
+  );
 }
 
 async function main() {
@@ -73,6 +90,8 @@ async function main() {
   const ddndNFT = await DDnDNFT.new();
   const messageLogger = await MessageLogger.new();
   const ddnd = await DDnD.new(ddndNFT.address, messageLogger.address);
+  console.log('ddndNFT deployed to:', ddndNFT.address);
+  console.log('messageLogger deployed to:', messageLogger.address);
   console.log('DDnD deployed to:', ddnd.address);
 
   // Deploy Parking Lot Dao
@@ -91,17 +110,21 @@ async function main() {
   await PLDGuildToken.transfer(tokenOwner7, web3.utils.toWei('10'));
   await PLDGuildToken.transfer(tokenOwner8, web3.utils.toWei('10'));
   
+  // Create the Guild and set to execute proposals after one hour if quorum reached
+  // 20 voting power required for quorum
   await ddnd.createGuild(
     PLDGuildToken.address, // address _token,
     moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
     moment.duration(1, 'days').asSeconds(), // uint256 _timeForExecution,
-    web3.utils.toWei('10'), // uint256 _votesForExecution,
-    web3.utils.toWei('1'), // uint256 _votesForCreation,
+    web3.utils.toWei('30'), // uint256 _votesForExecution,
+    web3.utils.toWei('10'), // uint256 _votesForCreation,
     'Parking Lot Guild', // string memory _name,
     0, // uint256 _voteGas,
     0, // uint256 _maxGasPrice,
     1 // uint256 _lockTime
   );
+  
+  // Distribute all guild tokesn accross accounts
   const PLDGuild = await ERC20Guild.at(await ddnd.guilds(0));
   const PLDGuildTokenVault = await PLDGuild.tokenVault();
   await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('30'), {
@@ -158,8 +181,8 @@ async function main() {
     DoyayaGuildToken.address, // address _token,
     moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
     moment.duration(1, 'days').asSeconds(), // uint256 _timeForExecution,
-    web3.utils.toWei('10'), // uint256 _votesForExecution,
-    web3.utils.toWei('1'), // uint256 _votesForCreation,
+    web3.utils.toWei('30'), // uint256 _votesForExecution,
+    web3.utils.toWei('10'), // uint256 _votesForCreation,
     'Doyaya Guild', // string memory _name,
     0, // uint256 _voteGas,
     0, // uint256 _maxGasPrice,
@@ -202,7 +225,6 @@ async function main() {
   await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner7 });
   await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner8 });
 
-
   const paymentToken = await ERC20Mock.new(
     accounts[0],
     web3.utils.toWei('100'),
@@ -213,10 +235,15 @@ async function main() {
   await paymentToken.transfer(PLDGuild.address, web3.utils.toWei('50'));
   await paymentToken.transfer(DoyayaGuild.address, web3.utils.toWei('50'));
 
+  // This hash has stored all the initial configuration of the dungeon duel
   const INITIAL_HASH = "QmdfuxY5wGwxowZA4mnbfr642rpp7ccP91mAVLvzDKrk31";
+  
+  // The game topic is deterministic and is used to fetch events from the MessageLogger
+  // The messages are saved by (bytes32 topic, string message, address sender)
+  // This is super helpful to share a lot of information off chain but verify it with other players with very few data
   const GAME_TOPIC = web3.utils.soliditySha3(dungeonMaster, PLDGuild.address, DoyayaGuild.address, "1");
   const DM_TURN_ONE_INSTRUCTIONS = web3.utils.sha3(INITIAL_HASH);
-  await messageLogger.broadcast(GAME_TOPIC, INITIAL_HASH, {from: dungeonMaster});
+  await messageLogger.broadcast(GAME_TOPIC, "rootHash:"+INITIAL_HASH, {from: dungeonMaster});
   const setUpGameHash = await ddnd.getGameHash(
     [dungeonMaster, PLDGuild.address, DoyayaGuild.address],
     moment.duration(1, 'days').asSeconds(),
@@ -313,7 +340,15 @@ async function main() {
     setUpGameHash,
     { from: tokenOwner1 }
   );
-
+  await PLDGuild.setVote(
+    setUpDDnDFromGuildA.logs[0].args.proposalId,
+    web3.utils.toWei('30'), {from: tokenOwner1}
+  );
+  await DoyayaGuild.setVote(
+    setUpDDnDFromGuildB.logs[0].args.proposalId,
+    web3.utils.toWei('30'), {from: tokenOwner1}
+  );
+  
   await time.increase(moment.duration(1, 'hours').asSeconds());
 
   await PLDGuild.endProposal(
@@ -327,9 +362,9 @@ async function main() {
   const signatures = [
     await web3.eth.sign(setUpGameHash, dungeonMaster),
     await web3.eth.sign(setUpGameHash, tokenOwner1),
-    await web3.eth.sign(setUpGameHash, tokenOwner1),
+    await web3.eth.sign(setUpGameHash, tokenOwner2),
   ];
-
+  
   await ddnd.setUpGame(
     [dungeonMaster, PLDGuild.address, DoyayaGuild.address],
     moment.duration(1, 'days').asSeconds(),
@@ -340,7 +375,108 @@ async function main() {
     2,
     daoArbitrator,
     signatures,
-    DM_TURN_ONE_INSTRUCTIONS,
+    setUpGameHash,
+    { from: dungeonMaster }
+  );
+  
+  
+  // Create Turn One Proposals 
+  const DEFAULT_ACTIONS = [
+    'move:south',
+    'move:north',
+    'move:east',
+    'move:west',
+  ]
+  const PLDGuild_TURN_ONE_PROPOSALS_ID = await createProposals(
+    PLDGuild, messageLogger, GAME_TOPIC, tokenOwner1, DEFAULT_ACTIONS
+  );
+  
+  const DoyayaGuild_TURN_ONE_PROPOSALS_ID = await createProposals(
+    DoyayaGuild, messageLogger, GAME_TOPIC, tokenOwner1, DEFAULT_ACTIONS
+  );
+  
+  console.log('PLD turn one proposals', PLDGuild_TURN_ONE_PROPOSALS_ID);
+  console.log('DoyayaGuild turn one proposals', DoyayaGuild_TURN_ONE_PROPOSALS_ID);
+  
+  
+  await PLDGuild.setVote(
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId,
+    web3.utils.toWei('10'), {from: tokenOwner2}
+  );
+  await PLDGuild.setVote(
+    PLDGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
+    web3.utils.toWei('10'), {from: tokenOwner3}
+  );
+  await PLDGuild.setVote(
+    PLDGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
+    web3.utils.toWei('10'), {from: tokenOwner4}
+  );
+  
+  // This vote is important
+  await PLDGuild.setVote(
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId,
+    web3.utils.toWei('30'), {from: tokenOwner1}
+  );
+  
+  await DoyayaGuild.setVote(
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
+    web3.utils.toWei('10'), {from: tokenOwner2}
+  );
+  await DoyayaGuild.setVote(
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
+    web3.utils.toWei('10'), {from: tokenOwner3}
+  );
+  await DoyayaGuild.setVote(
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
+    web3.utils.toWei('10'), {from: tokenOwner4}
+  );
+
+  // This vote is important
+  await DoyayaGuild.setVote(
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
+    web3.utils.toWei('30'), {from: tokenOwner1}
+  );
+  
+  await time.increase(moment.duration(1, 'hours').asSeconds());
+
+  await PLDGuild.endProposal(PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId);
+  await DoyayaGuild.endProposal(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId);
+
+  console.log(await PLDGuild.isValidSignature(
+    toEthSignedMessageHash(PLDGuild_TURN_ONE_PROPOSALS_ID[0].actionHashed),
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].eip1271Signature
+  ))
+  console.log(await DoyayaGuild.isValidSignature(
+    toEthSignedMessageHash(DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].actionHashed),
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].eip1271Signature
+  ))
+
+  const DM_TURN_ONE_FINISH = web3.utils.sha3('DM_TURN_ONE_FINISH');
+  const turnOneDungeonMasterSignature = await web3.eth.sign(DM_TURN_ONE_FINISH, dungeonMaster)
+  const TURN_ONE_END_SIGNATURES = [
+    turnOneDungeonMasterSignature,
+    PLDGuild_TURN_ONE_PROPOSALS_ID[0].eip1271Signature,
+    DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].eip1271Signature,
+  ];
+  
+  const DM_TURN_TWO_INSTRUCTIONS = web3.utils.sha3('DM_TURN_TWO_INSTRUCTIONS');
+  
+  await ddnd.setGameState(
+    1, // uint256 gameId,
+    1, // uint256 turnNumber,
+    1, // uint256 gameState,
+    [
+      DM_TURN_ONE_FINISH, // The DM ends in turn one
+      PLDGuild_TURN_ONE_PROPOSALS_ID[0].actionHashed,// The next actions they want to do
+      DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].actionHashed,// The next actions they want to do
+    ], // bytes32[] memory playersState
+    NULL_ADDRESS, // address winner,
+    TURN_ONE_END_SIGNATURES,
+    [
+      DM_TURN_TWO_INSTRUCTIONS,
+      web3.utils.sha3('GUILD_A_TURN_TWO_START'),// The next state of the player 
+      web3.utils.sha3('GUILD_B_TURN_TWO_START'),// The next state of the player 
+    ],
     { from: dungeonMaster }
   );
   

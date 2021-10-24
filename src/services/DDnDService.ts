@@ -62,18 +62,46 @@ export default class DDnDService {
       process.env.REACT_APP_DDND_ADDRESS,
     ).methods.getGuilds().call();
   }
+  
+  async getMessages(topic) {
+    const { providerStore } = this.context;
+    const rawEvents = await providerStore.getContract(
+      providerStore.getActiveWeb3React(),
+      ContractType.MessageLogger,
+      process.env.REACT_APP_MESSAGE_LOGGER,
+    ).getPastEvents("allEvents", { filter: {"topic": topic}, fromBlock: 1});
+    return rawEvents.map((message) => {return {
+      message: message.returnValues.message,
+      sender: message.returnValues.sender
+    }});
+  }
+  
+  // getLiveProposals(gameId, )
+  // 
+  // executeProposal(gameId, guildAddress, stateGameHash, turn, action){
+  // 
+  // }
+  // 
+  // voteProposal(gameId, guildAddress, stateGameHash, turn, action){
+  // 
+  // }
+  // 
+  getGameTopic(players, gameId) {
+    const { providerStore } = this.context;
+    const { library } = providerStore.getActiveWeb3React();
+    return library.utils.soliditySha3(...players, gameId);
+  }
 
   createProposal(
     scheme: string,
     proposalData: any
   ): PromiEvent<any> {
     const { providerStore } = this.context;
-    // const { library } = providerStore.getActiveWeb3React();
     return providerStore.sendTransaction(
       providerStore.getActiveWeb3React(),
       ContractType.DDND,
       scheme,
-      'proposeCalls',
+      'createProposal',
       [
         proposalData.to,
         proposalData.data,
@@ -85,15 +113,14 @@ export default class DDnDService {
     );
   }
 
-  vote(decision: string, amount: string, proposalId: string): PromiEvent<any> {
+  vote(proposalId: string, amount: string): PromiEvent<any> {
     const { providerStore } = this.context;
-    const { account } = providerStore.getActiveWeb3React();
     return providerStore.sendTransaction(
       providerStore.getActiveWeb3React(),
       ContractType.ERC20Guild,
       proposalId,
-      'vote',
-      [proposalId, decision, amount, account],
+      'setVote',
+      [proposalId, amount],
       {}
     );
   }

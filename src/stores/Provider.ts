@@ -12,6 +12,7 @@ import { schema } from '../services/ABIService';
 
 export enum ContractType {
   DDND = 'DDND',
+  MessageLogger = 'MessageLogger',
   ERC20Guild = 'ERC20Guild',
   Multicall = 'Multicall'
 }

@@ -26,7 +26,7 @@ const hardharNetworks = process.env.CI
       timeout: 60000,
       mining: {
         auto: true,
-        interval: 10000
+        interval: 30000
       }
     },
     mainnet: {

@@ -495,7 +495,6 @@ contract ERC20Guild is Initializable, IERC1271Upgradeable {
         newProposal.snapshotId = _currentSnapshotId;
 
         emit ProposalCreated(proposalId);
-        _setVote(msg.sender, proposalId, votesOf(msg.sender));
         proposalsIds.push(proposalId);
         return proposalId;
     }
@@ -785,7 +784,7 @@ contract ERC20Guild is Initializable, IERC1271Upgradeable {
     {
         return
             ((votesOf(hash.recover(signature)) > 0) &&
-                EIP1271SignedHashes[hash])
+                EIP1271SignedHashes[hash] == true)
                 ? this.isValidSignature.selector
                 : bytes4(0);
     }

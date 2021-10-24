@@ -108,16 +108,16 @@ contract DDnD {
     newGame.gameState = 1;
     newGame.playersState = new bytes32[](players.length);
     newGame.winner = address(0);
-    newGame.playersState[0] = rootGameState;
+    for (uint256 i = 0; i < newGame.players.length; i++) {
+      newGame.playersState[i] = rootGameState;
+    } 
     gameCount++;
-
-    bytes32 gameStateHash = keccak256(abi.encode(newGame));
 
     games[gameCount] = newGame;
 
     require(
       players.length ==
-        getValidSignatures(gameCount, gameStateHash, signatures),
+        getValidSignatures(gameCount, games[gameCount].playersState, signatures),
       'DDnD: Error in signature verification'
     );
 
@@ -153,28 +153,18 @@ contract DDnD {
         ),
       'DDnD: Wrong time to update'
     );
-
-    // Get the future hash of the game
-    bytes32 gameStateHash =
-      getFutureGameStateHash(
-        gameId,
-        turnNumber,
-        gameState,
-        playersState,
-        winner
-      );
-
+    
     // Check that the signatures match the future state of the game
     if (msg.sender != games[gameId].daoArbitrator) {
       require(
-        games[gameId].players.length >
-          getValidSignatures(gameId, gameStateHash, signatures),
+        games[gameId].players.length ==
+          getValidSignatures(gameId, playersState, signatures),
         'DDnD: Error in signature verification'
       );
     } else if (gameState == 3) {
       require(
-        games[gameId].requiredSignaturesToArbitrate >=
-          getValidSignatures(gameId, gameStateHash, signatures),
+        games[gameId].requiredSignaturesToArbitrate <=
+          getValidSignatures(gameId, games[gameId].playersState, signatures),
         'DDnD: Error in signature verification'
       );
     }
@@ -279,17 +269,19 @@ contract DDnD {
 
   function getValidSignatures(
     uint256 gameId,
-    bytes32 gameStateHash,
+    bytes32[] memory playersState,
     bytes[] memory signatures
   ) public view returns (uint256 validSignatures) {
     for (uint256 i = 0; i < signatures.length; i++) {
+      console.log('signature', i);
       if (
         games[gameId].players[i].isValidSignatureNow(
-          gameStateHash.toEthSignedMessageHash(),
+          playersState[i].toEthSignedMessageHash(),
           signatures[i]
         )
       ) {
         validSignatures++;
+        console.log('valid', validSignatures);
       }
     }
   }
