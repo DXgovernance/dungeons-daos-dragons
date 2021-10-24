@@ -177,9 +177,9 @@ export const DungeonMaster: React.FC = () => {
             {guildsApprovedActions && guildsApprovedActions[1]}
           </Message>
         </StyledBox>
-        <StyledBox>
+        <StyledBox >
           <Message>{guilds && guilds[0]} - Move 4 - Action</Message>
-          <ButtonWrapper>
+          <ButtonWrapper style={{justifyContent: "center"}}>
             <Button>Attack</Button>
             {constructButtonsForAvailableDoors(guildOneState?.room)}
             <Button>Nothing</Button>
@@ -187,7 +187,7 @@ export const DungeonMaster: React.FC = () => {
         </StyledBox>
         <StyledBox>
           <Message>{guilds && guilds[1]} - Move 4 - Action</Message>
-          <ButtonWrapper>
+          <ButtonWrapper style={{justifyContent: "center"}}>
             <StyledButton>Attack</StyledButton>
             {constructButtonsForAvailableDoors(guildTwoState?.room)}
             <StyledButton>Do nothing</StyledButton>

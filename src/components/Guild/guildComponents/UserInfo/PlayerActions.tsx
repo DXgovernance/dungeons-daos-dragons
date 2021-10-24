@@ -7,6 +7,8 @@ import { formatEther } from 'ethers/utils';
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
+      grid-gap: 5px;
+;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +24,8 @@ const StyledSelect = styled(Box)`
   background-color: #98a7fe;
 `;
 const StyledOption = styled.option`
-  background-color: #98a7fe !important;
+  background-color: #98a7fe ;
+  border-radius: 6px;
   margin: 0 10px;
   cursor: pointer;
 `;
@@ -53,16 +56,17 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     setDirectionVotes(getData.actions[getGuilds[guildSelected]]);
     return getData.actions;
   }
-  
+
   async function voteAction(action){
     setShowModal(true)
+
     const gameData = await ddndService.getAllGameData(1)
     const guildSelected = parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
     const guildsAddresses = await ddndService.getGuilds()
-    console.log(action,guildsAddresses, guildsAddresses[guildSelected])
-  
+
+
     const directionProposal = gameData.actions[guildsAddresses[guildSelected]][action];
-    ddndService.voteAction(
+    await ddndService.voteAction(
       guildsAddresses[guildSelected],
       directionProposal.proposalId,
       "1000000000",
@@ -96,6 +100,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       )}
       <StyledSelect multiple name="Move">
         <StyledOption
+
           onClick={() => {
             voteAction("move_north");
           }}
@@ -103,6 +108,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
           ↑ {directionVotes && formatEther(directionVotes.move_north.votes)}
         </StyledOption>
         <StyledOption
+
           onClick={() => {
             voteAction("move_south");
           }}
@@ -112,6 +118,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       </StyledSelect>
       <StyledSelect>
         <StyledOptionRotated
+
           onClick={() => {
             voteAction("move_west");
           }}
@@ -119,6 +126,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
           ← {directionVotes && formatEther(directionVotes.move_east.votes)}
         </StyledOptionRotated>
         <StyledOptionRotated
+
           onClick={() => {
             voteAction("move_east");
           }}
