@@ -85,31 +85,7 @@ const PageRouter = observer(({ children }) => {
     ) {
       history.push(`/${networkName}/dungeon-master`);
     }
-
-    // if (
-    //   !notificationStore.firstLoadComplete ||
-    //   notificationStore.globalLoadingState == GlobalLoadingState.ERROR
-    // ) {
-    //   const hasError =
-    //     notificationStore.globalLoadingState == GlobalLoadingState.ERROR;
-    //   return (
-    //     <PageRouterWrapper>
-    //       <LoadingBox>
-    //         <div className="loader">
-    //           {' '}
-    //           <PulsingIcon size={80} inactive={hasError} />
-    //           <div>{hasError ? 'Oops! Something broke.' : 'Loading'}</div>
-    //           <LoadingProgressText>
-    //             {notificationStore.globalMessage}
-    //           </LoadingProgressText>
-    //         </div>
-    //       </LoadingBox>
-    //     </PageRouterWrapper>
-    //   );
-    // } else {
-    // coingeckoService.loadPrices();
     return <PageRouterWrapper> {children} </PageRouterWrapper>;
-    // }
   }
 });
 

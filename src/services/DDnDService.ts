@@ -14,6 +14,36 @@ export default class DDnDService {
       vote: action
     });
   }
+  
+  gameCount(): PromiEvent<any> {
+    const { providerStore } = this.context;
+    // const { library } = providerStore.getActiveWeb3React();
+    return providerStore.getContract(
+      providerStore.getActiveWeb3React(),
+      ContractType.DDND,
+      process.env.REACT_APP_DDND_ADDRESS,
+    ).methods.gameCount().call();
+  }
+  
+  getGame(gameId): PromiEvent<any> {
+    const { providerStore } = this.context;
+    // const { library } = providerStore.getActiveWeb3React();
+    return providerStore.getContract(
+      providerStore.getActiveWeb3React(),
+      ContractType.DDND,
+      process.env.REACT_APP_DDND_ADDRESS,
+    ).methods.games(gameId).call();
+  }
+  
+  // getGuilds(): PromiEvent<any> {
+  //   const { providerStore } = this.context;
+  //   // const { library } = providerStore.getActiveWeb3React();
+  //   return providerStore.getContract(
+  //     providerStore.getActiveWeb3React(),
+  //     ContractType.DDND,
+  //     process.env.REACT_APP_DDND_ADDRESS,
+  //   ).methods.guilds().call();
+  // }
 
   createProposal(
     scheme: string,

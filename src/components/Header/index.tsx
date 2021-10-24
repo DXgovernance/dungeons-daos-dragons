@@ -46,8 +46,10 @@ enum Guilds {
 }
 const Header = observer(() => {
   const {
-    context: { providerStore, configStore },
+    context: { providerStore, configStore, ddndService },
   } = useContext();
+  ddndService.gameCount().then(console.log)
+  ddndService.getGame(1).then(console.log)
   const [selectedClient, setSelectedClient] = useState(Guilds.Guild1); //default value
   useEffect(() => {
     console.log(selectedClient);
