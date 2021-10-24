@@ -123,7 +123,48 @@ export default class DDnDService {
       gameData.playersState = playersState;
       gameData.playersAddresses = playersAddresses;
       gameData.messages = await this.getMessages(gameData.topic);
-      
+      gameData.actions = {}
+      for (let index = 1; index < gameData.playersAddresses.length; index++) {
+        const guildAddress = gameData.playersAddresses[index];
+        gameData.actions[guildAddress] = {
+          "move_south": {
+            proposalId: "",
+            signature: "",
+            votes: "0",
+            state: "0"
+          },
+          "move_north": {
+            proposalId: "",
+            signature: "",
+            votes: "0",
+            state: "0"
+          },
+          "move_east": {
+            proposalId: "",
+            signature: "",
+            votes: "0",
+            state: "0"
+          },
+          "move_west": {
+            proposalId: "",
+            signature: "",
+            votes: "0",
+            state: "0"
+          },
+        }
+        await gameData.messages.map(async (message) => {
+          if (message.message.split(':')[0] == guildAddress){
+            const proposal = await this.getProposal(guildAddress, message.message.split(':')[1]);
+            if (Number(gameData.turnNumber)+1 == Number(message.message.split(':')[2])){
+              gameData.actions[guildAddress][message.message.split(':')[3]].proposalId = message.message.split(':')[1];
+              gameData.actions[guildAddress][message.message.split(':')[3]].signature = message.message.split(':')[4];
+              gameData.actions[guildAddress][message.message.split(':')[3]].state = proposal.state
+              gameData.actions[guildAddress][message.message.split(':')[3]].votes = proposal.totalVotes
+            }
+          }
+        })
+        console.log('GameData', gameData);
+      }
       // Get Proposals from messages, form each proposal save the raw action, hashed action and signed action
       
       // When a proposal gets enough votes is collected by the DM, and executed with his hashed action and signed action
