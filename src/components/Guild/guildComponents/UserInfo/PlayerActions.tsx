@@ -58,16 +58,18 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   
   async function voteAction(action){
     setShowModal(true)
-    const getData = await ddndService.getAllGameData(1)
-    // const guildSelected = parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
+    const gameData = await ddndService.getAllGameData(1)
+    const guildSelected = parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
     const guildsAddresses = await ddndService.getGuilds()
-    console.log(action,guildsAddresses, guildsAddresses[1])
+    console.log(action,guildsAddresses, guildsAddresses[guildSelected])
   
-    const directionProposal = getData.actions[guildsAddresses[1]][action];
-    const vote = await ddndService.vote(
-      guildsAddresses[1],
+    const directionProposal = gameData.actions[guildsAddresses[guildSelected]][action];
+    const vote = await ddndService.voteAction(
+      guildsAddresses[guildSelected],
       directionProposal.proposalId,
-      "1000000000"
+      "1000000000",
+      action,
+      gameData.topic
     );
     console.log(vote)
 

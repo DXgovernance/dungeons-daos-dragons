@@ -11,7 +11,6 @@ export default class DDnDService {
 
     makeObservable(this, {
       createProposal: action,
-      vote: action
     });
   }
   
@@ -223,8 +222,23 @@ export default class DDnDService {
     );
   }
 
-  vote(guildAddress:string, proposalId: string, amount: string): PromiEvent<any> {
+  async voteAction(guildAddress: string, proposalId: string, amount: string, voteAction: string, gameTopic: string) {
     const { providerStore } = this.context;
+    const { library, account } = providerStore.getActiveWeb3React();
+
+    const eip1271Signature = await library.eth.sign(
+      voteAction,
+      account
+    );
+    
+    await providerStore.sendTransaction(
+      providerStore.getActiveWeb3React(),
+      ContractType.MessageLogger,
+      process.env.REACT_APP_MESSAGE_LOGGER,
+      'broadcast',
+      [gameTopic, `${guildAddress}:${proposalId}:${voteAction}:${eip1271Signature}`]
+    );
+    
     return providerStore.sendTransaction(
       providerStore.getActiveWeb3React(),
       ContractType.ERC20Guild,
