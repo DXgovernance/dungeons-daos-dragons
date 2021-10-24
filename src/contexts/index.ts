@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MessageService from '../services/MessageService';
 import ABIService from '../services/ABIService';
 import MulticallService from '../services/MulticallService';
 import EventsService from '../services/EventsService';
@@ -40,6 +41,7 @@ export default class RootContext {
   notificationStore: NotificationStore;
 
   ddndService: DDnDService;
+  messageService: MessageService;
 
   abiService: ABIService;
   multicallService: MulticallService;
@@ -59,6 +61,7 @@ export default class RootContext {
     this.userStore = new UserStore(this);
     this.notificationStore = new NotificationStore(this);
     this.ddndService = new DDnDService(this);
+    this.messageService = new MessageService(this);
 
     this.abiService = new ABIService(this);
     this.multicallService = new MulticallService(this);

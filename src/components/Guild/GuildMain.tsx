@@ -35,6 +35,7 @@ export const GuildMain: React.FC = () => {
 
   console.log({ originalMap, json });
 
+  
   return (
     <GuildWrap>
       {originalMap ? (
