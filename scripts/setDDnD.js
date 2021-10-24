@@ -74,17 +74,21 @@ async function createProposals(guild, messageLogger, gameTopic, creator, propose
 async function main() {
   const accounts = await web3.eth.getAccounts();
 
-  const genesisAccount = accounts[0];
-  const tokenOwner1 = accounts[1];
-  const tokenOwner2 = accounts[2];
-  const tokenOwner3 = accounts[3];
-  const tokenOwner4 = accounts[4];
-  const tokenOwner5 = accounts[5];
-  const tokenOwner6 = accounts[6];
-  const tokenOwner7 = accounts[7];
-  const tokenOwner8 = accounts[8];
-  const dungeonMaster = accounts[9];
-  const daoArbitrator = accounts[10];
+const [
+  genesisAccount,
+  PLDGuildTokenOwner1,
+  PLDGuildTokenOwner2,
+  PLDGuildTokenOwner3,
+  PLDGuildTokenOwner4,
+  PLDGuildTokenOwner5,
+  DoyayaGuildTokenOwner1,
+  DoyayaGuildTokenOwner2,
+  DoyayaGuildTokenOwner3,
+  DoyayaGuildTokenOwner4,
+  DoyayaGuildTokenOwner5,
+  dungeonMaster,
+  daoArbitrator,
+] = accounts;
   
   // Deploy DDnD
   console.log('Deploying DDnD...');
@@ -102,14 +106,6 @@ async function main() {
     'Parking Lot DAO',
     'PLD'
   );
-  await PLDGuildToken.transfer(tokenOwner1, web3.utils.toWei('30'));
-  await PLDGuildToken.transfer(tokenOwner2, web3.utils.toWei('10'));
-  await PLDGuildToken.transfer(tokenOwner3, web3.utils.toWei('10'));
-  await PLDGuildToken.transfer(tokenOwner4, web3.utils.toWei('10'));
-  await PLDGuildToken.transfer(tokenOwner5, web3.utils.toWei('10'));
-  await PLDGuildToken.transfer(tokenOwner6, web3.utils.toWei('10'));
-  await PLDGuildToken.transfer(tokenOwner7, web3.utils.toWei('10'));
-  await PLDGuildToken.transfer(tokenOwner8, web3.utils.toWei('10'));
   
   // Create the Guild and set to execute proposals after one hour if quorum reached
   // 20 voting power required for quorum
@@ -126,41 +122,35 @@ async function main() {
   );
   
   // Distribute all guild tokesn accross accounts
+  await PLDGuildToken.transfer(PLDGuildTokenOwner1, web3.utils.toWei('30'));
+  await PLDGuildToken.transfer(PLDGuildTokenOwner2, web3.utils.toWei('20'));
+  await PLDGuildToken.transfer(PLDGuildTokenOwner3, web3.utils.toWei('20'));
+  await PLDGuildToken.transfer(PLDGuildTokenOwner4, web3.utils.toWei('15'));
+  await PLDGuildToken.transfer(PLDGuildTokenOwner5, web3.utils.toWei('15'));
+  
   const PLDGuild = await ERC20Guild.at(await ddnd.guilds(0));
   const PLDGuildTokenVault = await PLDGuild.tokenVault();
   await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('30'), {
-    from: tokenOwner1,
+    from: PLDGuildTokenOwner1,
   });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner2,
+  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('20'), {
+    from: PLDGuildTokenOwner2,
   });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner3,
+  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('20'), {
+    from: PLDGuildTokenOwner3,
   });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner4,
+  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('15'), {
+    from: PLDGuildTokenOwner4,
   });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner5,
-  });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner6,
-  });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner7,
-  });
-  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner8,
+  await PLDGuildToken.approve(PLDGuildTokenVault, web3.utils.toWei('15'), {
+    from: PLDGuildTokenOwner5,
   });
   
-  await PLDGuild.lockTokens(web3.utils.toWei('30'), { from: tokenOwner1 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner2 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner3 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner4 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner5 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner6 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner7 });
-  await PLDGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner8 });
+  await PLDGuild.lockTokens(web3.utils.toWei('30'), { from: PLDGuildTokenOwner1 });
+  await PLDGuild.lockTokens(web3.utils.toWei('20'), { from: PLDGuildTokenOwner2 });
+  await PLDGuild.lockTokens(web3.utils.toWei('20'), { from: PLDGuildTokenOwner3 });
+  await PLDGuild.lockTokens(web3.utils.toWei('15'), { from: PLDGuildTokenOwner4 });
+  await PLDGuild.lockTokens(web3.utils.toWei('15'), { from: PLDGuildTokenOwner5 });
 
   // Deploy Doyaya guild
   const DoyayaGuildToken = await ERC20Mock.new(
@@ -169,15 +159,7 @@ async function main() {
     'Doyaya',
     'DYY'
   );
-  await DoyayaGuildToken.transfer(tokenOwner1, web3.utils.toWei('30'));
-  await DoyayaGuildToken.transfer(tokenOwner2, web3.utils.toWei('10'));
-  await DoyayaGuildToken.transfer(tokenOwner3, web3.utils.toWei('10'));
-  await DoyayaGuildToken.transfer(tokenOwner4, web3.utils.toWei('10'));
-  await DoyayaGuildToken.transfer(tokenOwner5, web3.utils.toWei('10'));
-  await DoyayaGuildToken.transfer(tokenOwner6, web3.utils.toWei('10'));
-  await DoyayaGuildToken.transfer(tokenOwner7, web3.utils.toWei('10'));
-  await DoyayaGuildToken.transfer(tokenOwner8, web3.utils.toWei('10'));
-  
+
   await ddnd.createGuild(
     DoyayaGuildToken.address, // address _token,
     moment.duration(1, 'hours').asSeconds(), // uint256 _proposalTime,
@@ -192,39 +174,35 @@ async function main() {
   const DoyayaGuild = await ERC20Guild.at(await ddnd.guilds(1));
 
   const DoyayaGuildTokenVault = await DoyayaGuild.tokenVault();
+  
+  // Distribute all guild tokesn accross accounts
+  await DoyayaGuildToken.transfer(DoyayaGuildTokenOwner1, web3.utils.toWei('30'));
+  await DoyayaGuildToken.transfer(DoyayaGuildTokenOwner2, web3.utils.toWei('20'));
+  await DoyayaGuildToken.transfer(DoyayaGuildTokenOwner3, web3.utils.toWei('20'));
+  await DoyayaGuildToken.transfer(DoyayaGuildTokenOwner4, web3.utils.toWei('15'));
+  await DoyayaGuildToken.transfer(DoyayaGuildTokenOwner5, web3.utils.toWei('15'));
+  
   await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('30'), {
-    from: tokenOwner1,
+    from: DoyayaGuildTokenOwner1,
   });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner2,
+  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('20'), {
+    from: DoyayaGuildTokenOwner2,
   });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner3,
+  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('20'), {
+    from: DoyayaGuildTokenOwner3,
   });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner4,
+  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('15'), {
+    from: DoyayaGuildTokenOwner4,
   });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner5,
-  });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner6,
-  });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner7,
-  });
-  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('10'), {
-    from: tokenOwner8,
+  await DoyayaGuildToken.approve(DoyayaGuildTokenVault, web3.utils.toWei('15'), {
+    from: DoyayaGuildTokenOwner5,
   });
   
-  await DoyayaGuild.lockTokens(web3.utils.toWei('30'), { from: tokenOwner1 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner2 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner3 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner4 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner5 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner6 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner7 });
-  await DoyayaGuild.lockTokens(web3.utils.toWei('10'), { from: tokenOwner8 });
+  await DoyayaGuild.lockTokens(web3.utils.toWei('30'), { from: DoyayaGuildTokenOwner1 });
+  await DoyayaGuild.lockTokens(web3.utils.toWei('20'), { from: DoyayaGuildTokenOwner2 });
+  await DoyayaGuild.lockTokens(web3.utils.toWei('20'), { from: DoyayaGuildTokenOwner3 });
+  await DoyayaGuild.lockTokens(web3.utils.toWei('15'), { from: DoyayaGuildTokenOwner4 });
+  await DoyayaGuild.lockTokens(web3.utils.toWei('15'), { from: DoyayaGuildTokenOwner5 });
 
   const paymentToken = await ERC20Mock.new(
     accounts[0],
@@ -299,7 +277,7 @@ async function main() {
     ['0', '0'],
     'Desc',
     setUpGameHash,
-    { from: tokenOwner1 }
+    { from: PLDGuildTokenOwner1 }
   );
 
   const setUpDDnDFromGuildB = await DoyayaGuild.createProposal(
@@ -339,15 +317,15 @@ async function main() {
     ['0', '0'],
     'Desc',
     setUpGameHash,
-    { from: tokenOwner1 }
+    { from: DoyayaGuildTokenOwner1 }
   );
   await PLDGuild.setVote(
     setUpDDnDFromGuildA.logs[0].args.proposalId,
-    web3.utils.toWei('30'), {from: tokenOwner1}
+    web3.utils.toWei('30'), {from: PLDGuildTokenOwner1}
   );
   await DoyayaGuild.setVote(
     setUpDDnDFromGuildB.logs[0].args.proposalId,
-    web3.utils.toWei('30'), {from: tokenOwner1}
+    web3.utils.toWei('30'), {from: DoyayaGuildTokenOwner1}
   );
   
   await time.increase(moment.duration(1, 'hours').asSeconds());
@@ -362,8 +340,8 @@ async function main() {
 
   const signatures = [
     await web3.eth.sign(setUpGameHash, dungeonMaster),
-    await web3.eth.sign(setUpGameHash, tokenOwner1),
-    await web3.eth.sign(setUpGameHash, tokenOwner2),
+    await web3.eth.sign(setUpGameHash, PLDGuildTokenOwner1),
+    await web3.eth.sign(setUpGameHash, DoyayaGuildTokenOwner1),
   ];
   
   await ddnd.setUpGame(
@@ -389,11 +367,11 @@ async function main() {
     'turn_1:move:west',
   ]
   const PLDGuild_TURN_ONE_PROPOSALS_ID = await createProposals(
-    PLDGuild, messageLogger, GAME_TOPIC, tokenOwner1, DEFAULT_ACTIONS_TURN_ONE
+    PLDGuild, messageLogger, GAME_TOPIC, PLDGuildTokenOwner1, DEFAULT_ACTIONS_TURN_ONE
   );
   
   const DoyayaGuild_TURN_ONE_PROPOSALS_ID = await createProposals(
-    DoyayaGuild, messageLogger, GAME_TOPIC, tokenOwner1, DEFAULT_ACTIONS_TURN_ONE
+    DoyayaGuild, messageLogger, GAME_TOPIC, DoyayaGuildTokenOwner1, DEFAULT_ACTIONS_TURN_ONE
   );
   
   console.log('PLD turn one proposals', PLDGuild_TURN_ONE_PROPOSALS_ID);
@@ -402,15 +380,15 @@ async function main() {
   
   await PLDGuild.setVote(
     PLDGuild_TURN_ONE_PROPOSALS_ID[0].proposalId,
-    web3.utils.toWei('10'), {from: tokenOwner2}
+    web3.utils.toWei('10'), {from: PLDGuildTokenOwner2}
   );
   await PLDGuild.setVote(
     PLDGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
-    web3.utils.toWei('10'), {from: tokenOwner3}
+    web3.utils.toWei('10'), {from: PLDGuildTokenOwner3}
   );
   await PLDGuild.setVote(
     PLDGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
-    web3.utils.toWei('10'), {from: tokenOwner4}
+    web3.utils.toWei('10'), {from: PLDGuildTokenOwner4}
   );
   
   // This vote is important
@@ -421,15 +399,15 @@ async function main() {
   
   await DoyayaGuild.setVote(
     DoyayaGuild_TURN_ONE_PROPOSALS_ID[1].proposalId,
-    web3.utils.toWei('10'), {from: tokenOwner2}
+    web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner1}
   );
   await DoyayaGuild.setVote(
     DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
-    web3.utils.toWei('10'), {from: tokenOwner3}
+    web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner2}
   );
   await DoyayaGuild.setVote(
     DoyayaGuild_TURN_ONE_PROPOSALS_ID[2].proposalId,
-    web3.utils.toWei('10'), {from: tokenOwner4}
+    web3.utils.toWei('10'), {from: DoyayaGuildTokenOwner3}
   );
 
   // This vote is important
