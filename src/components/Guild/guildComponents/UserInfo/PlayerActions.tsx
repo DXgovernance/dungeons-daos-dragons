@@ -34,17 +34,10 @@ const ExecuteButton = styled(Button)`
 `;
 
 interface LinkedButtonsProps {}
-export enum Actions {
-  up,
-  down,
-  left,
-  right,
-  attack,
-  heal,
-}
+
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
-  const [action, setAction] = useState<Actions>(Actions.attack);
+
   const [showModal, setShowModal] = useState(false);
   const [directionVotes, setDirectionVotes] = useState(null);
   const {
@@ -62,24 +55,22 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     setDirectionVotes(getData.actions[getGuilds[guildSelected]]);
     return getData.actions;
   }
-  async function vote(){
+  
+  async function voteAction(action){
     setShowModal(true)
-    try{
-      console.log(action)
-      const getData=await ddndService.getAllGameData(1)
-      const guildSelected=parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
-      const getGuilds=await ddndService.getGuilds()
+    const getData = await ddndService.getAllGameData(1)
+    // const guildSelected = parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
+    const guildsAddresses = await ddndService.getGuilds()
+    console.log(action,guildsAddresses, guildsAddresses[1])
+  
+    const directionProposal = getData.actions[guildsAddresses[1]][action];
+    const vote = await ddndService.vote(
+      guildsAddresses[1],
+      directionProposal.proposalId,
+      "1000000000"
+    );
+    console.log(vote)
 
-      let directionProposal
-      if(action===Actions.up) directionProposal= getData.actions[getGuilds[guildSelected]].move_north
-        if(action===Actions.down) directionProposal= getData.actions[getGuilds[guildSelected]].move_south
-          if(action===Actions.left) directionProposal= getData.actions[getGuilds[guildSelected]].move_west
-            if(action===Actions.right)  directionProposal=getData.actions[getGuilds[guildSelected]].move_east
-      const vote=await ddndService.vote(getGuilds[guildSelected],directionProposal.proposalId,"1000000000")
-      console.log(vote)
-    }catch (e) {
-      setShowModal(false)
-    }
     setShowModal(false);
   }
   useEffect(() => {
@@ -88,6 +79,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     }
     fetchData();
   }, []);
+  
   return (
     <PlayerActionsWrapper>
       {showModal &&
@@ -99,14 +91,14 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       <StyledSelect multiple name="Move">
         <StyledOption
           onClick={() => {
-            setAction(Actions.up);
+            voteAction("move_north");
           }}
         >
           ↑ { directionVotes &&  formatEther(directionVotes.move_north.votes)}
         </StyledOption>
         <StyledOption
           onClick={() => {
-            setAction(Actions.down);
+            voteAction("move_south");
           }}
         >
           ↓ { directionVotes && formatEther(directionVotes.move_south.votes)}
@@ -115,14 +107,14 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       <StyledSelect>
         <StyledOptionRotated
           onClick={() => {
-            setAction(Actions.left);
+            voteAction("move_west");
           }}
         >
           ← { directionVotes && formatEther(directionVotes.move_east.votes)}
         </StyledOptionRotated>
         <StyledOptionRotated
           onClick={() => {
-            setAction(Actions.right);
+            voteAction("move_east");
           }}
         >
           → { directionVotes && formatEther(directionVotes.move_west.votes)}
@@ -143,12 +135,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       >
         Heal 0
       </StyledButton>
-      <ExecuteButton  onClick={async () => {
-
-        await vote()
-      }}>
-        Execute!
-      </ExecuteButton>
+      <ExecuteButton  onClick={async () => {  }}> Execute! </ExecuteButton>
     </PlayerActionsWrapper>
   );
 };

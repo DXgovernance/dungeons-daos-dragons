@@ -230,8 +230,7 @@ export default class DDnDService {
       ContractType.ERC20Guild,
       guildAddress,
       'setVote',
-      [proposalId, amount],
-      {}
+      [proposalId, amount]
     );
   }
   
