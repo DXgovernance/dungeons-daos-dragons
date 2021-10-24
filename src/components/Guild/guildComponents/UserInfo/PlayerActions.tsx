@@ -42,7 +42,7 @@ export enum Actions {
 }
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
-  const [action, setAction] = useState<Actions>(Actions.attack);
+  const [action, setAction] = useState<Actions>(Actions.up);
   const [showModal, setShowModal] = useState(false);
   const [directionVotes, setDirectionVotes] = useState(null);
   const {
