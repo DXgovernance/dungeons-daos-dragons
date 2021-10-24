@@ -7,6 +7,9 @@ import { PlayerInfo } from './PlayerInfo';
 
 const Wrapper=styled.div`
   display: flex;
+   align-items: center;
+   padding: 6px;
+
   width:40%;
   justify-content: space-around;
   background-color: #fff;

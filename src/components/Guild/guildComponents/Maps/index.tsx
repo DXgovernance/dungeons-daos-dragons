@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Message } from 'retro-ui';
 
 import { addPlayerPos } from '../MapUtil';
+import { useContext } from '../../../../contexts';
 
 const TitleWrap = styled.div`
   display: flex;
@@ -103,9 +104,27 @@ export const SplitMap: React.FC<MapsProps> = ({
   originalMap,
   guildOneState,
   guildTwoState,
+
 }) => {
+  const {
+    context: {  ddndService },
+  } = useContext();
   const [guildOneMap, setGuildOneMap] = useState('');
   const [guildTwoMap, setGuildTwoMap] = useState('');
+  const [guilds,setGuild]=useState(null)
+  useEffect(()=>{
+    async function fetchData(){
+      const guildData=await ddndService.getGuilds()
+      console.log('guildData',guildData)
+      const guild1name=await ddndService.getGuildName(guildData[0])
+      const guild2name=await ddndService.getGuildName(guildData[1])
+      console.log('works?',guild1name)
+      console.log('guild2',guild2name)
+      setGuild([guild1name,guild2name])
+
+    }
+    fetchData()
+  },[])
 
   useEffect(() => {
     setGuildOneMap(addPlayerPos(originalMap, guildOneState.room, 'red'));
@@ -115,8 +134,8 @@ export const SplitMap: React.FC<MapsProps> = ({
   return (
     <div>
       <TitleWrap>
-        <Title>Guild #1</Title>
-        <Title>Guild #2</Title>
+        <Title>{guilds && guilds[0]}</Title>
+        <Title>{guilds && guilds[1]}</Title>
       </TitleWrap>
       <MapWrap>
         <div dangerouslySetInnerHTML={{ __html: guildOneMap }} />
