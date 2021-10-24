@@ -49,7 +49,6 @@ export const DungeonMaster: React.FC = () => {
   const {
     context: { ipfsService, ddndService },
   } = useContext();
-  ddndService.getAllGameData(1);
   const uploadToIpfs = async (json, svg) => {
     try{
       const jsonString = JSON.stringify({ rooms: json, map: svg });
@@ -103,17 +102,25 @@ console.log(e)
       return <StyledButton>Go {door.connection.direction}</StyledButton>;
     });
   };
-  const [guilds,setGuild]=useState(null)
+  const [guilds, setGuild] = useState(null)
+  const [turnNumber, setTurnNumber] = useState(null)
+  const [guildsApprovedActions, setGuildApprovedActions] = useState(["waiting for decision..", "waiting for decision.."])
   useEffect(()=>{
     async function fetchData(){
-      const guildData=await ddndService.getGuilds()
-      console.log('guildData',guildData)
-      const guild1name=await ddndService.getGuildName(guildData[0])
-      const guild2name=await ddndService.getGuildName(guildData[1])
-      console.log('works?',guild1name)
-      console.log('guild2',guild2name)
-      setGuild([guild1name,guild2name])
-
+      const gameData = await ddndService.getAllGameData(1);
+      const guild1name = await ddndService.getGuildName(gameData.playersAddresses[1]);
+      const guild2name = await ddndService.getGuildName(gameData.playersAddresses[2]);
+      setTurnNumber(Number(gameData.turnNumber)+1);
+      Object.keys(gameData.actions[gameData.playersAddresses[1]]).map((action) => {
+        if (gameData.actions[gameData.playersAddresses[1]][action].state == "3")
+          guildsApprovedActions[0] = action;
+      })
+      Object.keys(gameData.actions[gameData.playersAddresses[2]]).map((action) => {
+        if (gameData.actions[gameData.playersAddresses[2]][action].state == "3")
+          guildsApprovedActions[1] = action;
+      })
+      setGuild([guild1name , guild2name])
+      setGuildApprovedActions(guildsApprovedActions)
     }
     fetchData()
   },[])
@@ -129,12 +136,12 @@ console.log(e)
       ) : null}
       <GuildsWrapper>
         <StyledBox>
-          <Message>{guilds && guilds[0]} Decision - Move 4</Message>
-          <Message type="success">Move down</Message>
+          <Message>{guilds && guilds[0]} Decision - Move {turnNumber}</Message>
+          <Message type="success">{guildsApprovedActions && guildsApprovedActions[0]}</Message>
         </StyledBox>
         <StyledBox>
-          <Message>{guilds && guilds[1]} Decision - Move 4</Message>
-          <Message type="success">Attack</Message>
+          <Message>{guilds && guilds[1]} Decision - Move {turnNumber}</Message>
+          <Message type="success">{guildsApprovedActions && guildsApprovedActions[1]}</Message>
         </StyledBox>
         <StyledBox>
           <Message>{guilds && guilds[0]} - Move 4 - Action</Message>
