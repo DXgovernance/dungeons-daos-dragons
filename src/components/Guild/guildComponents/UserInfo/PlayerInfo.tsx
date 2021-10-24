@@ -7,6 +7,7 @@ const StyledWrapper = styled.div`
   display: flex;
   flex-direction: column;
   grid-gap: 2px;
+  padding: 10px;
 `;
 export const Progress = styled.div<{
   width: number;
@@ -33,12 +34,11 @@ export const PlayerInfo: React.FC<LinkedButtonsProps> = () => {
   return (
     <StyledWrapper>
       <ProgressBar>
-        <Progress width={22} />
+        <Progress width={80} />
       </ProgressBar>
-
-      <Box>Health:22</Box>
-      <Box>Score: 36</Box>
-      <Box>Some: 12</Box>
+      <Box>Health: 40</Box>
+      <Box>Victory Points: 0</Box>
+      <Box>Hit Points: 8</Box>
     </StyledWrapper>
   );
 };
