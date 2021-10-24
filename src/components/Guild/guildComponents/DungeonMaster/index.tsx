@@ -59,6 +59,7 @@ export const DungeonMaster: React.FC = () => {
     rooms.map(room => {
       if (room.roomNumber === 1) {
         setGuildOneState({ room });
+      } else if (room.roomNumber === 5) {
         setGuildTwoState({ room });
       }
     });
