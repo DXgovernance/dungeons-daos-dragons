@@ -115,6 +115,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         </StyledOptionRotated>
       </StyledSelect>
       <StyledButton
+        style={{backgroundColor:"#cf5f3b"}}
         onClick={() => {
           setAction(Actions.attack);
           messageService.write();
@@ -126,6 +127,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         onClick={() => {
           setAction(Actions.heal);
         }}
+        style={{backgroundColor:"#bbee9e"}}
       >
         Heal
       </StyledButton>
