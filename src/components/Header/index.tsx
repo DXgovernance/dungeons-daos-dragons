@@ -49,18 +49,8 @@ const Header = observer(() => {
     context: { providerStore, configStore, ddndService },
   } = useContext();
 
-  ddndService.gameCount().then(console.log)
-  ddndService.getGame(1).then(console.log)
-  ddndService.getGamePlayersState(1).then(console.log)
-  ddndService.getGamePlayers(1).then((playersAddresses) => {
-    console.log('Players Addresses',playersAddresses);
-    console.log('Game Topic', ddndService.getGameTopic(playersAddresses, "1"))
-    ddndService.getMessages(ddndService.getGameTopic(playersAddresses, "1")).then((gameMessages) => {
-      console.log('Game Messages',gameMessages);
+  ddndService.getAllGameData(1).then(console.log);
 
-    })
-  })
-  
   const [selectedClient, setSelectedClient] = useState(Guilds.Guild1); //default value
   useEffect(() => {
     console.log(selectedClient);
