@@ -154,7 +154,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     font-variant: none;
     color: ${({ theme }) => theme.textColor};
-    background-color: ${({ theme }) => theme.backgroundColor};
+    background-image: url(/assets/background.png);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
