@@ -53,6 +53,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   } = useContext();
   async function getAllGameData(){
     try{
+     await setTimeout(() => {console.log("this is the first message")}, 2000);
       const getData=await ddndService.getAllGameData(1)
 
       const guildSelected=parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
@@ -97,7 +98,9 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   return (
     <PlayerActionsWrapper>
       {showModal &&
-      <Modal open={showModal}>
+      <Modal onClick={()=>{
+      setShowModal(false)}
+      } open={showModal}>
         <Button >Confirm Transaction in Metamask</Button>
       </Modal>}
       <StyledSelect multiple name="Move">
