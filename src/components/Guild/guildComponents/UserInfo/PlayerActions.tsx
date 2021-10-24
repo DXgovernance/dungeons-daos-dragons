@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box, Modal } from 'retro-ui';
 import styled from 'styled-components';
 import { useContext } from '../../../../contexts';
-import {   formatEther } from 'ethers/utils';
+import { formatEther } from 'ethers/utils';
 
 const PlayerActionsWrapper = styled.div`
   width: 50%;
@@ -26,9 +26,7 @@ const StyledOption = styled.option`
   margin: 0 10px;
   cursor: pointer;
 `;
-const StyledOptionRotated = styled(StyledOption)`
-  
-`;
+const StyledOptionRotated = styled(StyledOption)``;
 const ExecuteButton = styled(Button)`
   background-color: #ff9051;
 `;
@@ -43,7 +41,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   const {
     context: { ddndService },
   } = useContext();
-  
+
   async function getAllGameData() {
     const getData = await ddndService.getAllGameData(1);
 
@@ -64,15 +62,13 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     console.log(action,guildsAddresses, guildsAddresses[guildSelected])
   
     const directionProposal = gameData.actions[guildsAddresses[guildSelected]][action];
-    const vote = await ddndService.voteAction(
+    ddndService.voteAction(
       guildsAddresses[guildSelected],
       directionProposal.proposalId,
       "1000000000",
       action,
       gameData.topic
     );
-    console.log(vote)
-
     setShowModal(false);
   }
   useEffect(() => {
@@ -81,29 +77,37 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     }
     fetchData();
   }, []);
-  
+  useEffect(()=>{
+    setInterval(async function() {
+      await getAllGameData();
+    }, 1000);
+  },[])
   return (
     <PlayerActionsWrapper>
-      {showModal &&
-      <Modal onClick={()=>{
-      setShowModal(false)}
-      } open={showModal}>
-        <Button >Confirm Transaction in Metamask</Button>
-      </Modal>}
+      {showModal && (
+        <Modal
+          onClick={() => {
+            setShowModal(false);
+          }}
+          open={showModal}
+        >
+          <Button>Confirm Transaction in Metamask</Button>
+        </Modal>
+      )}
       <StyledSelect multiple name="Move">
         <StyledOption
           onClick={() => {
             voteAction("move_north");
           }}
         >
-          ↑ { directionVotes &&  formatEther(directionVotes.move_north.votes)}
+          ↑ {directionVotes && formatEther(directionVotes.move_north.votes)}
         </StyledOption>
         <StyledOption
           onClick={() => {
             voteAction("move_south");
           }}
         >
-          ↓ { directionVotes && formatEther(directionVotes.move_south.votes)}
+          ↓ {directionVotes && formatEther(directionVotes.move_south.votes)}
         </StyledOption>
       </StyledSelect>
       <StyledSelect>
@@ -112,18 +116,18 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
             voteAction("move_west");
           }}
         >
-          ← { directionVotes && formatEther(directionVotes.move_east.votes)}
+          ← {directionVotes && formatEther(directionVotes.move_east.votes)}
         </StyledOptionRotated>
         <StyledOptionRotated
           onClick={() => {
             voteAction("move_east");
           }}
         >
-          → { directionVotes && formatEther(directionVotes.move_west.votes)}
+          → {directionVotes && formatEther(directionVotes.move_west.votes)}
         </StyledOptionRotated>
       </StyledSelect>
       <StyledButton
-        style={{backgroundColor:"#cf5f3b"}}
+        style={{ backgroundColor: '#cf5f3b' }}
         // onClick={() => {
         //   setAction(Actions.attack);
         //   messageService.write();
@@ -131,12 +135,8 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
       >
         Attack 0
       </StyledButton>
-      <StyledButton
+      <StyledButton style={{ backgroundColor: '#bbee9e' }}>Heal 0</StyledButton>
 
-        style={{backgroundColor:"#bbee9e"}}
-      >
-        Heal 0
-      </StyledButton>
       <ExecuteButton  onClick={async () => {  }}> Execute! </ExecuteButton>
     </PlayerActionsWrapper>
   );

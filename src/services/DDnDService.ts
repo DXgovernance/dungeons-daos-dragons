@@ -226,26 +226,26 @@ export default class DDnDService {
     const { providerStore } = this.context;
     const { library, account } = providerStore.getActiveWeb3React();
 
-    const eip1271Signature = await library.eth.sign(
+    return library.eth.sign(
       voteAction,
       account
-    );
-    
-    await providerStore.sendTransaction(
-      providerStore.getActiveWeb3React(),
-      ContractType.MessageLogger,
-      process.env.REACT_APP_MESSAGE_LOGGER,
-      'broadcast',
-      [gameTopic, `${guildAddress}:${proposalId}:${voteAction}:${eip1271Signature}`]
-    );
-    
-    return providerStore.sendTransaction(
-      providerStore.getActiveWeb3React(),
-      ContractType.ERC20Guild,
-      guildAddress,
-      'setVote',
-      [proposalId, amount]
-    );
+    ).then((eip1271Signature) => {
+      providerStore.sendTransaction(
+        providerStore.getActiveWeb3React(),
+        ContractType.MessageLogger,
+        process.env.REACT_APP_MESSAGE_LOGGER,
+        'broadcast',
+        [gameTopic, `${guildAddress}:${proposalId}:${voteAction}:${eip1271Signature}`]
+      ).then(async () => {
+        return await providerStore.sendTransaction(
+          providerStore.getActiveWeb3React(),
+          ContractType.ERC20Guild,
+          guildAddress,
+          'setVote',
+          [proposalId, amount]
+        );
+      })
+    });
   }
   
   endProposal(guildAddress:string, proposalId: string): PromiEvent<any> {
