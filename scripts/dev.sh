@@ -124,4 +124,6 @@ echo "${contents}" > tsconfig.json
 FORCE_COLOR=true \
 REACT_APP_ETH_NETWORKS=mainnet,xdai,arbitrum,rinkeby,arbitrumTestnet \
 REACT_APP_DDND_ADDRESS=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 \
+REACT_APP_STATE_HASH_IPFS=QmdfuxY5wGwxowZA4mnbfr642rpp7ccP91mAVLvzDKrk31 \
+REACT_APP_MAP_SVG_IPFS=QmahnmNyRj2saDeeBmn88S9QpEa6s4RSGGPmmBVMRRYQk3 \
 SKIP_PREFLIGHT_CHECK=true FORCE_COLOR=true npx react-scripts start | cat
