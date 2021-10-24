@@ -6,6 +6,7 @@ import { Box, Message, Input, Button } from 'retro-ui';
 
 import { generateMap } from '../../../../map-generator/index';
 import { SplitMap } from '../Maps';
+// import { useContext } from '../../../../contexts';
 
 const UserInfoWrap = styled.div`
   display: flex;
@@ -43,6 +44,21 @@ export const DungeonMaster: React.FC = () => {
   const [guildTwoState, setGuildTwoState] = useState(null);
   const [guildOneDesc, setGuildOneDesc] = useState(null);
   const [guildTwoDesc, setGuildTwoDesc] = useState(null);
+
+  // const {
+  //   context: { ipfsService },
+  // } = useContext();
+
+  // const uploadToIpfs = async (json, svg) => {
+  //   const jsonString = JSON.stringify({ rooms: json });
+  //   console.log({ jsonString });
+  //   const jsonHash = await ipfsService.add(jsonString);
+  //   console.log({ jsonHash });
+  //   const mapString = JSON.stringify(svg);
+  //   console.log({ mapString });
+  //   const mapHash = await ipfsService.add(svg);
+  //   console.log({ mapHash });
+  // };
 
   useEffect(() => {
     const { svg, json } = generateMap();
