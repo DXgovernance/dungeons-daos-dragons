@@ -33,17 +33,10 @@ const ExecuteButton = styled(Button)`
 `;
 
 interface LinkedButtonsProps {}
-export enum Actions {
-  up,
-  down,
-  left,
-  right,
-  attack,
-  heal,
-}
+
 
 export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
-  const [action, setAction] = useState<Actions>(Actions.up);
+
   const [showModal, setShowModal] = useState(false);
   const [directionVotes, setDirectionVotes] = useState(null);
   const {
@@ -61,35 +54,22 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
     setDirectionVotes(getData.actions[getGuilds[guildSelected]]);
     return getData.actions;
   }
-  async function vote() {
-    setShowModal(true);
-    try {
-      const getData = await ddndService.getAllGameData(1);
-      const guildSelected = parseInt(
-        JSON.parse(localStorage.getItem('GuildSelected'))
-      );
-      const getGuilds = await ddndService.getGuilds();
 
-      let directionProposal;
-      if (action === Actions.up)
-        directionProposal =
-          getData.actions[getGuilds[guildSelected]].move_north;
-      if (action === Actions.down)
-        directionProposal =
-          getData.actions[getGuilds[guildSelected]].move_south;
-      if (action === Actions.left)
-        directionProposal = getData.actions[getGuilds[guildSelected]].move_west;
-      if (action === Actions.right)
-        directionProposal = getData.actions[getGuilds[guildSelected]].move_east;
-      const vote = await ddndService.vote(
-        getGuilds[guildSelected],
-        directionProposal.proposalId,
-        '1000000000'
-      );
-      console.log(vote);
-    } catch (e) {
-      setShowModal(false);
-    }
+  async function voteAction(action){
+    setShowModal(true)
+    const gameData = await ddndService.getAllGameData(1)
+    const guildSelected = parseInt(JSON.parse(localStorage.getItem('GuildSelected')))
+    const guildsAddresses = await ddndService.getGuilds()
+    console.log(action,guildsAddresses, guildsAddresses[guildSelected])
+
+    const directionProposal = gameData.actions[guildsAddresses[guildSelected]][action];
+    ddndService.voteAction(
+      guildsAddresses[guildSelected],
+      directionProposal.proposalId,
+      "1000000000",
+      action,
+      gameData.topic
+    );
     setShowModal(false);
   }
   useEffect(() => {
@@ -119,7 +99,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         <StyledOption
           style={{backgroundColor:action===Actions.up && "#cf5f3b"}}
           onClick={() => {
-            setAction(Actions.up);
+            voteAction("move_north");
           }}
         >
           ↑ {directionVotes && formatEther(directionVotes.move_north.votes)}
@@ -127,7 +107,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         <StyledOption
           style={{backgroundColor:action===Actions.down && "#cf5f3b"}}
           onClick={() => {
-            setAction(Actions.down);
+            voteAction("move_south");
           }}
         >
           ↓ {directionVotes && formatEther(directionVotes.move_south.votes)}
@@ -137,7 +117,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         <StyledOptionRotated
           style={{backgroundColor:action===Actions.left && "#cf5f3b"}}
           onClick={() => {
-            setAction(Actions.left);
+            voteAction("move_west");
           }}
         >
           ← {directionVotes && formatEther(directionVotes.move_east.votes)}
@@ -145,7 +125,7 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         <StyledOptionRotated
           style={{backgroundColor:action===Actions.right && "#cf5f3b"}}
           onClick={() => {
-            setAction(Actions.right);
+            voteAction("move_east");
           }}
         >
           → {directionVotes && formatEther(directionVotes.move_west.votes)}
@@ -161,13 +141,8 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
         Attack 0
       </StyledButton>
       <StyledButton style={{ backgroundColor: '#bbee9e' }}>Heal 0</StyledButton>
-      <ExecuteButton
-        onClick={async () => {
-          await vote();
-        }}
-      >
-        Execute!
-      </ExecuteButton>
+
+      <ExecuteButton  onClick={async () => {  }}> Execute! </ExecuteButton>
     </PlayerActionsWrapper>
   );
 };

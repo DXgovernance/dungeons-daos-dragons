@@ -27,7 +27,8 @@ const hardharNetworks = process.env.CI
       mining: {
         auto: true,
         interval: 30000
-      }
+      },
+      chainId: 1337
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
