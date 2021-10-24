@@ -47,11 +47,7 @@ export const DungeonMaster: React.FC = () => {
   const [guildTwoDesc, setGuildTwoDesc] = useState(null);
 
   const {
-<<<<<<< HEAD
     context: { ipfsService, ddndService },
-=======
-    context: { ipfsService,ddndService },
->>>>>>> 14ab7bb64e3813a58ad1fd88290c60c572112eab
   } = useContext();
   ddndService.getAllGameData(1);
   const uploadToIpfs = async (json, svg) => {
