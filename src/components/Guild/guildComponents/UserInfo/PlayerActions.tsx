@@ -50,23 +50,17 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
   const {
     context: { ddndService },
   } = useContext();
-  async function getAllGameData(){
-    try{
-     await setTimeout(() => {console.log("this is the first message")}, 2000);
-      const getData=await ddndService.getAllGameData(1)
-
+  
   async function getAllGameData() {
-    try {
-      const getData = await ddndService.getAllGameData(1);
+    const getData = await ddndService.getAllGameData(1);
 
-      const guildSelected = parseInt(
-        JSON.parse(localStorage.getItem('GuildSelected'))
-      );
-      const getGuilds = await ddndService.getGuilds();
+    const guildSelected = parseInt(
+      JSON.parse(localStorage.getItem('GuildSelected'))
+    );
+    const getGuilds = await ddndService.getGuilds();
 
-      setDirectionVotes(getData.actions[getGuilds[guildSelected]]);
-      return getData.actions;
-    } catch (e) {}
+    setDirectionVotes(getData.actions[getGuilds[guildSelected]]);
+    return getData.actions;
   }
   async function vote(){
     setShowModal(true)
@@ -83,7 +77,6 @@ export const PlayerActions: React.FC<LinkedButtonsProps> = () => {
             if(action===Actions.right)  directionProposal=getData.actions[getGuilds[guildSelected]].move_east
       const vote=await ddndService.vote(getGuilds[guildSelected],directionProposal.proposalId,"1000000000")
       console.log(vote)
-
     }catch (e) {
       setShowModal(false)
     }
