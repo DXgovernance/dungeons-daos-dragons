@@ -59,14 +59,10 @@ const Header = observer(() => {
   }, [selectedClient]);
   useEffect(()=>{
     async function fetchData(){
-      const guildData=await ddndService.getGuilds()
-      console.log('guildData',guildData)
-      const guild1name=await ddndService.getGuildName(guildData[0])
-      const guild2name=await ddndService.getGuildName(guildData[1])
-      console.log('works?',guild1name)
-      console.log('guild2',guild2name)
-      setGuild([guild1name,guild2name])
-
+      const guildData=await ddndService.getGuilds();
+      const guild1name=await ddndService.getGuildName(guildData[0]);
+      const guild2name=await ddndService.getGuildName(guildData[1]);
+      setGuild([guild1name,guild2name]);
     }
     fetchData()
   },[])

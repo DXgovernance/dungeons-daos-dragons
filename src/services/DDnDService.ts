@@ -62,6 +62,7 @@ export default class DDnDService {
       process.env.REACT_APP_DDND_ADDRESS,
     ).methods.getGuilds().call();
   }
+  
   getGuildName(guildAddress): PromiEvent<any> {
     const { providerStore } = this.context;
     // const { library } = providerStore.getActiveWeb3React();
@@ -129,25 +130,25 @@ export default class DDnDService {
         gameData.actions[guildAddress] = {
           "move_south": {
             proposalId: "",
-            signature: "",
+            eip1271Signature: "",
             votes: "0",
             state: "0"
           },
           "move_north": {
             proposalId: "",
-            signature: "",
+            eip1271Signature: "",
             votes: "0",
             state: "0"
           },
           "move_east": {
             proposalId: "",
-            signature: "",
+            eip1271Signature: "",
             votes: "0",
             state: "0"
           },
           "move_west": {
             proposalId: "",
-            signature: "",
+            eip1271Signature: "",
             votes: "0",
             state: "0"
           },
@@ -157,7 +158,7 @@ export default class DDnDService {
             const proposal = await this.getProposal(guildAddress, message.message.split(':')[1]);
             if (Number(gameData.turnNumber)+1 == Number(message.message.split(':')[2])){
               gameData.actions[guildAddress][message.message.split(':')[3]].proposalId = message.message.split(':')[1];
-              gameData.actions[guildAddress][message.message.split(':')[3]].signature = message.message.split(':')[4];
+              gameData.actions[guildAddress][message.message.split(':')[3]].eip1271Signature = message.message.split(':')[4];
               gameData.actions[guildAddress][message.message.split(':')[3]].state = proposal.state
               gameData.actions[guildAddress][message.message.split(':')[3]].votes = proposal.totalVotes
             }
@@ -244,6 +245,12 @@ export default class DDnDService {
       [proposalId],
       {}
     );
+  }
+  
+  signMessage(messageToSign): PromiEvent<any> {
+    const { providerStore } = this.context;
+    const { library, account } = providerStore.getActiveWeb3React();
+    return library.eth.sign(messageToSign, account);
   }
 
 }
