@@ -9,7 +9,6 @@ const Wrapper=styled.div`
   display: flex;
    align-items: center;
    padding: 6px;
-
   width:40%;
   justify-content: space-around;
   background-color: #fff;
@@ -19,6 +18,7 @@ const Wrapper=styled.div`
 const StyledAvatar=styled.img`
 widht:150px;
 height:170px;
+
 `
 
 interface LinkedButtonsProps {
